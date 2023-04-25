@@ -12,24 +12,45 @@ import {
 import { useEffect, useState } from 'react';
 import GenericService from '../service/GenericService';
 import Job from '../dto/Job';
+import GenericResponse from '../dto/GenericResponse';
+import Pagination from './Pagination';
 
 export default function Offers() {
   const [offers, setOffers] = useState<Array<Job>>(new Array<Job>());
-
+  const [itemsCount, setItemsCount] = useState(0);
   useEffect(() => {
     GenericService.getAll<Array<Job>>('job/requests/0').then((data) => {
       console.log(data);
       setOffers(data);
     });
+    GenericService.get<GenericResponse<number>>('job/count/requests').then(
+      (genericResponse) => {
+        console.log(genericResponse);
+        setItemsCount(genericResponse.value);
+      }
+    );
   }, []);
-
+  const goToPage = (page: number) => {
+    GenericService.getAll<Array<Job>>('job/requests/' + page).then((data) => {
+      console.log(data);
+      setOffers(data);
+    });
+  };
   return (
-    <Box>
-      {offers &&
-        offers.map((item, idx) => (
-          <Offer key={idx} title={item.title} description={item.description} />
-        ))}
-    </Box>
+    <>
+      {' '}
+      <Box>
+        {offers &&
+          offers.map((item, idx) => (
+            <Offer
+              key={idx}
+              title={item.title}
+              description={item.description}
+            />
+          ))}
+      </Box>
+      <Pagination callback={goToPage} pages={itemsCount} />
+    </>
   );
 }
 
