@@ -13,9 +13,11 @@ import Main from './Main';
 import { BrowserRouter } from 'react-router-dom';
 
 export const App = () => (
-  <ChakraProvider theme={theme}>
-    <BrowserRouter>
-      <Main />
-    </BrowserRouter>
-  </ChakraProvider>
+  <React.StrictMode>
+    <ChakraProvider theme={theme}>
+      <BrowserRouter>
+        <Main />
+      </BrowserRouter>
+    </ChakraProvider>
+  </React.StrictMode>
 );

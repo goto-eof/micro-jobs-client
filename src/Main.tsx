@@ -21,6 +21,7 @@ import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import Home from './components/Home';
 import Offers from './components/Offers';
 import Requests from './components/Requests';
+import InsertJob from './components/InsertJob';
 
 const Links = [
   { name: 'Home', url: '/' },
@@ -78,8 +79,9 @@ export default function Main() {
               size={'sm'}
               mr={4}
               leftIcon={<AddIcon />}
+              onClick={() => navigate('/insertJob')}
             >
-              Action
+              Add Job
             </Button>
             <Menu>
               <MenuButton
@@ -125,6 +127,7 @@ export default function Main() {
             <Route path="/" element={<Home />} />
             <Route path="/offers" element={<Offers />} />
             <Route path="/requests" element={<Requests />} />
+            <Route path="/insertJob" element={<InsertJob />} />
           </Routes>
         </Box>
       </Box>

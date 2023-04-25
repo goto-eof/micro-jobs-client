@@ -1,7 +1,7 @@
 export default interface Job {
-  id: number;
+  id?: number;
   title: string;
   description: string;
   type: number;
-  status: number;
+  status?: number;
 }
