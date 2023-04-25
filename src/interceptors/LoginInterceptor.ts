@@ -1,5 +1,4 @@
 import axios from 'axios';
-import GenericService from '../service/GenericService';
 
 const customAxios = axios.create();
 export const customInterceptor = (
@@ -27,6 +26,9 @@ customAxios.interceptors.request.use(
   (config: any) => {
     let tokensData = localStorage.getItem('token');
     config.headers['Authorization'] = `${tokensData}`;
+    // config.headers['Access-Control-Allow-Origin'] = '*';
+    // config.headers['Access-Control-Allow-Method'] =
+    //   'GET,PUT,POST,DELETE,PATCH,OPTIONS';
     return config;
   },
   (error) => {

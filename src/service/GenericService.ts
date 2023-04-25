@@ -3,11 +3,7 @@ import customAxios from '../interceptors/LoginInterceptor';
 
 export default class GenericService {
   private static baseUrl: string =
-    'http://' +
-    process.env.REACT_APP_URI +
-    ':' +
-    process.env.REACT_APP_PORT +
-    '/';
+    process.env.REACT_APP_URI + ':' + process.env.REACT_APP_PORT + '/';
 
   public static async getAll<T>(modelName: string): Promise<T> {
     return await customAxios
@@ -23,7 +19,7 @@ export default class GenericService {
   public static async getById<T>(modelName: string, id: number): Promise<T> {
     return await customAxios
       .get<Array<T>>(`${this.baseUrl}${modelName}/${id}`, {
-        withCredentials: true,
+        //  withCredentials: true,
       })
       .then(async (result: any) => {
         let data = result.data;
@@ -37,7 +33,7 @@ export default class GenericService {
   public static async get<T>(modelName: string): Promise<T> {
     return await customAxios
       .get<Array<T>>(`${this.baseUrl}${modelName}`, {
-        withCredentials: true,
+        //  withCredentials: true,
       })
       .then(async (result: any) => {
         let data = result.data;
@@ -97,7 +93,7 @@ export default class GenericService {
   ): Promise<Result<S>> {
     return await customAxios
       .put<T>(`${this.baseUrl}${modelName}/${id}`, data, {
-        withCredentials: true,
+        //  withCredentials: true,
       })
       .then(async (result: any) => {
         let data = result.data;
