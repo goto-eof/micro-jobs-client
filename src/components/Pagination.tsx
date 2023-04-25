@@ -10,8 +10,9 @@ export default function Pagination({ pages, callback }: Props) {
       {pages &&
         [...Array(pages).keys()]
           .filter((item) => item % 10 == 0)
-          .map((item) => (
+          .map((item, idx) => (
             <Box
+              key={idx}
               as="span"
               w={'16px'}
               h={'16px'}
