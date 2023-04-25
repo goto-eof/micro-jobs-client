@@ -17,7 +17,7 @@ export default function Offers() {
   const [offers, setOffers] = useState<Array<Job>>(new Array<Job>());
 
   useEffect(() => {
-    GenericService.getAll<Array<Job>>('job/requests/1').then((data) => {
+    GenericService.getAll<Array<Job>>('job/requests/0').then((data) => {
       console.log(data);
       setOffers(data);
     });
