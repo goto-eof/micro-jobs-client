@@ -14,19 +14,18 @@ import GenericService from '../service/GenericService';
 import Job from '../dto/Job';
 import GenericResponse from '../dto/GenericResponse';
 import Pagination from './Pagination';
+import PaginationUtil from '../util/PaginationUtil';
 
 export default function Offers() {
   const [offers, setOffers] = useState<Array<Job>>(new Array<Job>());
   const [itemsCount, setItemsCount] = useState(0);
   useEffect(() => {
     GenericService.getAll<Array<Job>>('job/offers/0').then((data) => {
-      console.log(data);
       setOffers(data);
     });
 
     GenericService.get<GenericResponse<number>>('job/count/offers').then(
       (genericResponse) => {
-        console.log(genericResponse);
         setItemsCount(genericResponse.value);
       }
     );
@@ -34,8 +33,8 @@ export default function Offers() {
 
   const goToPage = (page: number) => {
     GenericService.getAll<Array<Job>>('job/offers/' + page).then((data) => {
-      console.log(data);
       setOffers(data);
+      window.scrollTo(0, 0);
     });
   };
 
@@ -51,7 +50,10 @@ export default function Offers() {
             />
           ))}
       </Box>
-      <Pagination callback={goToPage} pages={itemsCount} />
+      <Pagination
+        callback={goToPage}
+        numberOfPages={PaginationUtil.calculatePageNumber(itemsCount)}
+      />
     </>
   );
 }
