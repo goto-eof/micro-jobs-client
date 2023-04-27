@@ -98,26 +98,6 @@ export default function Main() {
             </HStack>
           </HStack>
           <Flex alignItems={'center'}>
-            {/* <HStack
-              display={{ base: 'none', md: 'flex' }}
-              mr={4}
-              style={{ cursor: 'pointer', userSelect: 'none' }}
-            >
-              {isAuthenticated() &&
-                myMenu.map((link) => (
-                  <Box
-                    fontWeight={'bold'}
-                    borderBottomWidth={selectedMenu === link.url ? '5px' : '0'}
-                    borderBottomColor={'green.300'}
-                    pb={2}
-                    onClick={() => selectMenuAndNavigate(link)}
-                    key={link.name}
-                    mr={2}
-                  >
-                    {link.name}
-                  </Box>
-                ))}
-            </HStack> */}
             {isAuthenticated() && (
               <Button
                 variant={'solid'}
