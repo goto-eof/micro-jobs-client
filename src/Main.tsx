@@ -22,6 +22,7 @@ import InsertJob from './components/InsertJob';
 import Register from './components/Register';
 import Login from './components/Login';
 import OffersRequests from './components/OffersRequests';
+import AuthenticationService from './service/AuthenticationService';
 
 const mainMenu = [
   { name: 'Home', url: '/' },
@@ -107,7 +108,13 @@ export default function Main() {
                   />
                 </MenuButton>
                 <MenuList>
-                  <MenuItem>Link 1</MenuItem>
+                  <MenuItem
+                    onClick={() =>
+                      AuthenticationService.logout(() => navigate('/offers'))
+                    }
+                  >
+                    Logout
+                  </MenuItem>
                   <MenuItem>Link 2</MenuItem>
                   <MenuDivider />
                   <MenuItem>Link 3</MenuItem>
