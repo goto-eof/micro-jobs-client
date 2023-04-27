@@ -16,7 +16,12 @@ import {
   Stack,
   useStatStyles,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
+import {
+  HamburgerIcon,
+  CloseIcon,
+  AddIcon,
+  ViewOffIcon,
+} from '@chakra-ui/icons';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Home from './components/Home';
 import InsertJob from './components/InsertJob';
@@ -24,6 +29,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import OffersRequests from './components/OffersRequests';
 import AuthenticationService from './service/AuthenticationService';
+import ViewOfferRequest from './components/ViewOfferRequest';
 
 const mainMenu = [
   { name: 'Home', url: '/' },
@@ -221,6 +227,7 @@ export default function Main() {
             <Route path="/insertJob" element={<InsertJob />} />
             <Route path="/register" element={<Register />} />
             <Route path="/authenticate" element={<Login />} />
+            <Route path="/view/:id" element={<ViewOfferRequest />} />
 
             <Route
               path="/myOffers"

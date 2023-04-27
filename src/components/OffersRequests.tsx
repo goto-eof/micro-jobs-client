@@ -8,8 +8,6 @@ import {
   Image,
   Text,
   Box,
-  Fade,
-  ScaleFade,
   Skeleton,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -18,6 +16,7 @@ import Job from '../dto/Job';
 import GenericResponse from '../dto/GenericResponse';
 import Pagination from './Pagination';
 import PaginationUtil from '../util/PaginationUtil';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   baseUrl: string;
@@ -57,6 +56,7 @@ export default function OffersRequests({ baseUrl, urlCountItems }: Props) {
               key={idx}
               title={item.title}
               description={item.description}
+              idd={item.id}
             />
           ))}
       </Box>
@@ -71,15 +71,22 @@ export default function OffersRequests({ baseUrl, urlCountItems }: Props) {
 interface Offer {
   title: string;
   description: string;
+  idd: number | undefined;
 }
 
-function Offer({ title, description }: Offer) {
+function Offer({ title, description, idd }: Offer) {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const navigate = useNavigate();
+  const goToViewOfferRequest = (id: number | undefined) => {
+    navigate('/view/' + id);
+  };
+
   return (
     <Card
       direction={{ base: 'column', sm: 'row' }}
       overflow="hidden"
       variant="outline"
+      onClick={() => goToViewOfferRequest(idd)}
     >
       <Skeleton width={{ base: '100%', sm: '200px' }} isLoaded={imageLoaded}>
         <Image
