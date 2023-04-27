@@ -21,7 +21,7 @@ interface Props {
   urlCountItems: string;
 }
 
-export default function Offers({ baseUrl, urlCountItems }: Props) {
+export default function OffersRequests({ baseUrl, urlCountItems }: Props) {
   const [offers, setOffers] = useState<Array<Job>>(new Array<Job>());
   const [itemsCount, setItemsCount] = useState(0);
   useEffect(() => {

@@ -18,11 +18,10 @@ import {
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Home from './components/Home';
-import Offers from './components/Offers';
-import Requests from './components/Requests';
 import InsertJob from './components/InsertJob';
 import Register from './components/Register';
 import Login from './components/Login';
+import OffersRequests from './components/OffersRequests';
 
 const mainMenu = [
   { name: 'Home', url: '/' },
@@ -155,7 +154,7 @@ export default function Main() {
             <Route
               path="/offers"
               element={
-                <Offers
+                <OffersRequests
                   key={'offers'}
                   baseUrl="api/v1/job/offers"
                   urlCountItems="api/v1/job/count/offers"
@@ -165,7 +164,7 @@ export default function Main() {
             <Route
               path="/requests"
               element={
-                <Requests
+                <OffersRequests
                   key={'requests'}
                   baseUrl="api/v1/job/requests"
                   urlCountItems="api/v1/job/count/requests"
@@ -179,7 +178,7 @@ export default function Main() {
             <Route
               path="/myOffers"
               element={
-                <Offers
+                <OffersRequests
                   key={'myOffers'}
                   baseUrl="api/v1/job/myOffers"
                   urlCountItems="api/v1/job/count/myOffers"
@@ -189,7 +188,7 @@ export default function Main() {
             <Route
               path="/myRequests"
               element={
-                <Requests
+                <OffersRequests
                   key={'myRequests'}
                   baseUrl="api/v1/job/myRequests"
                   urlCountItems="api/v1/job/count/myRequests"
