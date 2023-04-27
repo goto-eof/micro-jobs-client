@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import {
   Box,
   Flex,
@@ -14,6 +14,7 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
+  useStatStyles,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
 import { Route, Routes, useNavigate } from 'react-router-dom';
@@ -37,13 +38,19 @@ const myMenu = [
 
 export default function Main() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedMenu, setSelectedMenu] = useState('/');
   const isAuthenticated = () => {
     return localStorage.getItem('access_token');
   };
   let navigate = useNavigate();
+  const selectMenuAndNavigate = (link: { name: string; url: string }): void => {
+    setSelectedMenu(link.url);
+    navigate(link.url);
+  };
+
   return (
     <>
-      <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+      <Box bg={useColorModeValue('white', 'white')} px={4} boxShadow={'base'}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <IconButton
             size={'md'}
@@ -53,27 +60,45 @@ export default function Main() {
             onClick={isOpen ? onClose : onOpen}
           />
           <HStack spacing={8} alignItems={'center'}>
-            <Box fontWeight={'extrabold'}>MicroJobs</Box>
+            <Box
+              fontWeight={'extrabold'}
+              color={'green.400'}
+              textShadow={'xl'}
+              fontSize={32}
+            >
+              MicroJobs
+            </Box>
             <HStack
               as={'nav'}
               spacing={4}
               display={{ base: 'none', md: 'flex' }}
             >
               {mainMenu.map((link) => (
-                <Box onClick={() => navigate(link.url)} key={link.name}>
+                <Box
+                  fontWeight={'bold'}
+                  borderBottomWidth={selectedMenu === link.url ? '5px' : '0'}
+                  borderBottomColor={'green.300'}
+                  pb={2}
+                  onClick={() => selectMenuAndNavigate(link)}
+                  key={link.name}
+                >
                   {link.name}
                 </Box>
               ))}
             </HStack>
           </HStack>
           <Flex alignItems={'center'}>
-            <HStack display={{ base: 'none', md: 'flex' }}>
+            <HStack display={{ base: 'none', md: 'flex' }} mr={4}>
               {isAuthenticated() &&
                 myMenu.map((link) => (
                   <Box
-                    pr={4}
-                    onClick={() => navigate(link.url)}
+                    fontWeight={'bold'}
+                    borderBottomWidth={selectedMenu === link.url ? '5px' : '0'}
+                    borderBottomColor={'green.300'}
+                    pb={2}
+                    onClick={() => selectMenuAndNavigate(link)}
                     key={link.name}
+                    mr={2}
                   >
                     {link.name}
                   </Box>
@@ -82,7 +107,7 @@ export default function Main() {
             {isAuthenticated() && (
               <Button
                 variant={'solid'}
-                colorScheme={'teal'}
+                colorScheme={'green'}
                 size={'sm'}
                 mr={4}
                 leftIcon={<AddIcon />}
@@ -133,9 +158,14 @@ export default function Main() {
 
         {isOpen ? (
           <Box pb={4} display={{ md: 'none' }}>
-            <Stack as={'nav'} spacing={4}>
+            <Stack as={'nav'} spacing={4} textAlign={'center'}>
               {mainMenu.map((link) => (
-                <Box onClick={() => navigate(link.url)} key={link.name}>
+                <Box
+                  onClick={() => selectMenuAndNavigate(link)}
+                  borderBottomWidth={selectedMenu === link.url ? '3px' : '0'}
+                  borderBottomColor={'green.300'}
+                  key={link.name}
+                >
                   {link.name}
                 </Box>
               ))}
@@ -143,7 +173,9 @@ export default function Main() {
                 myMenu.map((link) => (
                   <Box
                     pr={4}
-                    onClick={() => navigate(link.url)}
+                    borderBottomWidth={selectedMenu === link.url ? '3px' : '0'}
+                    borderBottomColor={'green.300'}
+                    onClick={() => selectMenuAndNavigate(link)}
                     key={link.name}
                   >
                     {link.name}
