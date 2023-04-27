@@ -14,12 +14,12 @@ import { BrowserRouter } from 'react-router-dom';
 import InterceptorInit from './components/InterceptorInit';
 
 export const App = () => (
-  // <React.StrictMode>
-  <ChakraProvider theme={theme}>
-    <BrowserRouter>
-      <InterceptorInit />
-      <Main />
-    </BrowserRouter>
-  </ChakraProvider>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <ChakraProvider theme={theme}>
+      <BrowserRouter>
+        <InterceptorInit />
+        <Main />
+      </BrowserRouter>
+    </ChakraProvider>
+  </React.StrictMode>
 );
