@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import GenericService from '../service/GenericService';
 import Job from '../dto/Job';
 import { Card, CardBody } from '@chakra-ui/card';
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 interface Props {}
@@ -23,13 +23,15 @@ export default function ViewOfferRequest({}: Props) {
         <Text>Description: {job && job.description}</Text>
         <Text>Status: {job && job.status}</Text>
         <Text>Type: {job && job.type}</Text>
-        {job &&
-          job.images &&
-          job.images.map((image, idx) => (
-            <Box key={idx}>
-              <img src={image} />
-            </Box>
-          ))}
+        <Flex>
+          {job &&
+            job.images &&
+            job.images.map((image, idx) => (
+              <Box key={idx} w={'64px'} h={'64px'}>
+                <img src={image} />
+              </Box>
+            ))}
+        </Flex>
       </CardBody>
     </Card>
   );
