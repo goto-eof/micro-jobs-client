@@ -15,7 +15,6 @@ export default function Pagination({ numberOfPages, callback }: Props) {
   useEffect(() => {
     const newPages = new Array<number>(WINDOW_LENGTH);
     if (numberOfPages < WINDOW_LENGTH) {
-      console.log('numberOfPages', numberOfPages);
       for (let i = 0; i < numberOfPages; i++) {
         newPages[i] = offset + i;
       }
@@ -25,7 +24,6 @@ export default function Pagination({ numberOfPages, callback }: Props) {
       }
     }
 
-    console.log(newPages);
     setPages(newPages);
   }, [offset, numberOfPages]);
 

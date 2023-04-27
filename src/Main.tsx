@@ -4,7 +4,6 @@ import {
   Flex,
   Avatar,
   HStack,
-  Link,
   IconButton,
   Button,
   Menu,
@@ -17,35 +16,24 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import Home from './components/Home';
 import Offers from './components/Offers';
 import Requests from './components/Requests';
 import InsertJob from './components/InsertJob';
 import Register from './components/Register';
 import Login from './components/Login';
-import InterceptorInit from './components/InterceptorInit';
 
-const Links = [
+const mainMenu = [
   { name: 'Home', url: '/' },
   { name: 'Offers', url: '/offers' },
   { name: 'Requests', url: '/requests' },
 ];
 
-const NavLink = ({ children }: { children: ReactNode }) => (
-  <Link
-    px={2}
-    py={1}
-    rounded={'md'}
-    _hover={{
-      textDecoration: 'none',
-      bg: useColorModeValue('gray.200', 'gray.700'),
-    }}
-    href={'#'}
-  >
-    {children}
-  </Link>
-);
+const myMenu = [
+  { name: 'My Offers', url: '/myOffers' },
+  { name: 'My Requests', url: '/myRequests' },
+];
 
 export default function Main() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -71,7 +59,7 @@ export default function Main() {
               spacing={4}
               display={{ base: 'none', md: 'flex' }}
             >
-              {Links.map((link) => (
+              {mainMenu.map((link) => (
                 <Box onClick={() => navigate(link.url)} key={link.name}>
                   {link.name}
                 </Box>
@@ -79,6 +67,18 @@ export default function Main() {
             </HStack>
           </HStack>
           <Flex alignItems={'center'}>
+            <HStack display={{ base: 'none', md: 'flex' }}>
+              {isAuthenticated() &&
+                myMenu.map((link) => (
+                  <Box
+                    pr={4}
+                    onClick={() => navigate(link.url)}
+                    key={link.name}
+                  >
+                    {link.name}
+                  </Box>
+                ))}
+            </HStack>
             {isAuthenticated() && (
               <Button
                 variant={'solid'}
@@ -128,11 +128,21 @@ export default function Main() {
         {isOpen ? (
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
-              {Links.map((link) => (
+              {mainMenu.map((link) => (
                 <Box onClick={() => navigate(link.url)} key={link.name}>
                   {link.name}
                 </Box>
               ))}
+              {isAuthenticated() &&
+                myMenu.map((link) => (
+                  <Box
+                    pr={4}
+                    onClick={() => navigate(link.url)}
+                    key={link.name}
+                  >
+                    {link.name}
+                  </Box>
+                ))}
             </Stack>
           </Box>
         ) : null}
@@ -142,11 +152,50 @@ export default function Main() {
         <Box>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/offers" element={<Offers />} />
-            <Route path="/requests" element={<Requests />} />
+            <Route
+              path="/offers"
+              element={
+                <Offers
+                  key={'offers'}
+                  baseUrl="api/v1/job/offers"
+                  urlCountItems="api/v1/job/count/offers"
+                />
+              }
+            />
+            <Route
+              path="/requests"
+              element={
+                <Requests
+                  key={'requests'}
+                  baseUrl="api/v1/job/requests"
+                  urlCountItems="api/v1/job/count/requests"
+                />
+              }
+            />
             <Route path="/insertJob" element={<InsertJob />} />
             <Route path="/register" element={<Register />} />
             <Route path="/authenticate" element={<Login />} />
+
+            <Route
+              path="/myOffers"
+              element={
+                <Offers
+                  key={'myOffers'}
+                  baseUrl="api/v1/job/myOffers"
+                  urlCountItems="api/v1/job/count/myOffers"
+                />
+              }
+            />
+            <Route
+              path="/myRequests"
+              element={
+                <Requests
+                  key={'myRequests'}
+                  baseUrl="api/v1/job/myRequests"
+                  urlCountItems="api/v1/job/count/myRequests"
+                />
+              }
+            />
           </Routes>
         </Box>
       </Box>

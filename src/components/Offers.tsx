@@ -16,27 +16,30 @@ import GenericResponse from '../dto/GenericResponse';
 import Pagination from './Pagination';
 import PaginationUtil from '../util/PaginationUtil';
 
-export default function Offers() {
+interface Props {
+  baseUrl: string;
+  urlCountItems: string;
+}
+
+export default function Offers({ baseUrl, urlCountItems }: Props) {
   const [offers, setOffers] = useState<Array<Job>>(new Array<Job>());
   const [itemsCount, setItemsCount] = useState(0);
   useEffect(() => {
-    GenericService.getAll<Array<Job>>('api/v1/job/offers/0').then((data) => {
-      GenericService.get<GenericResponse<number>>(
-        'api/v1/job/count/offers'
-      ).then((genericResponse) => {
-        setOffers(data);
-        setItemsCount(genericResponse.value);
-      });
+    GenericService.getAll<Array<Job>>(baseUrl + '/0').then((data) => {
+      GenericService.get<GenericResponse<number>>(urlCountItems).then(
+        (genericResponse) => {
+          setOffers(data);
+          setItemsCount(genericResponse.value);
+        }
+      );
     });
   }, []);
 
   const goToPage = (page: number) => {
-    GenericService.getAll<Array<Job>>('api/v1/job/offers/' + page).then(
-      (data) => {
-        setOffers(data);
-        window.scrollTo(0, 0);
-      }
-    );
+    GenericService.getAll<Array<Job>>(baseUrl + '/' + page).then((data) => {
+      setOffers(data);
+      window.scrollTo(0, 0);
+    });
   };
 
   return (
