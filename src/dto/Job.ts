@@ -4,4 +4,5 @@ export default interface Job {
   description: string;
   type: number;
   status?: number;
+  images?: Array<string>;
 }

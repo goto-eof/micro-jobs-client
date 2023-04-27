@@ -11,9 +11,11 @@ import { useState } from 'react';
 import GenericService from '../service/GenericService';
 import { useNavigate } from 'react-router-dom';
 import Job from '../dto/Job';
+import FileUpload from './FileUpload';
 
 export default function InserJob() {
   const [form, setForm] = useState({ title: '', description: '', type: 0 });
+  const [files, setFiles] = useState(Array<string>);
   const updateFormData = (evt: any) => {
     const name = evt.target.name;
     const value =
@@ -31,6 +33,7 @@ export default function InserJob() {
       title: form.title,
       description: form.description,
       type: form.type,
+      images: files,
     };
     GenericService.create<Job>('api/v1/job', data).then((data) => {
       console.log(data);
@@ -40,6 +43,11 @@ export default function InserJob() {
         navigate('/requests');
       }
     });
+  };
+
+  const updateFileList = (files: Array<any>) => {
+    setFiles(files);
+    console.log(files);
   };
 
   return (
@@ -75,6 +83,9 @@ export default function InserJob() {
             <option value="1">Request</option>
           </Select>
         </FormControl>
+
+        <FileUpload callback={updateFileList} />
+
         <Button mt={4} colorScheme="teal" type="submit" onClick={onSubmit}>
           Submit
         </Button>

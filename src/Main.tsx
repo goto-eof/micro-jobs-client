@@ -59,7 +59,11 @@ export default function Main() {
             display={{ md: 'none' }}
             onClick={isOpen ? onClose : onOpen}
           />
-          <HStack spacing={8} alignItems={'center'}>
+          <HStack
+            spacing={8}
+            alignItems={'center'}
+            style={{ cursor: 'pointer', userSelect: 'none' }}
+          >
             <Box
               fontWeight={'extrabold'}
               color={'green.400'}
@@ -88,7 +92,11 @@ export default function Main() {
             </HStack>
           </HStack>
           <Flex alignItems={'center'}>
-            <HStack display={{ base: 'none', md: 'flex' }} mr={4}>
+            <HStack
+              display={{ base: 'none', md: 'flex' }}
+              mr={4}
+              style={{ cursor: 'pointer', userSelect: 'none' }}
+            >
               {isAuthenticated() &&
                 myMenu.map((link) => (
                   <Box
