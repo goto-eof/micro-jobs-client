@@ -38,8 +38,13 @@ function FileUpload({ callback }: Props) {
 
   return (
     <FormControl isRequired>
-      <FormLabel>Upload screenshots</FormLabel>
-      <Input type="file" onChange={(e) => handleFileChange(e)} multiple />
+      <FormLabel>Upload images</FormLabel>
+      <Input
+        type="file"
+        onChange={(e) => handleFileChange(e)}
+        accept="image/png, image/gif, image/jpeg"
+        multiple
+      />
       <div>{file && `${file.name} - ${file.type}`}</div>
     </FormControl>
   );
