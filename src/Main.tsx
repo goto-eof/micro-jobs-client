@@ -98,7 +98,7 @@ export default function Main() {
             </HStack>
           </HStack>
           <Flex alignItems={'center'}>
-            <HStack
+            {/* <HStack
               display={{ base: 'none', md: 'flex' }}
               mr={4}
               style={{ cursor: 'pointer', userSelect: 'none' }}
@@ -117,7 +117,7 @@ export default function Main() {
                     {link.name}
                   </Box>
                 ))}
-            </HStack>
+            </HStack> */}
             {isAuthenticated() && (
               <Button
                 variant={'solid'}
@@ -154,9 +154,13 @@ export default function Main() {
                   >
                     Logout
                   </MenuItem>
-                  <MenuItem>Link 2</MenuItem>
                   <MenuDivider />
-                  <MenuItem>Link 3</MenuItem>
+                  <MenuItem onClick={() => navigate('/myOffers')}>
+                    My Offers
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate('/myRequests')}>
+                    My Requests
+                  </MenuItem>
                 </MenuList>
               </Menu>
             )}
