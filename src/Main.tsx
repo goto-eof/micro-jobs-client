@@ -22,6 +22,9 @@ import Home from './components/Home';
 import Offers from './components/Offers';
 import Requests from './components/Requests';
 import InsertJob from './components/InsertJob';
+import Register from './components/Register';
+import Login from './components/Login';
+import InterceptorInit from './components/InterceptorInit';
 
 const Links = [
   { name: 'Home', url: '/' },
@@ -46,6 +49,9 @@ const NavLink = ({ children }: { children: ReactNode }) => (
 
 export default function Main() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const isAuthenticated = () => {
+    return localStorage.getItem('access_token');
+  };
   let navigate = useNavigate();
   return (
     <>
@@ -73,38 +79,49 @@ export default function Main() {
             </HStack>
           </HStack>
           <Flex alignItems={'center'}>
-            <Button
-              variant={'solid'}
-              colorScheme={'teal'}
-              size={'sm'}
-              mr={4}
-              leftIcon={<AddIcon />}
-              onClick={() => navigate('/insertJob')}
-            >
-              Add Job
-            </Button>
-            <Menu>
-              <MenuButton
-                as={Button}
-                rounded={'full'}
-                variant={'link'}
-                cursor={'pointer'}
-                minW={0}
+            {isAuthenticated() && (
+              <Button
+                variant={'solid'}
+                colorScheme={'teal'}
+                size={'sm'}
+                mr={4}
+                leftIcon={<AddIcon />}
+                onClick={() => navigate('/insertJob')}
               >
-                <Avatar
-                  size={'sm'}
-                  src={
-                    'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                  }
-                />
-              </MenuButton>
-              <MenuList>
-                <MenuItem>Link 1</MenuItem>
-                <MenuItem>Link 2</MenuItem>
-                <MenuDivider />
-                <MenuItem>Link 3</MenuItem>
-              </MenuList>
-            </Menu>
+                Add Job
+              </Button>
+            )}
+            {isAuthenticated() && (
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  rounded={'full'}
+                  variant={'link'}
+                  cursor={'pointer'}
+                  minW={0}
+                >
+                  <Avatar
+                    size={'sm'}
+                    src={
+                      'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
+                    }
+                  />
+                </MenuButton>
+                <MenuList>
+                  <MenuItem>Link 1</MenuItem>
+                  <MenuItem>Link 2</MenuItem>
+                  <MenuDivider />
+                  <MenuItem>Link 3</MenuItem>
+                </MenuList>
+              </Menu>
+            )}
+            {!isAuthenticated() && (
+              <>
+                <span onClick={() => navigate('/authenticate')}>Login</span>
+                {' | '}
+                <span onClick={() => navigate('/register')}>Register</span>
+              </>
+            )}
           </Flex>
         </Flex>
 
@@ -128,6 +145,8 @@ export default function Main() {
             <Route path="/offers" element={<Offers />} />
             <Route path="/requests" element={<Requests />} />
             <Route path="/insertJob" element={<InsertJob />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/authenticate" element={<Login />} />
           </Routes>
         </Box>
       </Box>

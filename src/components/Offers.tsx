@@ -19,23 +19,28 @@ import PaginationUtil from '../util/PaginationUtil';
 export default function Offers() {
   const [offers, setOffers] = useState<Array<Job>>(new Array<Job>());
   const [itemsCount, setItemsCount] = useState(0);
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    GenericService.getAll<Array<Job>>('job/offers/0').then((data) => {
-      setOffers(data);
-    });
-
-    GenericService.get<GenericResponse<number>>('job/count/offers').then(
-      (genericResponse) => {
-        setItemsCount(genericResponse.value);
-      }
-    );
+    if (!loaded) {
+      GenericService.getAll<Array<Job>>('api/v1/job/offers/0').then((data) => {
+        GenericService.get<GenericResponse<number>>(
+          'api/v1/job/count/offers'
+        ).then((genericResponse) => {
+          setOffers(data);
+          setItemsCount(genericResponse.value);
+        });
+      });
+      setLoaded(true);
+    }
   }, []);
 
   const goToPage = (page: number) => {
-    GenericService.getAll<Array<Job>>('job/offers/' + page).then((data) => {
-      setOffers(data);
-      window.scrollTo(0, 0);
-    });
+    GenericService.getAll<Array<Job>>('api/v1/job/offers/' + page).then(
+      (data) => {
+        setOffers(data);
+        window.scrollTo(0, 0);
+      }
+    );
   };
 
   return (

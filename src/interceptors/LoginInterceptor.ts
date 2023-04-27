@@ -1,34 +1,70 @@
 import axios from 'axios';
+import GenericService from '../service/GenericService';
 
 const customAxios = axios.create();
-export const customInterceptor = (
-  navigate: any,
-  toggleChangedLocalStorage: any
-) => {
+export const customInterceptor = (navigate: any) => {
   customAxios.interceptors.response.use(
-    async function (response) {
-      //   GenericService.refreshToken(response.data);
+    async (response) => {
       return response;
     },
-    function (error) {
-      if (error.response.status === 401) {
-        console.log('Unauthorized');
-        localStorage.clear();
-        toggleChangedLocalStorage();
-        navigate('/login');
+    (error) => {
+      if (isNotAuthorized(error)) {
+        return refreshToken(error, navigate).then((data: any) => {
+          if (data.access_token) {
+            localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('refresh_token', data.refresh_token);
+            error.config.baseURL = undefined;
+            error.config.headers[
+              'Authorization'
+            ] = `Bearer ${data.access_token}`;
+            return axios.request(error.config).then(
+              (data) => {
+                return Promise.resolve(data);
+              },
+              (error) => {
+                if (isNotAuthorized(error)) {
+                  navigate('/authenticate');
+                  return Promise.reject(error);
+                }
+                return Promise.reject(error);
+              }
+            );
+            // return Promise.resolve(data);
+          } else {
+            localStorage.clear();
+            navigate('/authenticate');
+            return Promise.reject(error);
+          }
+        });
       }
       return Promise.reject(error);
+
+      function isNotAuthorized(error: any) {
+        return error.response.status === 401 || error.response.status === 403;
+      }
     }
   );
 };
 
+const refreshToken = (error: any, navigate: (path: string) => {}) => {
+  let tokensData = localStorage.getItem('refresh_token');
+  localStorage.clear();
+  if (tokensData) {
+    return GenericService.postHeaders('api/v1/auth/refreshToken', {
+      headers: {
+        Authorization: `Bearer ${tokensData}`,
+      },
+    });
+  }
+  return Promise.resolve(error);
+};
+
 customAxios.interceptors.request.use(
   (config: any) => {
-    let tokensData = localStorage.getItem('token');
-    config.headers['Authorization'] = `${tokensData}`;
-    // config.headers['Access-Control-Allow-Origin'] = '*';
-    // config.headers['Access-Control-Allow-Method'] =
-    //   'GET,PUT,POST,DELETE,PATCH,OPTIONS';
+    let tokensData = localStorage.getItem('access_token');
+    if (tokensData) {
+      config.headers['Authorization'] = `Bearer ${tokensData}`;
+    }
     return config;
   },
   (error) => {

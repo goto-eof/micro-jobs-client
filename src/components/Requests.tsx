@@ -20,21 +20,23 @@ export default function Offers() {
   const [offers, setOffers] = useState<Array<Job>>(new Array<Job>());
   const [itemsCount, setItemsCount] = useState(0);
   useEffect(() => {
-    GenericService.getAll<Array<Job>>('job/requests/0').then((data) => {
-      setOffers(data);
-    });
-    GenericService.get<GenericResponse<number>>('job/count/requests').then(
-      (genericResponse) => {
+    GenericService.getAll<Array<Job>>('api/v1/job/requests/0').then((data) => {
+      GenericService.get<GenericResponse<number>>(
+        'api/v1/job/count/requests'
+      ).then((genericResponse) => {
+        setOffers(data);
         setItemsCount(genericResponse.value);
-      }
-    );
+      });
+    });
   }, []);
 
   const goToPage = (page: number) => {
-    GenericService.getAll<Array<Job>>('job/requests/' + page).then((data) => {
-      setOffers(data);
-      window.scrollTo(0, 0);
-    });
+    GenericService.getAll<Array<Job>>('api/v1/job/requests/' + page).then(
+      (data) => {
+        setOffers(data);
+        window.scrollTo(0, 0);
+      }
+    );
   };
   return (
     <>

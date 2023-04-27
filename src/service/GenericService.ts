@@ -2,8 +2,8 @@ import Result from '../dto/Result';
 import customAxios from '../interceptors/LoginInterceptor';
 
 export default class GenericService {
-  private static baseUrl: string =
-    process.env.REACT_APP_URI + ':' + process.env.REACT_APP_PORT + '/';
+  private static baseUrl: string = '/';
+  // process.env.REACT_APP_URI + ':' + process.env.REACT_APP_PORT + '/';
 
   public static async getAll<T>(modelName: string): Promise<T> {
     return await customAxios
@@ -86,6 +86,24 @@ export default class GenericService {
       });
   }
 
+  public static async postHeaders<T>(
+    modelName: string,
+    headers: any
+  ): Promise<Result<T>> {
+    return await customAxios
+      .post<T>(`${this.baseUrl}${modelName}`, '', {
+        ...headers,
+        withCredentials: true,
+      })
+      .then(async (result: any) => {
+        let data = result.data;
+        return data;
+      })
+      .catch((err: any) => {
+        throw err;
+      });
+  }
+
   public static async update<T, S>(
     modelName: string,
     id: number,
@@ -128,16 +146,16 @@ export default class GenericService {
       });
   }
 
-  //   public static refreshToken(result: Result<any>) {
-  //     if (result.refresh_token) {
-  //       GenericService.createDifResponse<JwtI, JwtI>('user/refreshToken', {
-  //         jwt: localStorage.getItem('token') || '',
-  //       }).then((response) => {
-  //         if (response.success) {
-  //           localStorage.setItem('token', response.result.jwt);
-  //         }
-  //       });
-  //     } else {
-  //     }
+  // public static refreshToken(result: Result<any>) {
+  //   if (result.refresh_token) {
+  //     GenericService.createDifResponse<Jwt, Jwt>('user/refreshToken', {
+  //       jwt: localStorage.getItem('token') || '',
+  //     }).then((response) => {
+  //       if (response.success) {
+  //         localStorage.setItem('token', response.result.jwt);
+  //       }
+  //     });
+  //   } else {
   //   }
+  // }
 }

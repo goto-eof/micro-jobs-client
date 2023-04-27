@@ -32,7 +32,7 @@ export default function InserJob() {
       description: form.description,
       type: form.type,
     };
-    GenericService.create<Job>('job', data).then((data) => {
+    GenericService.create<Job>('api/v1/job', data).then((data) => {
       console.log(data);
       if (form.type == 0) {
         navigate('/offers');
