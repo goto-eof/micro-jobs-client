@@ -193,8 +193,8 @@ export default function Main() {
               element={
                 <OffersRequests
                   key={'offers'}
-                  baseUrl="api/v1/job/offers"
-                  urlCountItems="api/v1/job/count/offers"
+                  baseUrl="api/v1/job/0"
+                  urlCountItems="api/v1/job/count/0"
                 />
               }
             />
@@ -203,8 +203,8 @@ export default function Main() {
               element={
                 <OffersRequests
                   key={'requests'}
-                  baseUrl="api/v1/job/requests"
-                  urlCountItems="api/v1/job/count/requests"
+                  baseUrl="api/v1/job/1"
+                  urlCountItems="api/v1/job/count/1"
                 />
               }
             />
@@ -218,8 +218,8 @@ export default function Main() {
               element={
                 <OffersRequests
                   key={'myOffers'}
-                  baseUrl="api/v1/job/myOffers"
-                  urlCountItems="api/v1/job/count/myOffers"
+                  baseUrl="api/v1/job/mine/0"
+                  urlCountItems="api/v1/job/count/mine/0"
                 />
               }
             />
@@ -228,8 +228,8 @@ export default function Main() {
               element={
                 <OffersRequests
                   key={'myRequests'}
-                  baseUrl="api/v1/job/myRequests"
-                  urlCountItems="api/v1/job/count/myRequests"
+                  baseUrl="api/v1/job/1"
+                  urlCountItems="api/v1/job/count/mine/1"
                 />
               }
             />

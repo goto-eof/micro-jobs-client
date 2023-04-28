@@ -14,7 +14,12 @@ import Job from '../dto/Job';
 import FileUpload from './FileUpload';
 
 export default function InserJob() {
-  const [form, setForm] = useState({ title: '', description: '', type: 0 });
+  const [form, setForm] = useState({
+    title: '',
+    description: '',
+    price: 0,
+    type: 0,
+  });
   const [files, setFiles] = useState(Array<string>);
   const updateFormData = (evt: any) => {
     const name = evt.target.name;
@@ -34,6 +39,7 @@ export default function InserJob() {
       description: form.description,
       type: form.type,
       images: files,
+      price: form.price,
     };
     GenericService.create<Job>('api/v1/job', data).then((data) => {
       console.log(data);
@@ -68,6 +74,16 @@ export default function InserJob() {
             name="description"
             value={form.description}
             placeholder="Description"
+            onChange={(e) => updateFormData(e)}
+          />
+        </FormControl>
+        <FormControl isRequired>
+          <FormLabel>Price</FormLabel>
+          <Input
+            type="number"
+            name="price"
+            value={form.price}
+            placeholder="Price"
             onChange={(e) => updateFormData(e)}
           />
         </FormControl>

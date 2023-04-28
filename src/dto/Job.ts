@@ -1,3 +1,5 @@
+import Author from './Author';
+
 export default interface Job {
   id?: number;
   title: string;
@@ -5,4 +7,6 @@ export default interface Job {
   type: number;
   status?: number;
   images?: Array<string>;
+  author?: Author;
+  price: number;
 }

@@ -9,6 +9,13 @@ import {
   Text,
   Box,
   Skeleton,
+  Icon,
+  HStack,
+  VStack,
+  Flex,
+  SimpleGrid,
+  GridItem,
+  Center,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import GenericService from '../service/GenericService';
@@ -17,6 +24,8 @@ import GenericResponse from '../dto/GenericResponse';
 import Pagination from './Pagination';
 import PaginationUtil from '../util/PaginationUtil';
 import { useNavigate } from 'react-router-dom';
+import JobConst from '../consts/JobConst';
+import { StarIcon } from '@chakra-ui/icons';
 
 interface Props {
   baseUrl: string;
@@ -49,17 +58,10 @@ export default function OffersRequests({ baseUrl, urlCountItems }: Props) {
 
   return (
     <>
-      <Box>
+      <SimpleGrid spacing={3}>
         {offers &&
-          offers.map((item, idx) => (
-            <Offer
-              key={idx}
-              title={item.title}
-              description={item.description}
-              idd={item.id}
-            />
-          ))}
-      </Box>
+          offers.map((item, idx) => <JobComponent key={idx} job={item} />)}
+      </SimpleGrid>
       <Pagination
         callback={goToPage}
         numberOfPages={PaginationUtil.calculatePageNumber(itemsCount)}
@@ -68,17 +70,25 @@ export default function OffersRequests({ baseUrl, urlCountItems }: Props) {
   );
 }
 
-interface Offer {
-  title: string;
-  description: string;
-  idd: number | undefined;
+interface JobProps {
+  job: Job;
 }
 
-function Offer({ title, description, idd }: Offer) {
+function JobComponent({ job }: JobProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
   const goToViewOfferRequest = (id: number | undefined) => {
     navigate('/view/' + id);
+  };
+
+  const calulateAcceptButtonLabel = () => {
+    if (job.type === JobConst.TYPE_OFFER) {
+      return 'Request service';
+    }
+    if (job.type === JobConst.TYPE_REQUEST) {
+      return 'Provide service';
+    }
+    throw new Error('Function not implemented.');
   };
 
   return (
@@ -86,29 +96,65 @@ function Offer({ title, description, idd }: Offer) {
       direction={{ base: 'column', sm: 'row' }}
       overflow="hidden"
       variant="outline"
-      onClick={() => goToViewOfferRequest(idd)}
+      onClick={() => goToViewOfferRequest(job.id)}
     >
       <Skeleton width={{ base: '100%', sm: '200px' }} isLoaded={imageLoaded}>
         <Image
           objectFit="cover"
           maxW={{ base: '100%', sm: '200px' }}
+          h={{ base: '100%', sm: '100%' }}
           src="https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
           alt="Caffe Latte"
           onLoad={() => setImageLoaded(true)}
         />
       </Skeleton>
-      <Stack>
-        <CardBody>
-          <Heading size="md">{title}</Heading>
-
-          <Text py="2">{description}</Text>
-        </CardBody>
-        <CardFooter>
-          <Button variant="solid" colorScheme="blue">
-            Accept
-          </Button>
-        </CardFooter>
-      </Stack>
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
+        <Stack spacing={24}>
+          <CardBody>
+            <Heading size="md">{job.title} </Heading>
+            <Box fontSize={'0.8em'}>
+              by {job.author?.firstname} {job.author?.lastname}
+              {' | '} <Stars num={job.author?.stars} />
+            </Box>
+            <Text py="2">{job.description}</Text>
+          </CardBody>
+          <CardFooter justify={'center'}>
+            <Button variant="solid" colorScheme="blue">
+              {calulateAcceptButtonLabel()}
+            </Button>
+          </CardFooter>
+        </Stack>
+        <Stack p={5} align={'end'}>
+          <Box
+            borderRadius={'10px'}
+            verticalAlign={'top'}
+            maxW={'200px'}
+            boxShadow={'md'}
+            p={10}
+          >
+            <Flex textAlign={'left'}>Price:</Flex>
+            <Box fontSize={'1.3em'} fontWeight={'bold'}>
+              {job.price}€
+            </Box>
+          </Box>
+        </Stack>
+      </SimpleGrid>
     </Card>
+  );
+}
+interface StarsProps {
+  num: number | undefined;
+}
+function Stars({ num }: StarsProps) {
+  return (
+    <Box as="span">
+      {Array.from(Array(5).keys()).map((value, idx) => {
+        return idx < (num || 0) ? (
+          <StarIcon color={'yellow.300'} />
+        ) : (
+          <StarIcon color={'gray.400'} />
+        );
+      })}
+    </Box>
   );
 }
