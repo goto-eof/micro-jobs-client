@@ -228,7 +228,7 @@ export default function Main() {
               element={
                 <OffersRequests
                   key={'myRequests'}
-                  baseUrl="api/v1/job/1"
+                  baseUrl="api/v1/job/mine/1"
                   urlCountItems="api/v1/job/count/mine/1"
                 />
               }
