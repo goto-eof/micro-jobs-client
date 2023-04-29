@@ -45,6 +45,12 @@ export default function JobOffersRequests({ baseUrl, urlCountItems }: Props) {
     });
   }, []);
 
+  const deleteItem = (jobId: number) => {
+    GenericService.delete('api/v1/job', jobId).then((_) => {
+      setOffers(offers.filter((offer) => offer.id !== jobId));
+    });
+  };
+
   const goToPage = (page: number) => {
     GenericService.getAll<Array<Job>>(baseUrl + '/' + page).then((data) => {
       setOffers(data);
@@ -56,7 +62,9 @@ export default function JobOffersRequests({ baseUrl, urlCountItems }: Props) {
     <>
       <SimpleGrid spacing={3}>
         {offers &&
-          offers.map((item, idx) => <JobComponent key={idx} job={item} />)}
+          offers.map((item, idx) => (
+            <JobComponent key={idx} deleteItem={deleteItem} job={item} />
+          ))}
       </SimpleGrid>
       <Pagination
         callback={goToPage}
@@ -68,9 +76,10 @@ export default function JobOffersRequests({ baseUrl, urlCountItems }: Props) {
 
 interface JobProps {
   job: Job;
+  deleteItem: (jobId: number) => void;
 }
 
-function JobComponent({ job }: JobProps) {
+function JobComponent({ job, deleteItem }: JobProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
   const goToViewOfferRequest = (id: number | undefined) => {
@@ -86,7 +95,11 @@ function JobComponent({ job }: JobProps) {
     }
     throw new Error('Function not implemented.');
   };
-
+  const deleteJobOfferRequest = (jobId: number | undefined) => {
+    if (jobId) {
+      deleteItem(jobId);
+    }
+  };
   return (
     <Card
       direction={{ base: 'column', sm: 'row' }}
@@ -146,6 +159,13 @@ function JobComponent({ job }: JobProps) {
                 onClick={() => goToViewOfferRequest(job.id)}
               >
                 View
+              </Button>{' '}
+              <Button
+                variant={'solid'}
+                colorScheme="red"
+                onClick={() => deleteJobOfferRequest(job.id)}
+              >
+                Delete
               </Button>
             </Box>
           </Box>
