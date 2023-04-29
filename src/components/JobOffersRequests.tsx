@@ -9,13 +9,9 @@ import {
   Text,
   Box,
   Skeleton,
-  Icon,
-  HStack,
-  VStack,
   Flex,
   SimpleGrid,
-  GridItem,
-  Center,
+  Grid,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import GenericService from '../service/GenericService';
@@ -32,7 +28,7 @@ interface Props {
   urlCountItems: string;
 }
 
-export default function OffersRequests({ baseUrl, urlCountItems }: Props) {
+export default function JobOffersRequests({ baseUrl, urlCountItems }: Props) {
   const [offers, setOffers] = useState<Array<Job>>(new Array<Job>());
   const [itemsCount, setItemsCount] = useState(0);
   const [isLoaded, setLoaded] = useState(false);
@@ -96,7 +92,6 @@ function JobComponent({ job }: JobProps) {
       direction={{ base: 'column', sm: 'row' }}
       overflow="hidden"
       variant="outline"
-      onClick={() => goToViewOfferRequest(job.id)}
     >
       <Skeleton width={{ base: '100%', sm: '200px' }} isLoaded={imageLoaded}>
         <Image
@@ -108,8 +103,9 @@ function JobComponent({ job }: JobProps) {
           onLoad={() => setImageLoaded(true)}
         />
       </Skeleton>
-      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
-        <Stack spacing={24}>
+
+      <SimpleGrid columns={2} spacingX={100}>
+        <Stack spacing={0}>
           <CardBody>
             <Heading size="md">{job.title} </Heading>
             <Box fontSize={'0.8em'}>
@@ -122,9 +118,17 @@ function JobComponent({ job }: JobProps) {
             <Button variant="solid" colorScheme="blue">
               {calulateAcceptButtonLabel()}
             </Button>
+            <Button
+              mx={3}
+              variant={'solid'}
+              colorScheme="green"
+              onClick={() => goToViewOfferRequest(job.id)}
+            >
+              View
+            </Button>
           </CardFooter>
         </Stack>
-        <Stack p={5} align={'end'}>
+        <Stack p={5} align={'end'} float={'right'}>
           <Box
             borderRadius={'10px'}
             verticalAlign={'top'}
@@ -148,11 +152,11 @@ interface StarsProps {
 function Stars({ num }: StarsProps) {
   return (
     <Box as="span">
-      {Array.from(Array(5).keys()).map((value, idx) => {
+      {Array.from(Array(5).keys()).map((_, idx) => {
         return idx < (num || 0) ? (
-          <StarIcon color={'yellow.300'} />
+          <StarIcon key={idx} color={'yellow.300'} />
         ) : (
-          <StarIcon color={'gray.400'} />
+          <StarIcon key={idx} color={'gray.400'} />
         );
       })}
     </Box>

@@ -27,7 +27,7 @@ import Home from './components/Home';
 import InsertJob from './components/InsertJob';
 import Register from './components/Register';
 import Login from './components/Login';
-import OffersRequests from './components/OffersRequests';
+import JobOffersRequests from './components/JobOffersRequests';
 import AuthenticationService from './service/AuthenticationService';
 import ViewOfferRequest from './components/ViewOfferRequest';
 
@@ -191,7 +191,7 @@ export default function Main() {
             <Route
               path="/offers"
               element={
-                <OffersRequests
+                <JobOffersRequests
                   key={'offers'}
                   baseUrl="api/v1/job/0"
                   urlCountItems="api/v1/job/count/0"
@@ -201,7 +201,7 @@ export default function Main() {
             <Route
               path="/requests"
               element={
-                <OffersRequests
+                <JobOffersRequests
                   key={'requests'}
                   baseUrl="api/v1/job/1"
                   urlCountItems="api/v1/job/count/1"
@@ -216,7 +216,7 @@ export default function Main() {
             <Route
               path="/myOffers"
               element={
-                <OffersRequests
+                <JobOffersRequests
                   key={'myOffers'}
                   baseUrl="api/v1/job/mine/0"
                   urlCountItems="api/v1/job/count/mine/0"
@@ -226,7 +226,7 @@ export default function Main() {
             <Route
               path="/myRequests"
               element={
-                <OffersRequests
+                <JobOffersRequests
                   key={'myRequests'}
                   baseUrl="api/v1/job/mine/1"
                   urlCountItems="api/v1/job/count/mine/1"
