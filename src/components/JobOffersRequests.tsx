@@ -104,44 +104,52 @@ function JobComponent({ job }: JobProps) {
         />
       </Skeleton>
 
-      <SimpleGrid columns={2} spacingX={100}>
-        <Stack spacing={0}>
+      <SimpleGrid columns={{ base: 1, md: 2 }} w={'full'}>
+        <Stack spacing={4} w={'full'}>
           <CardBody>
-            <Heading size="md">{job.title} </Heading>
+            <Heading
+              cursor={'pointer'}
+              color={'blue.400'}
+              _hover={{ color: 'blue.500' }}
+              size="md"
+              onClick={() => goToViewOfferRequest(job.id)}
+            >
+              {job.title}{' '}
+            </Heading>
             <Box fontSize={'0.8em'}>
               by {job.author?.firstname} {job.author?.lastname}
               {' | '} <Stars num={job.author?.stars} />
             </Box>
             <Text py="2">{job.description}</Text>
           </CardBody>
-          <CardFooter justify={'center'}>
-            <Button variant="solid" colorScheme="blue">
-              {calulateAcceptButtonLabel()}
-            </Button>
-            <Button
-              mx={3}
-              variant={'solid'}
-              colorScheme="green"
-              onClick={() => goToViewOfferRequest(job.id)}
-            >
-              View
-            </Button>
-          </CardFooter>
+          <CardFooter justify={'center'}></CardFooter>
         </Stack>
-        <Stack p={5} align={'end'} float={'right'}>
+        <Flex w={'full'}>
           <Box
             borderRadius={'10px'}
             verticalAlign={'top'}
-            maxW={'200px'}
-            boxShadow={'md'}
+            w={'full'}
+            textAlign={'right'}
             p={10}
           >
-            <Flex textAlign={'left'}>Price:</Flex>
+            <Box textAlign={'right'}>Price:</Box>
             <Box fontSize={'1.3em'} fontWeight={'bold'}>
               {job.price}€
             </Box>
+            <Box mt={4}>
+              <Button mr={3} variant="solid" colorScheme="blue">
+                {calulateAcceptButtonLabel()}
+              </Button>
+              <Button
+                variant={'solid'}
+                colorScheme="green"
+                onClick={() => goToViewOfferRequest(job.id)}
+              >
+                View
+              </Button>
+            </Box>
           </Box>
-        </Stack>
+        </Flex>
       </SimpleGrid>
     </Card>
   );

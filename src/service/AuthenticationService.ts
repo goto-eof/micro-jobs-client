@@ -9,7 +9,8 @@ export default class AuthenticationService {
         Authorization: `Bearer ${tokensData}`,
       },
     }).then(() => {
-      localStorage.clear();
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
 
       console.log('logout done');
       callback();

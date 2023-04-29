@@ -31,7 +31,8 @@ export const customInterceptor = (navigate: any) => {
             );
             // return Promise.resolve(data);
           } else {
-            localStorage.clear();
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
             navigate('/authenticate');
             return Promise.reject(error);
           }
@@ -48,7 +49,8 @@ export const customInterceptor = (navigate: any) => {
 
 const refreshToken = (error: any, navigate: (path: string) => {}) => {
   let tokensData = localStorage.getItem('refresh_token');
-  localStorage.clear();
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
   if (tokensData) {
     return GenericService.postHeaders('api/v1/auth/refreshToken', {
       headers: {
