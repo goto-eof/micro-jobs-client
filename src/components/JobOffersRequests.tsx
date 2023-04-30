@@ -100,6 +100,10 @@ function JobComponent({ job, deleteItem }: JobProps) {
       deleteItem(jobId);
     }
   };
+  function showUserButtons(job: Job) {
+    return job.author?.username === localStorage.getItem('username');
+  }
+
   return (
     <Card
       direction={{ base: 'column', sm: 'row' }}
@@ -163,6 +167,7 @@ function JobComponent({ job, deleteItem }: JobProps) {
               <Button
                 variant={'solid'}
                 colorScheme="red"
+                display={showUserButtons(job) ? '' : 'none'}
                 onClick={() => deleteJobOfferRequest(job.id)}
               >
                 Delete
