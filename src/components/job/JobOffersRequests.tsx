@@ -11,7 +11,6 @@ import {
   Skeleton,
   Flex,
   SimpleGrid,
-  Grid,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import GenericService from '../../service/GenericService';
@@ -21,8 +20,9 @@ import Pagination from '../Pagination';
 import PaginationUtil from '../../util/PaginationUtil';
 import { useNavigate } from 'react-router-dom';
 import JobConst from '../../consts/JobConst';
-import { StarIcon } from '@chakra-ui/icons';
 import UserService from '../../service/UserService';
+import Stars from './Stars';
+import JobService from '../../service/JobService';
 
 interface Props {
   baseUrl: string;
@@ -46,12 +46,6 @@ export default function JobOffersRequests({ baseUrl, urlCountItems }: Props) {
     });
   }, []);
 
-  const deleteItem = (jobId: number) => {
-    GenericService.delete('api/v1/job', jobId).then((_) => {
-      setOffers(offers.filter((offer) => offer.id !== jobId));
-    });
-  };
-
   const goToPage = (page: number) => {
     GenericService.getAll<Array<Job>>(baseUrl + '/' + page).then((data) => {
       setOffers(data);
@@ -63,9 +57,7 @@ export default function JobOffersRequests({ baseUrl, urlCountItems }: Props) {
     <>
       <SimpleGrid spacing={3}>
         {offers &&
-          offers.map((item, idx) => (
-            <JobComponent key={idx} deleteItem={deleteItem} job={item} />
-          ))}
+          offers.map((item, idx) => <JobComponent key={idx} job={item} />)}
       </SimpleGrid>
       <Pagination
         callback={goToPage}
@@ -77,34 +69,15 @@ export default function JobOffersRequests({ baseUrl, urlCountItems }: Props) {
 
 interface JobProps {
   job: Job;
-  deleteItem: (jobId: number) => void;
 }
 
-function JobComponent({ job, deleteItem }: JobProps) {
+function JobComponent({ job }: JobProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
   const goToViewOfferRequest = (id: number | undefined) => {
     navigate('/view/' + id);
   };
 
-  const goToEditOfferRequest = (id: number | undefined) => {
-    navigate('/editJob/' + id);
-  };
-
-  const calulateAcceptButtonLabel = () => {
-    if (job.type === JobConst.TYPE_OFFER) {
-      return 'Request service';
-    }
-    if (job.type === JobConst.TYPE_REQUEST) {
-      return 'Provide service';
-    }
-    throw new Error('Function not implemented.');
-  };
-  const deleteJobOfferRequest = (jobId: number | undefined) => {
-    if (jobId) {
-      deleteItem(jobId);
-    }
-  };
   function showUserButtons(job: Job) {
     return UserService.isSameUsername(job.author?.username || '');
   }
@@ -179,45 +152,12 @@ function JobComponent({ job, deleteItem }: JobProps) {
                 variant="solid"
                 colorScheme="blue"
               >
-                {calulateAcceptButtonLabel()}
-              </Button>
-              <Button
-                variant={'solid'}
-                colorScheme="red"
-                mr={3}
-                display={showUserButtons(job) ? '' : 'none'}
-                onClick={() => deleteJobOfferRequest(job.id)}
-              >
-                Delete
-              </Button>
-              <Button
-                variant={'solid'}
-                colorScheme="green"
-                display={showUserButtons(job) ? '' : 'none'}
-                onClick={() => goToEditOfferRequest(job.id)}
-              >
-                Edit
+                {JobService.calulateAcceptButtonLabel(job)}
               </Button>
             </Box>
           </Box>
         </Flex>
       </SimpleGrid>
     </Card>
-  );
-}
-interface StarsProps {
-  num: number | undefined;
-}
-function Stars({ num }: StarsProps) {
-  return (
-    <Box as="span">
-      {Array.from(Array(5).keys()).map((_, idx) => {
-        return idx < (num || 0) ? (
-          <StarIcon key={idx} color={'yellow.300'} />
-        ) : (
-          <StarIcon key={idx} color={'gray.400'} />
-        );
-      })}
-    </Box>
   );
 }
