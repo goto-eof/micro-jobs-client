@@ -101,10 +101,10 @@ function JobComponent({ job }: JobProps) {
         </Skeleton>
       )}
       {!job.pictureName && (
-        <Skeleton width={{ base: '100%', sm: '200px' }} isLoaded={imageLoaded}>
+        <Skeleton width={{ base: '100%', sm: '300px' }} isLoaded={imageLoaded}>
           <Image
             objectFit="cover"
-            maxW={{ base: '100%', sm: '200px' }}
+            maxW={{ base: '100%', sm: '300px' }}
             h={{ base: '100%', sm: '100%' }}
             src={'/api/v1/jobPicture/files/no_image.png'}
             alt="Job Picture"
