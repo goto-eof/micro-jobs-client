@@ -115,16 +115,30 @@ function JobComponent({ job, deleteItem }: JobProps) {
       overflow="hidden"
       variant="outline"
     >
-      <Skeleton width={{ base: '100%', sm: '200px' }} isLoaded={imageLoaded}>
-        <Image
-          objectFit="cover"
-          maxW={{ base: '100%', sm: '200px' }}
-          h={{ base: '100%', sm: '100%' }}
-          src={'/api/v1/jobPicture/files/' + job.pictureName}
-          alt="Caffe Latte"
-          onLoad={() => setImageLoaded(true)}
-        />
-      </Skeleton>
+      {job.pictureName && (
+        <Skeleton width={{ base: '100%', sm: '200px' }} isLoaded={imageLoaded}>
+          <Image
+            objectFit="cover"
+            maxW={{ base: '100%', sm: '200px' }}
+            h={{ base: '100%', sm: '100%' }}
+            src={'/api/v1/jobPicture/files/' + job.pictureName}
+            alt="Job Picture"
+            onLoad={() => setImageLoaded(true)}
+          />
+        </Skeleton>
+      )}
+      {!job.pictureName && (
+        <Skeleton width={{ base: '100%', sm: '200px' }} isLoaded={imageLoaded}>
+          <Image
+            objectFit="cover"
+            maxW={{ base: '100%', sm: '200px' }}
+            h={{ base: '100%', sm: '100%' }}
+            src={'/api/v1/jobPicture/files/no_image.png'}
+            alt="Job Picture"
+            onLoad={() => setImageLoaded(true)}
+          />
+        </Skeleton>
+      )}
 
       <SimpleGrid columns={{ base: 1, md: 2 }} w={'full'}>
         <Stack spacing={4} w={'full'}>
