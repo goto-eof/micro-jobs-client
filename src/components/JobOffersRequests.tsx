@@ -86,6 +86,10 @@ function JobComponent({ job, deleteItem }: JobProps) {
     navigate('/view/' + id);
   };
 
+  const goToEditOfferRequest = (id: number | undefined) => {
+    navigate('/editJob/' + id);
+  };
+
   const calulateAcceptButtonLabel = () => {
     if (job.type === JobConst.TYPE_OFFER) {
       return 'Request service';
@@ -171,6 +175,14 @@ function JobComponent({ job, deleteItem }: JobProps) {
                 onClick={() => deleteJobOfferRequest(job.id)}
               >
                 Delete
+              </Button>
+              <Button
+                variant={'solid'}
+                colorScheme="green"
+                display={showUserButtons(job) ? '' : 'none'}
+                onClick={() => goToEditOfferRequest(job.id)}
+              >
+                Edit
               </Button>
             </Box>
           </Box>

@@ -7,20 +7,39 @@ import {
   Input,
   Select,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import GenericService from '../service/GenericService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Job from '../dto/Job';
 import FileUpload from './FileUpload';
 
 export default function InserJob() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<Job>({
     title: '',
     description: '',
     price: 0,
     type: 0,
+    id: undefined,
   });
+
+  let { id } = useParams();
+
   const [files, setFiles] = useState(Array<string>);
+
+  useEffect(() => {
+    if (id) {
+      GenericService.get<Job>('api/v1/job/' + id).then((job) => {
+        setForm({
+          title: job.title,
+          description: job.description,
+          price: job.price,
+          type: job.type,
+          id: job.id,
+        });
+      });
+    }
+  }, []);
+
   const updateFormData = (evt: any) => {
     const name = evt.target.name;
     const value =
@@ -40,15 +59,28 @@ export default function InserJob() {
       type: form.type,
       images: files,
       price: form.price,
+      id: form.id,
     };
-    GenericService.create<Job>('api/v1/job', data).then((data) => {
-      console.log(data);
-      if (form.type == 0) {
-        navigate('/offers');
-      } else if (form.type == 1) {
-        navigate('/requests');
-      }
-    });
+
+    if (!form.id) {
+      GenericService.create<Job>('api/v1/job', data).then((data) => {
+        console.log(data);
+        if (form.type == 0) {
+          navigate('/offers');
+        } else if (form.type == 1) {
+          navigate('/requests');
+        }
+      });
+    } else {
+      GenericService.put<Job>('api/v1/job', form.id, data).then((data) => {
+        console.log(data);
+        if (form.type == 0) {
+          navigate('/offers');
+        } else if (form.type == 1) {
+          navigate('/requests');
+        }
+      });
+    }
   };
 
   const updateFileList = (files: Array<any>) => {

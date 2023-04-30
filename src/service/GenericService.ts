@@ -122,6 +122,24 @@ export default class GenericService {
       });
   }
 
+  public static async put<T>(
+    modelName: string,
+    id: number,
+    data: T
+  ): Promise<T> {
+    return await customAxios
+      .put<T>(`${this.baseUrl}${modelName}/${id}`, data, {
+        //  withCredentials: true,
+      })
+      .then(async (result: any) => {
+        let data = result.data;
+        return data;
+      })
+      .catch((err: any) => {
+        throw err;
+      });
+  }
+
   public static async delete<T>(modelName: string, id: number): Promise<T> {
     return await customAxios
       .delete(`${this.baseUrl}${modelName}/${id}`, { withCredentials: true })

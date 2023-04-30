@@ -215,6 +215,7 @@ export default function Main() {
               }
             />
             <Route path="/insertJob" element={<InsertJob />} />
+            <Route path="/editJob/:id" element={<InsertJob />} />
             <Route path="/register" element={<Register />} />
             <Route path="/authenticate" element={<Login />} />
             <Route path="/view/:id" element={<ViewOfferRequest />} />
