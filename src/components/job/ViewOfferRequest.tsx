@@ -137,6 +137,7 @@ export default function ViewOfferRequest({}: Props) {
                       onClick={() => openModal(image)}
                       key={idx}
                       mr={5}
+                      maxW={'200px'}
                       borderRadius={'10px'}
                       boxShadow={'md'}
                     >
