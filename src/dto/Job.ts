@@ -9,5 +9,5 @@ export default interface Job {
   images?: Array<string>;
   author?: Author;
   price: number;
-  picture?: string;
+  pictureName?: string;
 }

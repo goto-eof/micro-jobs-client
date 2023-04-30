@@ -28,7 +28,7 @@ export default function ViewOfferRequest({}: Props) {
             job.images &&
             job.images.map((image, idx) => (
               <Box key={idx} w={'64px'} h={'64px'}>
-                <img src={image} />
+                <img src={'/api/v1/jobPicture/files/' + image} />
               </Box>
             ))}
         </Flex>

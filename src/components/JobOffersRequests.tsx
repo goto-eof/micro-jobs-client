@@ -120,7 +120,7 @@ function JobComponent({ job, deleteItem }: JobProps) {
           objectFit="cover"
           maxW={{ base: '100%', sm: '200px' }}
           h={{ base: '100%', sm: '100%' }}
-          src={job.picture}
+          src={'/api/v1/jobPicture/files/' + job.pictureName}
           alt="Caffe Latte"
           onLoad={() => setImageLoaded(true)}
         />
