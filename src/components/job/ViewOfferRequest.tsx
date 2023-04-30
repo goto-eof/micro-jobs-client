@@ -69,9 +69,19 @@ export default function ViewOfferRequest({}: Props) {
     onOpen();
   }
 
+  function calculateTitle(type: number | undefined): import('react').ReactNode {
+    if (type === 0) {
+      return 'Offers';
+    }
+    if (type === 1) {
+      return 'Requests';
+    }
+    return '';
+  }
+
   return (
     <>
-      <Title title={job?.title || ''} />
+      <Title title={job?.type === 0 ? 'Offer' : 'Request'} />
       <Card
         direction={{ base: 'column', sm: 'row' }}
         overflow="hidden"
@@ -114,14 +124,14 @@ export default function ViewOfferRequest({}: Props) {
         <SimpleGrid columns={{ base: 1, md: 2 }} w={'full'}>
           <Stack spacing={4} w={'full'}>
             <CardBody>
-              {/* <Heading
+              <Heading
                 cursor={'pointer'}
                 color={'green.400'}
                 _hover={{ color: 'greeen.500' }}
                 size="md"
               >
                 {job && job.title}{' '}
-              </Heading> */}
+              </Heading>
               <Box fontSize={'0.8em'}>
                 by {job && job.author?.firstname} {job && job.author?.lastname}{' '}
                 (@
