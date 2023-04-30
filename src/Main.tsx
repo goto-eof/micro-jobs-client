@@ -16,6 +16,7 @@ import {
   Stack,
   useStatStyles,
   Icon,
+  Center,
 } from '@chakra-ui/react';
 import {
   HamburgerIcon,
@@ -32,6 +33,7 @@ import Login from './components/Login';
 import JobOffersRequests from './components/JobOffersRequests';
 import AuthenticationService from './service/AuthenticationService';
 import ViewOfferRequest from './components/ViewOfferRequest';
+import UserService from './service/UserService';
 
 const mainMenu = [
   { name: 'Home', url: '/' },
@@ -120,32 +122,38 @@ export default function Main() {
                   variant={'link'}
                   cursor={'pointer'}
                   minW={0}
+                  alignContent={'center'}
                 >
-                  <Avatar
-                    size={'sm'}
-                    src={
-                      'https://i.pinimg.com/280x280_RS/af/db/37/afdb379ece8167459322717886a51af9.jpg'
-                    }
-                  />
+                  <Box>
+                    <img
+                      src={UserService.getUserPicture()}
+                      style={{
+                        borderRadius: '50%',
+                        margin: 'auto',
+                        width: '32px',
+                        height: '32px',
+                      }}
+                    />
+                  </Box>
                   <Box fontSize={'0.7em'}>
-                    {localStorage.getItem('username')}
+                    {UserService.getUsername()}
                     <Icon ml={1} as={TriangleDownIcon} />
                   </Box>
                 </MenuButton>
                 <MenuList>
+                  <MenuItem onClick={() => navigate('/myOffers')}>
+                    My Offers
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate('/myRequests')}>
+                    My Requests
+                  </MenuItem>
+                  <MenuDivider />
                   <MenuItem
                     onClick={() =>
                       AuthenticationService.logout(() => navigate('/offers'))
                     }
                   >
                     Logout
-                  </MenuItem>
-                  <MenuDivider />
-                  <MenuItem onClick={() => navigate('/myOffers')}>
-                    My Offers
-                  </MenuItem>
-                  <MenuItem onClick={() => navigate('/myRequests')}>
-                    My Requests
                   </MenuItem>
                 </MenuList>
               </Menu>

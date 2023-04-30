@@ -10,6 +10,7 @@ import { useState } from 'react';
 import GenericService from '../service/GenericService';
 import { useNavigate } from 'react-router-dom';
 import LoginRequest from '../dto/LoginRequest';
+import UserProfile from '../dto/UserProfile';
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -41,8 +42,12 @@ export default function Login() {
         console.log(data);
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('refresh_token', data.refresh_token);
-        localStorage.setItem('username', form.username);
-        navigate('/offers');
+        GenericService.get<UserProfile>('api/v1/auth/me').then(
+          (userProfile: UserProfile) => {
+            localStorage.setItem('user', JSON.stringify(userProfile));
+            navigate('/offers');
+          }
+        );
       }
     );
   };

@@ -132,7 +132,7 @@ export default function InserJob() {
           </Select>
         </FormControl>
 
-        <FileUpload callback={updateFileList} />
+        <FileUpload callback={updateFileList} multiple={true} />
 
         <Button mt={4} colorScheme="teal" type="submit" onClick={onSubmit}>
           Submit

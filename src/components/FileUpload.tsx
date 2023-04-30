@@ -3,21 +3,20 @@ import { ChangeEvent, useState } from 'react';
 
 interface Props {
   callback: (files: Array<any>) => void;
+  multiple: boolean;
 }
 
-function FileUpload({ callback }: Props) {
+function FileUpload({ callback, multiple }: Props) {
   const [file, setFile] = useState<File>();
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
 
       const files = new Array<any>();
       for (let i = 0; i < e.target.files.length; i++) {
-        convertBase64(e.target.files[i]).then((fileString: any) => {
-          files.push(fileString);
-          console.log(fileString);
-        });
+        let b64 = await convertBase64(e.target.files[i]);
+        files.push(b64);
       }
       callback(files);
     }
@@ -43,7 +42,7 @@ function FileUpload({ callback }: Props) {
         type="file"
         onChange={(e) => handleFileChange(e)}
         accept="image/png, image/gif, image/jpeg"
-        multiple
+        multiple={multiple}
       />
       <div>{file && `${file.name} - ${file.type}`}</div>
     </FormControl>

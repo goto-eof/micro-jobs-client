@@ -22,6 +22,7 @@ import PaginationUtil from '../util/PaginationUtil';
 import { useNavigate } from 'react-router-dom';
 import JobConst from '../consts/JobConst';
 import { StarIcon } from '@chakra-ui/icons';
+import UserService from '../service/UserService';
 
 interface Props {
   baseUrl: string;
@@ -105,7 +106,7 @@ function JobComponent({ job, deleteItem }: JobProps) {
     }
   };
   function showUserButtons(job: Job) {
-    return job.author?.username === localStorage.getItem('username');
+    return UserService.isSameUsername(job.author?.username || '');
   }
 
   return (
@@ -158,19 +159,18 @@ function JobComponent({ job, deleteItem }: JobProps) {
               {job.price}€
             </Box>
             <Box mt={4}>
-              <Button mr={3} variant="solid" colorScheme="blue">
+              <Button
+                display={!showUserButtons(job) ? '' : 'none'}
+                mr={3}
+                variant="solid"
+                colorScheme="blue"
+              >
                 {calulateAcceptButtonLabel()}
               </Button>
               <Button
                 variant={'solid'}
-                colorScheme="green"
-                onClick={() => goToViewOfferRequest(job.id)}
-              >
-                View
-              </Button>{' '}
-              <Button
-                variant={'solid'}
                 colorScheme="red"
+                mr={3}
                 display={showUserButtons(job) ? '' : 'none'}
                 onClick={() => deleteJobOfferRequest(job.id)}
               >
