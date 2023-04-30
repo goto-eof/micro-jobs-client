@@ -26,6 +26,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import UserService from '../../service/UserService';
 import Stars from './Stars';
 import JobService from '../../service/JobService';
+import Title from './Title';
 
 interface Props {}
 export default function ViewOfferRequest({}: Props) {
@@ -70,6 +71,7 @@ export default function ViewOfferRequest({}: Props) {
 
   return (
     <>
+      <Title title={job?.title || ''} />
       <Card
         direction={{ base: 'column', sm: 'row' }}
         overflow="hidden"
@@ -112,14 +114,14 @@ export default function ViewOfferRequest({}: Props) {
         <SimpleGrid columns={{ base: 1, md: 2 }} w={'full'}>
           <Stack spacing={4} w={'full'}>
             <CardBody>
-              <Heading
+              {/* <Heading
                 cursor={'pointer'}
-                color={'blue.400'}
-                _hover={{ color: 'blue.500' }}
+                color={'green.400'}
+                _hover={{ color: 'greeen.500' }}
                 size="md"
               >
                 {job && job.title}{' '}
-              </Heading>
+              </Heading> */}
               <Box fontSize={'0.8em'}>
                 by {job && job.author?.firstname} {job && job.author?.lastname}{' '}
                 (@

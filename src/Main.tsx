@@ -137,10 +137,20 @@ export default function Main() {
                   </Box>
                 </MenuButton>
                 <MenuList>
-                  <MenuItem onClick={() => navigate('/myOffers')}>
+                  <MenuItem
+                    onClick={() => {
+                      setSelectedMenu('');
+                      navigate('/myOffers');
+                    }}
+                  >
                     My Offers
                   </MenuItem>
-                  <MenuItem onClick={() => navigate('/myRequests')}>
+                  <MenuItem
+                    onClick={() => {
+                      setSelectedMenu('');
+                      navigate('/myRequests');
+                    }}
+                  >
                     My Requests
                   </MenuItem>
                   <MenuDivider />
@@ -194,7 +204,7 @@ export default function Main() {
         ) : null}
       </Box>
 
-      <Box p={4}>
+      <Box px={0}>
         <Box>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -205,6 +215,7 @@ export default function Main() {
                   key={'offers'}
                   baseUrl="api/v1/job/public/0"
                   urlCountItems="api/v1/job/public/count/0"
+                  title="Offers"
                 />
               }
             />
@@ -215,6 +226,7 @@ export default function Main() {
                   key={'requests'}
                   baseUrl="api/v1/job/public/1"
                   urlCountItems="api/v1/job/public/count/1"
+                  title="Requests"
                 />
               }
             />
@@ -231,6 +243,7 @@ export default function Main() {
                   key={'myOffers'}
                   baseUrl="api/v1/job/mine/0"
                   urlCountItems="api/v1/job/count/mine/0"
+                  title="My Offers"
                 />
               }
             />
@@ -241,6 +254,7 @@ export default function Main() {
                   key={'myRequests'}
                   baseUrl="api/v1/job/mine/1"
                   urlCountItems="api/v1/job/count/mine/1"
+                  title="My Requests"
                 />
               }
             />
