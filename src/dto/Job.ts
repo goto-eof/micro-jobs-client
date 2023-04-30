@@ -6,8 +6,9 @@ export default interface Job {
   description: string;
   type: number;
   status?: number;
-  images?: Array<string>;
+  imagesContent?: Array<string>;
   author?: Author;
   price: number;
   pictureName?: string;
+  pictureNamesList?: Array<string>;
 }

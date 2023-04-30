@@ -14,15 +14,15 @@ import {
   Grid,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import GenericService from '../service/GenericService';
-import Job from '../dto/Job';
-import GenericResponse from '../dto/GenericResponse';
-import Pagination from './Pagination';
-import PaginationUtil from '../util/PaginationUtil';
+import GenericService from '../../service/GenericService';
+import Job from '../../dto/Job';
+import GenericResponse from '../../dto/GenericResponse';
+import Pagination from '../Pagination';
+import PaginationUtil from '../../util/PaginationUtil';
 import { useNavigate } from 'react-router-dom';
-import JobConst from '../consts/JobConst';
+import JobConst from '../../consts/JobConst';
 import { StarIcon } from '@chakra-ui/icons';
-import UserService from '../service/UserService';
+import UserService from '../../service/UserService';
 
 interface Props {
   baseUrl: string;

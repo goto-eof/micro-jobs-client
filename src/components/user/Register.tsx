@@ -7,11 +7,11 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import GenericService from '../service/GenericService';
+import GenericService from '../../service/GenericService';
 import { useNavigate } from 'react-router-dom';
-import RegisterRequest from '../dto/RegisterRequest';
-import FileUpload from './FileUpload';
-import UserProfile from '../dto/UserProfile';
+import RegisterRequest from '../../dto/RegisterRequest';
+import FileUpload from '../FileUpload';
+import UserProfile from '../../dto/UserProfile';
 
 export default function Register() {
   const [userPicture, setUserPicture] = useState<string>();

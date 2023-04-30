@@ -1,8 +1,7 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Flex,
-  Avatar,
   HStack,
   IconButton,
   Button,
@@ -14,25 +13,22 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
-  useStatStyles,
   Icon,
-  Center,
 } from '@chakra-ui/react';
 import {
   HamburgerIcon,
   CloseIcon,
   AddIcon,
-  ViewOffIcon,
   TriangleDownIcon,
 } from '@chakra-ui/icons';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Home from './components/Home';
-import InsertJob from './components/InsertJob';
-import Register from './components/Register';
-import Login from './components/Login';
-import JobOffersRequests from './components/JobOffersRequests';
+import InsertJob from './components/job/InsertUpdateJob';
+import Register from './components/user/Register';
+import Login from './components/user/Login';
+import JobOffersRequests from './components/job/JobOffersRequests';
 import AuthenticationService from './service/AuthenticationService';
-import ViewOfferRequest from './components/ViewOfferRequest';
+import ViewOfferRequest from './components/job/ViewOfferRequest';
 import UserService from './service/UserService';
 
 const mainMenu = [
@@ -207,8 +203,8 @@ export default function Main() {
               element={
                 <JobOffersRequests
                   key={'offers'}
-                  baseUrl="api/v1/job/0"
-                  urlCountItems="api/v1/job/count/0"
+                  baseUrl="api/v1/job/public/0"
+                  urlCountItems="api/v1/job/public/count/0"
                 />
               }
             />
@@ -217,8 +213,8 @@ export default function Main() {
               element={
                 <JobOffersRequests
                   key={'requests'}
-                  baseUrl="api/v1/job/1"
-                  urlCountItems="api/v1/job/count/1"
+                  baseUrl="api/v1/job/public/1"
+                  urlCountItems="api/v1/job/public/count/1"
                 />
               }
             />

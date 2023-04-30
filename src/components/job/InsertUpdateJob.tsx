@@ -8,10 +8,10 @@ import {
   Select,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import GenericService from '../service/GenericService';
+import GenericService from '../../service/GenericService';
 import { useNavigate, useParams } from 'react-router-dom';
-import Job from '../dto/Job';
-import FileUpload from './FileUpload';
+import Job from '../../dto/Job';
+import FileUpload from '../FileUpload';
 
 export default function InserJob() {
   const [form, setForm] = useState<Job>({
@@ -57,7 +57,7 @@ export default function InserJob() {
       title: form.title,
       description: form.description,
       type: form.type,
-      images: files,
+      imagesContent: files,
       price: form.price,
       id: form.id,
     };

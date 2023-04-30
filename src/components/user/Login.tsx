@@ -7,10 +7,10 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import GenericService from '../service/GenericService';
+import GenericService from '../../service/GenericService';
 import { useNavigate } from 'react-router-dom';
-import LoginRequest from '../dto/LoginRequest';
-import UserProfile from '../dto/UserProfile';
+import LoginRequest from '../../dto/LoginRequest';
+import UserProfile from '../../dto/UserProfile';
 
 export default function Login() {
   const [form, setForm] = useState({
