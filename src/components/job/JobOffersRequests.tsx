@@ -19,41 +19,44 @@ import GenericResponse from '../../dto/GenericResponse';
 import Pagination from '../Pagination';
 import PaginationUtil from '../../util/PaginationUtil';
 import { useNavigate } from 'react-router-dom';
-import JobConst from '../../consts/JobConst';
 import UserService from '../../service/UserService';
 import Stars from './Stars';
 import JobService from '../../service/JobService';
 import Title from './Title';
 
 interface Props {
-  baseUrl: string;
-  urlCountItems: string;
+  type: number;
+  scope: string;
   title: string;
 }
 
-export default function JobOffersRequests({
-  baseUrl,
-  urlCountItems,
-  title,
-}: Props) {
+export default function JobOffersRequests({ type, scope, title }: Props) {
+  const BASE_URL_RETRIEVE_ITEMS: string = `api/v1/job/${scope}/${type}`;
+  const BASE_URL_RETRIEVE_ITEMS_FIRST_PAGE: string = `${BASE_URL_RETRIEVE_ITEMS}/0`;
+  const BASE_URL_COUNT_ITEMS: string = `api/v1/job/${scope}/count/${type}`;
+
   const [offers, setOffers] = useState<Array<Job>>(new Array<Job>());
   const [itemsCount, setItemsCount] = useState(0);
   const [isLoaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    GenericService.getAll<Array<Job>>(baseUrl + '/0').then((data) => {
-      GenericService.get<GenericResponse<number>>(urlCountItems).then(
-        (genericResponse) => {
-          setOffers(data);
-          setItemsCount(genericResponse.value);
-          setLoaded(true);
-        }
-      );
-    });
+    GenericService.getAll<Array<Job>>(BASE_URL_RETRIEVE_ITEMS_FIRST_PAGE).then(
+      (data) => {
+        GenericService.get<GenericResponse<number>>(BASE_URL_COUNT_ITEMS).then(
+          (genericResponse) => {
+            setOffers(data);
+            setItemsCount(genericResponse.value);
+            setLoaded(true);
+          }
+        );
+      }
+    );
   }, []);
 
   const goToPage = (page: number) => {
-    GenericService.getAll<Array<Job>>(baseUrl + '/' + page).then((data) => {
+    GenericService.getAll<Array<Job>>(
+      BASE_URL_RETRIEVE_ITEMS + '/' + page
+    ).then((data) => {
       setOffers(data);
       window.scrollTo(0, 0);
     });
@@ -64,7 +67,9 @@ export default function JobOffersRequests({
       <Title title={title} />
       <SimpleGrid spacing={3}>
         {offers &&
-          offers.map((item, idx) => <JobComponent key={idx} job={item} />)}
+          offers.map((item, idx) => (
+            <JobComponent scope={scope} key={idx} job={item} />
+          ))}
       </SimpleGrid>
       <Pagination
         callback={goToPage}
@@ -76,13 +81,14 @@ export default function JobOffersRequests({
 
 interface JobProps {
   job: Job;
+  scope: string;
 }
 
-function JobComponent({ job }: JobProps) {
+function JobComponent({ job, scope }: JobProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
   const goToViewOfferRequest = (id: number | undefined) => {
-    navigate('/view/' + id);
+    navigate(`/view/${scope}/${id}`);
   };
 
   function showUserButtons(job: Job) {

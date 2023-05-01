@@ -36,9 +36,10 @@ export default function ViewOfferRequest({}: Props) {
   const navigate = useNavigate();
   const [modalImage, setModalImage] = useState<string>();
 
-  let { id } = useParams();
+  let { id, scopeFromUrl } = useParams();
+  const scope = scopeFromUrl || 'public';
   useEffect(() => {
-    GenericService.get<Job>('api/v1/job/' + id).then((job) => {
+    GenericService.get<Job>(`api/v1/job/${scope}/${id}`).then((job) => {
       setJob(job);
     });
   }, []);
@@ -51,15 +52,14 @@ export default function ViewOfferRequest({}: Props) {
     navigate('/editJob/' + id);
   };
 
-  const deleteJobOfferRequest = (jobId: number | undefined) => {
+  const deleteJobOfferRequest = (jobId: number | undefined, scope: string) => {
     if (jobId) {
-      deleteItem(jobId);
+      deleteItem(jobId, scope);
     }
   };
 
-  const deleteItem = (jobId: number) => {
-    GenericService.delete('api/v1/job', jobId).then((_) => {
-      // setOffers(offers.filter((offer) => offer.id !== jobId));
+  const deleteItem = (jobId: number, scope: string) => {
+    GenericService.delete(`api/v1/job/${scope}`, jobId).then((_) => {
       navigate('/offers');
     });
   };
@@ -69,19 +69,19 @@ export default function ViewOfferRequest({}: Props) {
     onOpen();
   }
 
-  function calculateTitle(type: number | undefined): import('react').ReactNode {
+  function calculateTitle(type: number | undefined): string {
     if (type === 0) {
-      return 'Offers';
+      return 'Offer';
     }
     if (type === 1) {
-      return 'Requests';
+      return 'Request';
     }
     return '';
   }
 
   return (
     <>
-      <Title title={job?.type === 0 ? 'Offer' : 'Request'} />
+      {job && <Title title={calculateTitle(job?.type)} />}
       <Card
         direction={{ base: 'column', sm: 'row' }}
         overflow="hidden"
@@ -185,7 +185,7 @@ export default function ViewOfferRequest({}: Props) {
                   colorScheme="red"
                   mr={3}
                   display={job && showUserButtons(job) ? '' : 'none'}
-                  onClick={() => job && deleteJobOfferRequest(job.id)}
+                  onClick={() => job && deleteJobOfferRequest(job.id, scope)}
                 >
                   Delete
                 </Button>

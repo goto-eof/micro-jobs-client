@@ -30,6 +30,7 @@ import JobOffersRequests from './components/job/JobOffersRequests';
 import AuthenticationService from './service/AuthenticationService';
 import ViewOfferRequest from './components/job/ViewOfferRequest';
 import UserService from './service/UserService';
+import JobConst from './consts/JobConst';
 
 const mainMenu = [
   { name: 'Home', url: '/' },
@@ -213,8 +214,8 @@ export default function Main() {
               element={
                 <JobOffersRequests
                   key={'offers'}
-                  baseUrl="api/v1/job/public/0"
-                  urlCountItems="api/v1/job/public/count/0"
+                  type={JobConst.TYPE_OFFER}
+                  scope={JobConst.SCOPE_PUBLIC}
                   title="Offers"
                 />
               }
@@ -224,8 +225,8 @@ export default function Main() {
               element={
                 <JobOffersRequests
                   key={'requests'}
-                  baseUrl="api/v1/job/public/1"
-                  urlCountItems="api/v1/job/public/count/1"
+                  type={JobConst.TYPE_REQUEST}
+                  scope={JobConst.SCOPE_PUBLIC}
                   title="Requests"
                 />
               }
@@ -234,15 +235,15 @@ export default function Main() {
             <Route path="/editJob/:id" element={<InsertJob />} />
             <Route path="/register" element={<Register />} />
             <Route path="/authenticate" element={<Login />} />
-            <Route path="/view/:id" element={<ViewOfferRequest />} />
+            <Route path="/view/:scope/:id" element={<ViewOfferRequest />} />
 
             <Route
               path="/myOffers"
               element={
                 <JobOffersRequests
                   key={'myOffers'}
-                  baseUrl="api/v1/job/mine/0"
-                  urlCountItems="api/v1/job/count/mine/0"
+                  type={JobConst.TYPE_OFFER}
+                  scope={JobConst.SCOPE_PRIVATE}
                   title="My Offers"
                 />
               }
@@ -252,8 +253,8 @@ export default function Main() {
               element={
                 <JobOffersRequests
                   key={'myRequests'}
-                  baseUrl="api/v1/job/mine/1"
-                  urlCountItems="api/v1/job/count/mine/1"
+                  type={JobConst.TYPE_REQUEST}
+                  scope={JobConst.SCOPE_PRIVATE}
                   title="My Requests"
                 />
               }
