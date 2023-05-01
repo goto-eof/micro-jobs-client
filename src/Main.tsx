@@ -206,9 +206,19 @@ export default function Main() {
             )}
             {!isAuthenticated() && (
               <>
-                <span onClick={() => navigate('/authenticate')}>Login</span>
+                <span
+                  onClick={() => navigate('/authenticate')}
+                  style={{ padding: 4, cursor: 'pointer' }}
+                >
+                  Login
+                </span>
                 {' | '}
-                <span onClick={() => navigate('/register')}>Register</span>
+                <span
+                  style={{ padding: 4, cursor: 'pointer' }}
+                  onClick={() => navigate('/register')}
+                >
+                  Register
+                </span>
               </>
             )}
           </Flex>

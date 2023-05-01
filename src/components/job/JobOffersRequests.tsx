@@ -38,7 +38,6 @@ export default function JobOffersRequests({
   title,
   status,
 }: Props) {
-  console.log(status);
   const BASE_URL_RETRIEVE_ITEMS: string =
     status !== undefined
       ? `api/v1/job/${scope}/admin/${type}/${status}`
