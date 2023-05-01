@@ -76,7 +76,7 @@ export default function Pagination({ numberOfPages, callback }: Props) {
             }}
             _hover={{ bg: 'lightyellow' }}
           >
-            {pageNumber}
+            {pageNumber + 1}
           </Box>
         ))}
       <Box
