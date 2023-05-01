@@ -11,6 +11,7 @@ import GenericService from '../../service/GenericService';
 import { useNavigate } from 'react-router-dom';
 import LoginRequest from '../../dto/LoginRequest';
 import UserProfile from '../../dto/UserProfile';
+import Header from '../job/Header';
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -53,31 +54,34 @@ export default function Login() {
   };
 
   return (
-    <Center>
-      <Box width={'3xl'}>
-        <FormControl isRequired>
-          <FormLabel>Username</FormLabel>
-          <Input
-            name="username"
-            value={form.username}
-            placeholder="Username"
-            onChange={(e) => updateFormData(e)}
-          />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel>Password</FormLabel>
-          <Input
-            name="password"
-            value={form.password}
-            type="password"
-            placeholder="Password"
-            onChange={(e) => updateFormData(e)}
-          />
-        </FormControl>
-        <Button mt={4} colorScheme="teal" type="submit" onClick={onSubmit}>
-          Submit
-        </Button>
-      </Box>
-    </Center>
+    <>
+      <Header title="Sign in" />
+      <Center>
+        <Box width={'3xl'} boxShadow={'md'} p={4} mt={5}>
+          <FormControl isRequired>
+            <FormLabel>Username</FormLabel>
+            <Input
+              name="username"
+              value={form.username}
+              placeholder="Username"
+              onChange={(e) => updateFormData(e)}
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Password</FormLabel>
+            <Input
+              name="password"
+              value={form.password}
+              type="password"
+              placeholder="Password"
+              onChange={(e) => updateFormData(e)}
+            />
+          </FormControl>
+          <Button mt={4} colorScheme="teal" type="submit" onClick={onSubmit}>
+            Submit
+          </Button>
+        </Box>
+      </Center>
+    </>
   );
 }

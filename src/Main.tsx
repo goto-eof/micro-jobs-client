@@ -211,14 +211,14 @@ export default function Main() {
                   onClick={() => navigate('/authenticate')}
                   style={{ padding: 4, cursor: 'pointer' }}
                 >
-                  Login
+                  Sign in
                 </span>
                 {' | '}
                 <span
                   style={{ padding: 4, cursor: 'pointer' }}
                   onClick={() => navigate('/register')}
                 >
-                  Register
+                  Sign up
                 </span>
               </>
             )}

@@ -49,6 +49,11 @@ export default function ViewOfferRequest({}: Props) {
     });
   }, []);
 
+  const showJobStatus =
+    job &&
+    (UserService.isAdmin() || UserService.isPublisher(job)) &&
+    scope !== JobConst.SCOPE_PUBLIC;
+
   const showUserButtons = (job: Job) => {
     return (
       scope === JobConst.SCOPE_PRIVATE &&
@@ -168,6 +173,16 @@ export default function ViewOfferRequest({}: Props) {
               textAlign={'right'}
               p={10}
             >
+              {showJobStatus && (
+                <Box
+                  color={
+                    JobService.isCreated(job.status) ? 'gray.400' : 'green.400'
+                  }
+                  fontWeight={'bold'}
+                >
+                  {JobService.retrieveStatus(job)}
+                </Box>
+              )}
               <Box textAlign={'right'}>Price:</Box>
               <Box fontSize={'1.3em'} fontWeight={'bold'}>
                 {job && job.price}€

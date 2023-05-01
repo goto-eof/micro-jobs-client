@@ -13,6 +13,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Job from '../../dto/Job';
 import FileUpload from '../FileUpload';
 import JobConst from '../../consts/JobConst';
+import Header from './Header';
 
 export default function InserJob() {
   const [form, setForm] = useState<Job>({
@@ -97,55 +98,58 @@ export default function InserJob() {
   };
 
   return (
-    <Center>
-      <Box width={'3xl'}>
-        <FormControl isRequired>
-          <FormLabel>Title</FormLabel>
-          <Input
-            placeholder="Title"
-            value={form.title}
-            name="title"
-            onChange={(e) => updateFormData(e)}
-          />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel>Description</FormLabel>
-          <Input
-            name="description"
-            value={form.description}
-            placeholder="Description"
-            onChange={(e) => updateFormData(e)}
-          />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel>Price</FormLabel>
-          <Input
-            type="number"
-            name="price"
-            value={form.price}
-            placeholder="Price"
-            onChange={(e) => updateFormData(e)}
-          />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel>Type</FormLabel>
-          <Select
-            placeholder="Select type"
-            name="type"
-            value={form.type}
-            onChange={(e) => updateFormData(e)}
-          >
-            <option value="0">Offer</option>
-            <option value="1">Request</option>
-          </Select>
-        </FormControl>
+    <>
+      <Header title="Insert Job" />
+      <Center>
+        <Box width={'3xl'} boxShadow={'md'} p={4} mt={5}>
+          <FormControl isRequired>
+            <FormLabel>Title</FormLabel>
+            <Input
+              placeholder="Title"
+              value={form.title}
+              name="title"
+              onChange={(e) => updateFormData(e)}
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Description</FormLabel>
+            <Input
+              name="description"
+              value={form.description}
+              placeholder="Description"
+              onChange={(e) => updateFormData(e)}
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Price</FormLabel>
+            <Input
+              type="number"
+              name="price"
+              value={form.price}
+              placeholder="Price"
+              onChange={(e) => updateFormData(e)}
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Type</FormLabel>
+            <Select
+              placeholder="Select type"
+              name="type"
+              value={form.type}
+              onChange={(e) => updateFormData(e)}
+            >
+              <option value="0">Offer</option>
+              <option value="1">Request</option>
+            </Select>
+          </FormControl>
 
-        <FileUpload callback={updateFileList} multiple={true} />
+          <FileUpload callback={updateFileList} multiple={true} />
 
-        <Button mt={4} colorScheme="teal" type="submit" onClick={onSubmit}>
-          Submit
-        </Button>
-      </Box>
-    </Center>
+          <Button mt={4} colorScheme="teal" type="submit" onClick={onSubmit}>
+            Submit
+          </Button>
+        </Box>
+      </Center>
+    </>
   );
 }
