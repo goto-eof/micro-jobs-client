@@ -33,6 +33,7 @@ import ViewOfferRequest from './components/job/ViewJob';
 import UserService from './service/UserService';
 import JobConst from './consts/JobConst';
 import UserConst from './consts/UserConst';
+import Footer from './components/Footer';
 
 const mainMenu = [
   { name: 'Home', url: '/' },
@@ -340,6 +341,7 @@ export default function Main() {
           </Routes>
         </Box>
       </Box>
+      <Footer />
     </>
   );
 }

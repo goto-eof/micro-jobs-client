@@ -11,6 +11,7 @@ import {
   Skeleton,
   Flex,
   SimpleGrid,
+  Center,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import GenericService from '../../service/GenericService';
@@ -83,7 +84,7 @@ export default function JobOffersRequests({
   return (
     <>
       <Title title={title} />
-      <SimpleGrid spacing={3}>
+      <SimpleGrid spacing={3} p={3}>
         {offers &&
           offers.map((item, idx) => (
             <JobComponent
@@ -95,10 +96,13 @@ export default function JobOffersRequests({
             />
           ))}
       </SimpleGrid>
-      <Pagination
-        callback={goToPage}
-        numberOfPages={PaginationUtil.calculatePageNumber(itemsCount)}
-      />
+      <Center>
+        {' '}
+        <Pagination
+          callback={goToPage}
+          numberOfPages={PaginationUtil.calculatePageNumber(itemsCount)}
+        />
+      </Center>
     </>
   );
 }
