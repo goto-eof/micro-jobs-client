@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import UserService from '../../service/UserService';
 import Stars from './Stars';
 import JobService from '../../service/JobService';
-import Title from './Title';
+import Title from './Header';
 import JobConst from '../../consts/JobConst';
 
 interface Props {
