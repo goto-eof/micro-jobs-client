@@ -132,12 +132,17 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
     });
   };
 
+  const showJobStatus =
+    (UserService.isAdmin() || UserService.isPublisher(job)) &&
+    scope !== JobConst.SCOPE_PUBLIC;
+
   return (
     <>
       <Card
         direction={{ base: 'column', sm: 'row' }}
         overflow="hidden"
         variant="outline"
+        maxH={'200px'}
       >
         {job.pictureName && (
           <Skeleton
@@ -145,6 +150,8 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
             isLoaded={imageLoaded}
           >
             <Image
+              onClick={() => goToViewOfferRequest(job.id)}
+              cursor={'pointer'}
               objectFit="cover"
               maxW={{ base: '100%', sm: '200px' }}
               h={{ base: '100%', sm: '100%' }}
@@ -160,6 +167,8 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
             isLoaded={imageLoaded}
           >
             <Image
+              onClick={() => goToViewOfferRequest(job.id)}
+              cursor={'pointer'}
               objectFit="cover"
               maxW={{ base: '100%', sm: '200px' }}
               h={{ base: '100%', sm: '100%' }}
@@ -198,7 +207,16 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
               textAlign={'right'}
               p={10}
             >
-              <Box>{JobService.retrieveStatus(job)}</Box>
+              {showJobStatus && (
+                <Box
+                  color={
+                    JobService.isCreated(job.status) ? 'gray.400' : 'green.400'
+                  }
+                  fontWeight={'bold'}
+                >
+                  {JobService.retrieveStatus(job)}
+                </Box>
+              )}
               <Box textAlign={'right'}>Price:</Box>
               <Box fontSize={'1.3em'} fontWeight={'bold'}>
                 {job.price}€

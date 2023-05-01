@@ -1,7 +1,11 @@
 import UserConst from '../consts/UserConst';
+import Job from '../dto/Job';
 import UserProfile from '../dto/UserProfile';
 
 export default class UserService {
+  static isPublisher(job: Job): boolean {
+    return this.getUsername() === job.author?.username;
+  }
   static isAdmin(): boolean {
     return UserService.getRole() === UserConst.ROLE_ADMIN;
   }
