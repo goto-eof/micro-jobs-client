@@ -256,7 +256,7 @@ export default function Main() {
       </Box>
 
       <Box px={0}>
-        <Box>
+        <Box minH={'100vh'}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route
