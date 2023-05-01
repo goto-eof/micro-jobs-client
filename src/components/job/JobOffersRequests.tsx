@@ -52,6 +52,11 @@ export default function JobOffersRequests({
   const [itemsCount, setItemsCount] = useState(0);
   const [isLoaded, setLoaded] = useState(false);
 
+  const removeElementFromList = (job: Job) => {
+    setOffers(offers.filter((offer) => offer.id !== job.id));
+    setItemsCount(itemsCount - 1);
+  };
+
   useEffect(() => {
     GenericService.getAll<Array<Job>>(BASE_URL_RETRIEVE_ITEMS_FIRST_PAGE).then(
       (data) => {
@@ -81,7 +86,13 @@ export default function JobOffersRequests({
       <SimpleGrid spacing={3}>
         {offers &&
           offers.map((item, idx) => (
-            <JobComponent scope={scope} key={idx} job={item} status={status} />
+            <JobComponent
+              scope={scope}
+              key={idx}
+              job={item}
+              status={status}
+              removeElementFromList={removeElementFromList}
+            />
           ))}
       </SimpleGrid>
       <Pagination
@@ -96,9 +107,10 @@ interface JobProps {
   job: Job;
   scope: string;
   status?: number;
+  removeElementFromList: (job: Job) => void;
 }
 
-function JobComponent({ job, scope, status }: JobProps) {
+function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
   const goToViewOfferRequest = (id: number | undefined) => {
@@ -115,7 +127,8 @@ function JobComponent({ job, scope, status }: JobProps) {
 
   const approve = (job: Job): void => {
     GenericService.post<Job>('api/v1/job/private/' + job.id).then((job) => {
-      navigate(job.type === JobConst.TYPE_OFFER ? '/offers' : '/requests');
+      removeElementFromList(job);
+      //navigate(job.type === JobConst.TYPE_OFFER ? '/offers' : '/requests');
     });
   };
 
@@ -128,12 +141,12 @@ function JobComponent({ job, scope, status }: JobProps) {
       >
         {job.pictureName && (
           <Skeleton
-            width={{ base: '100%', sm: '300px' }}
+            width={{ base: '100%', sm: '200px' }}
             isLoaded={imageLoaded}
           >
             <Image
               objectFit="cover"
-              maxW={{ base: '100%', sm: '300px' }}
+              maxW={{ base: '100%', sm: '200px' }}
               h={{ base: '100%', sm: '100%' }}
               src={'/api/v1/jobPicture/files/' + job.pictureName}
               alt="Job Picture"
@@ -143,12 +156,12 @@ function JobComponent({ job, scope, status }: JobProps) {
         )}
         {!job.pictureName && (
           <Skeleton
-            width={{ base: '100%', sm: '300px' }}
+            width={{ base: '100%', sm: '200px' }}
             isLoaded={imageLoaded}
           >
             <Image
               objectFit="cover"
-              maxW={{ base: '100%', sm: '300px' }}
+              maxW={{ base: '100%', sm: '200px' }}
               h={{ base: '100%', sm: '100%' }}
               src={'/api/v1/jobPicture/files/no_image.png'}
               alt="Job Picture"
@@ -192,7 +205,11 @@ function JobComponent({ job, scope, status }: JobProps) {
               </Box>
               <Box mt={4}>
                 <Button
-                  display={!showUserButtons(job) ? '' : 'none'}
+                  display={
+                    !showUserButtons(job) && !UserService.isAdmin()
+                      ? ''
+                      : 'none'
+                  }
                   mr={3}
                   variant="solid"
                   colorScheme="blue"
