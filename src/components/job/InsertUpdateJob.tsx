@@ -12,6 +12,7 @@ import GenericService from '../../service/GenericService';
 import { useNavigate, useParams } from 'react-router-dom';
 import Job from '../../dto/Job';
 import FileUpload from '../FileUpload';
+import JobConst from '../../consts/JobConst';
 
 export default function InserJob() {
   const [form, setForm] = useState<Job>({
@@ -22,21 +23,24 @@ export default function InserJob() {
     id: undefined,
   });
 
-  let { id } = useParams();
+  let { id, scope } = useParams();
+  const scopeFromUri = scope || 'public';
 
   const [files, setFiles] = useState(Array<string>);
 
   useEffect(() => {
     if (id) {
-      GenericService.get<Job>('api/v1/job/' + id).then((job) => {
-        setForm({
-          title: job.title,
-          description: job.description,
-          price: job.price,
-          type: job.type,
-          id: job.id,
-        });
-      });
+      GenericService.get<Job>(`api/v1/job/${scopeFromUri}/${id}`).then(
+        (job) => {
+          setForm({
+            title: job.title,
+            description: job.description,
+            price: job.price,
+            type: job.type,
+            id: job.id,
+          });
+        }
+      );
     }
   }, []);
 
@@ -63,23 +67,25 @@ export default function InserJob() {
     };
 
     if (!form.id) {
-      GenericService.create<Job>('api/v1/job', data).then((data) => {
-        console.log(data);
-        if (form.type == 0) {
-          navigate('/offers');
-        } else if (form.type == 1) {
-          navigate('/requests');
+      GenericService.create<Job>(`api/v1/job/${scopeFromUri}`, data).then(
+        () => {
+          if (form.type == JobConst.TYPE_OFFER) {
+            navigate('/myOffers');
+          } else if (form.type == JobConst.TYPE_REQUEST) {
+            navigate('/myRequests');
+          }
         }
-      });
+      );
     } else {
-      GenericService.put<Job>('api/v1/job', form.id, data).then((data) => {
-        console.log(data);
-        if (form.type == 0) {
-          navigate('/offers');
-        } else if (form.type == 1) {
-          navigate('/requests');
+      GenericService.put<Job>(`api/v1/job/${scopeFromUri}`, form.id, data).then(
+        () => {
+          if (form.type == JobConst.TYPE_OFFER) {
+            navigate('/myOffers');
+          } else if (form.type == JobConst.TYPE_REQUEST) {
+            navigate('/myRequests');
+          }
         }
-      });
+      );
     }
   };
 

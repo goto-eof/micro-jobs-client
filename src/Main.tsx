@@ -106,7 +106,7 @@ export default function Main() {
                 size={'sm'}
                 mr={4}
                 leftIcon={<AddIcon />}
-                onClick={() => navigate('/insertJob')}
+                onClick={() => navigate('/insertJob/' + JobConst.SCOPE_PRIVATE)}
               >
                 Add Job
               </Button>
@@ -231,8 +231,8 @@ export default function Main() {
                 />
               }
             />
-            <Route path="/insertJob" element={<InsertJob />} />
-            <Route path="/editJob/:id" element={<InsertJob />} />
+            <Route path="/insertJob/:scope" element={<InsertJob />} />
+            <Route path="/editJob/:scope/:id" element={<InsertJob />} />
             <Route path="/register" element={<Register />} />
             <Route path="/authenticate" element={<Login />} />
             <Route path="/view/:scope/:id" element={<ViewOfferRequest />} />

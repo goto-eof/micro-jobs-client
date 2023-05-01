@@ -27,6 +27,7 @@ import UserService from '../../service/UserService';
 import Stars from './Stars';
 import JobService from '../../service/JobService';
 import Title from './Title';
+import JobConst from '../../consts/JobConst';
 
 interface Props {}
 export default function ViewOfferRequest({}: Props) {
@@ -36,10 +37,10 @@ export default function ViewOfferRequest({}: Props) {
   const navigate = useNavigate();
   const [modalImage, setModalImage] = useState<string>();
 
-  let { id, scopeFromUrl } = useParams();
-  const scope = scopeFromUrl || 'public';
+  let { id, scope } = useParams();
+  const scopeFromUrl = scope || 'public';
   useEffect(() => {
-    GenericService.get<Job>(`api/v1/job/${scope}/${id}`).then((job) => {
+    GenericService.get<Job>(`api/v1/job/${scopeFromUrl}/${id}`).then((job) => {
       setJob(job);
     });
   }, []);
@@ -48,20 +49,20 @@ export default function ViewOfferRequest({}: Props) {
     return UserService.isSameUsername(job.author?.username || '');
   }
 
-  const goToEditOfferRequest = (id: number | undefined) => {
-    navigate('/editJob/' + id);
+  const goToEditOfferRequest = (id: number | undefined, scope: string) => {
+    navigate(`/editJob/${scopeFromUrl}/${id}`);
   };
 
-  const deleteJobOfferRequest = (jobId: number | undefined, scope: string) => {
+  const deleteItem = (jobId: number) => {
     if (jobId) {
-      deleteItem(jobId, scope);
+      GenericService.delete(`api/v1/job/${scopeFromUrl}`, jobId).then((_) => {
+        if (job && job.type === JobConst.TYPE_OFFER) {
+          navigate('/myOffers');
+        } else if (job && job.type === JobConst.TYPE_REQUEST) {
+          navigate('/myRequests');
+        }
+      });
     }
-  };
-
-  const deleteItem = (jobId: number, scope: string) => {
-    GenericService.delete(`api/v1/job/${scope}`, jobId).then((_) => {
-      navigate('/offers');
-    });
   };
 
   function openModal(image: string) {
@@ -185,7 +186,7 @@ export default function ViewOfferRequest({}: Props) {
                   colorScheme="red"
                   mr={3}
                   display={job && showUserButtons(job) ? '' : 'none'}
-                  onClick={() => job && deleteJobOfferRequest(job.id, scope)}
+                  onClick={() => job && job.id && deleteItem(job.id)}
                 >
                   Delete
                 </Button>
@@ -193,7 +194,9 @@ export default function ViewOfferRequest({}: Props) {
                   variant={'solid'}
                   colorScheme="green"
                   display={job && showUserButtons(job) ? '' : 'none'}
-                  onClick={() => job && goToEditOfferRequest(job.id)}
+                  onClick={() =>
+                    job && goToEditOfferRequest(job.id, scopeFromUrl)
+                  }
                 >
                   Edit
                 </Button>
