@@ -186,6 +186,7 @@ function JobComponent({ job, scope, status }: JobProps) {
               textAlign={'right'}
               p={10}
             >
+              <Box>{JobService.retrieveStatus(job)}</Box>
               <Box textAlign={'right'}>Price:</Box>
               <Box fontSize={'1.3em'} fontWeight={'bold'}>
                 {job.price}€
