@@ -25,6 +25,7 @@ export default function InserJob() {
 
   let { id, scope } = useParams();
   const scopeFromUri = scope || 'public';
+  const [job, setJob] = useState<Job>();
 
   const [files, setFiles] = useState(Array<string>);
 
@@ -32,6 +33,7 @@ export default function InserJob() {
     if (id) {
       GenericService.get<Job>(`api/v1/job/${scopeFromUri}/${id}`).then(
         (job) => {
+          setJob(job);
           setForm({
             title: job.title,
             description: job.description,

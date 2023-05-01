@@ -36,26 +36,28 @@ export default function ViewOfferRequest({}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const [modalImage, setModalImage] = useState<string>();
-
   let { id, scope } = useParams();
   const scopeFromUrl = scope || 'public';
+
   useEffect(() => {
     GenericService.get<Job>(`api/v1/job/${scopeFromUrl}/${id}`).then((job) => {
       setJob(job);
     });
   }, []);
 
-  function showUserButtons(job: Job) {
+  const showUserButtons = (job: Job) => {
     return UserService.isSameUsername(job.author?.username || '');
-  }
-
-  const goToEditOfferRequest = (id: number | undefined, scope: string) => {
-    navigate(`/editJob/${scopeFromUrl}/${id}`);
   };
 
-  const deleteItem = (jobId: number) => {
-    if (jobId) {
-      GenericService.delete(`api/v1/job/${scopeFromUrl}`, jobId).then((_) => {
+  const goToEditOfferRequest = (job: Job | undefined) => {
+    if (job) {
+      navigate(`/editJob/${scopeFromUrl}/${job.id}`);
+    }
+  };
+
+  const deleteItem = (job: Job | undefined) => {
+    if (job && job.id) {
+      GenericService.delete(`api/v1/job/${scopeFromUrl}`, job.id).then((_) => {
         if (job && job.type === JobConst.TYPE_OFFER) {
           navigate('/myOffers');
         } else if (job && job.type === JobConst.TYPE_REQUEST) {
@@ -65,12 +67,21 @@ export default function ViewOfferRequest({}: Props) {
     }
   };
 
-  function openModal(image: string) {
-    setModalImage(image);
-    onOpen();
-  }
+  const openModal = (job: Job | undefined) => {
+    if (job && job.pictureName) {
+      setModalImage(job.pictureName);
+      onOpen();
+    }
+  };
 
-  function calculateTitle(type: number | undefined): string {
+  const openModalByImage = (imageName: string | undefined) => {
+    if (imageName) {
+      setModalImage(imageName);
+      onOpen();
+    }
+  };
+
+  const calculateTitle = (type: number | undefined): string => {
     if (type === 0) {
       return 'Offer';
     }
@@ -78,8 +89,24 @@ export default function ViewOfferRequest({}: Props) {
       return 'Request';
     }
     return '';
-  }
+  };
 
+  const getImageLink = (pictureName: string | undefined): string => {
+    if (pictureName) {
+      return `/api/v1/jobPicture/files/${pictureName}`;
+    }
+    return '#';
+  };
+
+  const calculateDisplayUserButtons = () => {
+    return job && showUserButtons(job) ? '' : 'none';
+  };
+
+  const calculateDisplayDeleteButton = () => {
+    return job && showUserButtons(job) ? '' : 'none';
+  };
+  const retrieveFirstname = job && job.author?.firstname;
+  const retrieveLastName = job && job.author?.lastname;
   return (
     <>
       {job && <Title title={calculateTitle(job?.type)} />}
@@ -88,40 +115,7 @@ export default function ViewOfferRequest({}: Props) {
         overflow="hidden"
         variant="outline"
       >
-        {job && job.pictureName && (
-          <Skeleton
-            width={{ base: '100%', sm: '200px' }}
-            isLoaded={imageLoaded}
-          >
-            <Image
-              onClick={() =>
-                job && job.pictureName && openModal(job.pictureName)
-              }
-              objectFit="cover"
-              maxW={{ base: '100%', sm: '200px' }}
-              h={{ base: '100%', sm: '100%' }}
-              src={'/api/v1/jobPicture/files/' + job.pictureName}
-              alt="Job Picture"
-              onLoad={() => setImageLoaded(true)}
-            />
-          </Skeleton>
-        )}
-        {job && !job.pictureName && (
-          <Skeleton
-            width={{ base: '100%', sm: '200px' }}
-            isLoaded={imageLoaded}
-          >
-            <Image
-              objectFit="cover"
-              maxW={{ base: '100%', sm: '200px' }}
-              h={{ base: '100%', sm: '100%' }}
-              src={'/api/v1/jobPicture/files/no_image.png'}
-              alt="Job Picture"
-              onLoad={() => setImageLoaded(true)}
-            />
-          </Skeleton>
-        )}
-
+        {JobPicture(job, imageLoaded, openModal, getImageLink, setImageLoaded)}
         <SimpleGrid columns={{ base: 1, md: 2 }} w={'full'}>
           <Stack spacing={4} w={'full'}>
             <CardBody>
@@ -134,8 +128,7 @@ export default function ViewOfferRequest({}: Props) {
                 {job && job.title}{' '}
               </Heading>
               <Box fontSize={'0.8em'}>
-                by {job && job.author?.firstname} {job && job.author?.lastname}{' '}
-                (@
+                by {retrieveFirstname} {retrieveLastName} (@
                 {job && job.author?.username}){' | '}{' '}
                 <Stars num={job && job.author?.stars} />
               </Box>
@@ -147,14 +140,14 @@ export default function ViewOfferRequest({}: Props) {
                   job.pictureNamesList &&
                   job.pictureNamesList.map((image, idx) => (
                     <Box
-                      onClick={() => openModal(image)}
+                      onClick={() => openModalByImage(image)}
                       key={idx}
                       mr={5}
                       maxW={'200px'}
                       borderRadius={'10px'}
                       boxShadow={'md'}
                     >
-                      <img src={'/api/v1/jobPicture/files/' + image} />
+                      <img src={getImageLink(image)} />
                     </Box>
                   ))}
               </Flex>
@@ -174,7 +167,7 @@ export default function ViewOfferRequest({}: Props) {
               </Box>
               <Box mt={4}>
                 <Button
-                  display={job && !showUserButtons(job) ? '' : 'none'}
+                  display={calculateDisplayUserButtons()}
                   mr={3}
                   variant="solid"
                   colorScheme="blue"
@@ -185,18 +178,16 @@ export default function ViewOfferRequest({}: Props) {
                   variant={'solid'}
                   colorScheme="red"
                   mr={3}
-                  display={job && showUserButtons(job) ? '' : 'none'}
-                  onClick={() => job && job.id && deleteItem(job.id)}
+                  display={calculateDisplayDeleteButton()}
+                  onClick={() => deleteItem(job)}
                 >
                   Delete
                 </Button>
                 <Button
                   variant={'solid'}
                   colorScheme="green"
-                  display={job && showUserButtons(job) ? '' : 'none'}
-                  onClick={() =>
-                    job && goToEditOfferRequest(job.id, scopeFromUrl)
-                  }
+                  display={calculateDisplayUserButtons()}
+                  onClick={() => goToEditOfferRequest(job)}
                 >
                   Edit
                 </Button>
@@ -205,24 +196,72 @@ export default function ViewOfferRequest({}: Props) {
           </Flex>
         </SimpleGrid>
       </Card>
-      <Modal isOpen={isOpen} size={'full'} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent onClick={onClose}>
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Box borderRadius={'10px'} boxShadow={'md'}>
-              <img src={'/api/v1/jobPicture/files/' + modalImage} />
-            </Box>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {ModalShowPicture(isOpen, onClose, getImageLink, modalImage)}
     </>
+  );
+}
+function JobPicture(
+  job: Job | undefined,
+  imageLoaded: boolean,
+  openModal: (job: Job | undefined) => void,
+  getImageLink: (pictureName: string | undefined) => string,
+  setImageLoaded: any
+) {
+  return (
+    <>
+      {job && job.pictureName && (
+        <Skeleton width={{ base: '100%', sm: '200px' }} isLoaded={imageLoaded}>
+          <Image
+            onClick={() => openModal(job)}
+            objectFit="cover"
+            maxW={{ base: '100%', sm: '200px' }}
+            h={{ base: '100%', sm: '100%' }}
+            src={getImageLink(job.pictureName)}
+            alt="Job Picture"
+            onLoad={() => setImageLoaded(true)}
+          />
+        </Skeleton>
+      )}
+      {job && !job.pictureName && (
+        <Skeleton width={{ base: '100%', sm: '200px' }} isLoaded={imageLoaded}>
+          <Image
+            objectFit="cover"
+            maxW={{ base: '100%', sm: '200px' }}
+            h={{ base: '100%', sm: '100%' }}
+            src={getImageLink('no_image.png')}
+            alt="Job Picture"
+            onLoad={() => setImageLoaded(true)}
+          />
+        </Skeleton>
+      )}
+    </>
+  );
+}
+
+function ModalShowPicture(
+  isOpen: boolean,
+  onClose: () => void,
+  getImageLink: (pictureName: string | undefined) => string,
+  modalImage: string | undefined
+) {
+  return (
+    <Modal isOpen={isOpen} size={'full'} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent onClick={onClose}>
+        <ModalHeader>Modal Title</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Box borderRadius={'10px'} boxShadow={'md'}>
+            <img src={getImageLink(modalImage)} />
+          </Box>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button colorScheme="blue" mr={3} onClick={onClose}>
+            Close
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }
