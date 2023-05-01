@@ -10,4 +10,5 @@ export default interface UserProfile {
   stars: number;
   status: number;
   picture: UserPicture;
+  role: string;
 }

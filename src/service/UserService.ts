@@ -13,6 +13,10 @@ export default class UserService {
     return this.getUser().username;
   }
 
+  public static getRole(): string {
+    return this.getUser().role;
+  }
+
   public static getUserPicture(): string {
     return this.getUser().picture?.picture;
   }

@@ -20,6 +20,7 @@ import {
   CloseIcon,
   AddIcon,
   TriangleDownIcon,
+  UnlockIcon,
 } from '@chakra-ui/icons';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Home from './components/Home';
@@ -31,6 +32,7 @@ import AuthenticationService from './service/AuthenticationService';
 import ViewOfferRequest from './components/job/ViewOfferRequest';
 import UserService from './service/UserService';
 import JobConst from './consts/JobConst';
+import UserConst from './consts/UserConst';
 
 const mainMenu = [
   { name: 'Home', url: '/' },
@@ -122,17 +124,35 @@ export default function Main() {
                   alignContent={'center'}
                 >
                   <Box>
-                    <img
-                      src={UserService.getUserPicture()}
-                      style={{
-                        borderRadius: '50%',
-                        margin: 'auto',
-                        width: '32px',
-                        height: '32px',
-                      }}
-                    />
+                    {UserService.getRole() === UserConst.ROLE_ADMIN && (
+                      <Icon
+                        as={UnlockIcon}
+                        w={'28px'}
+                        height={'28px'}
+                        color={'red'}
+                      />
+                    )}
+
+                    {UserService.getRole() === UserConst.ROLE_USER && (
+                      <img
+                        src={UserService.getUserPicture()}
+                        style={{
+                          borderRadius: '50%',
+                          margin: 'auto',
+                          width: '32px',
+                          height: '32px',
+                        }}
+                      />
+                    )}
                   </Box>
-                  <Box fontSize={'0.7em'}>
+                  <Box
+                    fontSize={'0.7em'}
+                    color={
+                      UserService.getRole() === UserConst.ROLE_ADMIN
+                        ? 'red'
+                        : ''
+                    }
+                  >
                     {UserService.getUsername()}
                     <Icon ml={1} as={TriangleDownIcon} />
                   </Box>

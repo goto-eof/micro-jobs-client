@@ -4,6 +4,12 @@
 yarn start
 ```
 
+# Default username and password
+```
+username: admin
+password: Micr@J@bs
+```
+
 # Screenshot
 ![screenshot](screenshot.png)
 
