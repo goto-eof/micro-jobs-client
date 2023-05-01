@@ -23,17 +23,31 @@ import UserService from '../../service/UserService';
 import Stars from './Stars';
 import JobService from '../../service/JobService';
 import Title from './Title';
+import JobConst from '../../consts/JobConst';
 
 interface Props {
   type: number;
   scope: string;
   title: string;
+  status?: number;
 }
 
-export default function JobOffersRequests({ type, scope, title }: Props) {
-  const BASE_URL_RETRIEVE_ITEMS: string = `api/v1/job/${scope}/${type}`;
+export default function JobOffersRequests({
+  type,
+  scope,
+  title,
+  status,
+}: Props) {
+  console.log(status);
+  const BASE_URL_RETRIEVE_ITEMS: string =
+    status !== undefined
+      ? `api/v1/job/${scope}/admin/${type}/${status}`
+      : `api/v1/job/${scope}/${type}`;
   const BASE_URL_RETRIEVE_ITEMS_FIRST_PAGE: string = `${BASE_URL_RETRIEVE_ITEMS}/0`;
-  const BASE_URL_COUNT_ITEMS: string = `api/v1/job/${scope}/count/${type}`;
+  const BASE_URL_COUNT_ITEMS: string =
+    status !== undefined
+      ? `api/v1/job/${scope}/admin/count/${type}/${status}`
+      : `api/v1/job/${scope}/count/${type}`;
 
   const [offers, setOffers] = useState<Array<Job>>(new Array<Job>());
   const [itemsCount, setItemsCount] = useState(0);
@@ -68,7 +82,7 @@ export default function JobOffersRequests({ type, scope, title }: Props) {
       <SimpleGrid spacing={3}>
         {offers &&
           offers.map((item, idx) => (
-            <JobComponent scope={scope} key={idx} job={item} />
+            <JobComponent scope={scope} key={idx} job={item} status={status} />
           ))}
       </SimpleGrid>
       <Pagination
@@ -82,18 +96,29 @@ export default function JobOffersRequests({ type, scope, title }: Props) {
 interface JobProps {
   job: Job;
   scope: string;
+  status?: number;
 }
 
-function JobComponent({ job, scope }: JobProps) {
+function JobComponent({ job, scope, status }: JobProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
   const goToViewOfferRequest = (id: number | undefined) => {
-    navigate(`/view/${scope}/${id}`);
+    navigate(
+      status !== undefined
+        ? `/view/${scope}/${status}/${id}`
+        : `/view/${scope}/${id}`
+    );
   };
 
   function showUserButtons(job: Job) {
     return UserService.isSameUsername(job.author?.username || '');
   }
+
+  const approve = (job: Job): void => {
+    GenericService.post<Job>('api/v1/job/private/' + job.id).then((job) => {
+      navigate(job.type === JobConst.TYPE_OFFER ? '/offers' : '/requests');
+    });
+  };
 
   return (
     <>
@@ -174,6 +199,16 @@ function JobComponent({ job, scope }: JobProps) {
                 >
                   {JobService.calulateAcceptButtonLabel(job)}
                 </Button>
+                {UserService.isAdmin() && JobService.isCreated(job.status) && (
+                  <Button
+                    mr={3}
+                    variant="solid"
+                    colorScheme="blue"
+                    onClick={() => approve(job)}
+                  >
+                    Approve
+                  </Button>
+                )}
               </Box>
             </Box>
           </Flex>

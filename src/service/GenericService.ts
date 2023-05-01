@@ -74,7 +74,7 @@ export default class GenericService {
       });
   }
 
-  public static async post<T>(modelName: string): Promise<Result<T>> {
+  public static async post<T>(modelName: string): Promise<T> {
     return await customAxios
       .post<T>(`${this.baseUrl}${modelName}`, '', { withCredentials: true })
       .then(async (result: any) => {

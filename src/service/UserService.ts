@@ -1,11 +1,15 @@
+import UserConst from '../consts/UserConst';
 import UserProfile from '../dto/UserProfile';
 
 export default class UserService {
+  static isAdmin(): boolean {
+    return UserService.getRole() === UserConst.ROLE_ADMIN;
+  }
   public static getUser(): UserProfile {
     return JSON.parse(localStorage.getItem('user') || '{}');
   }
 
-  public static isSameUsername(username: string) {
+  public static isSameUsername(username: string): boolean {
     return this.getUser().username === username;
   }
 

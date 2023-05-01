@@ -45,6 +45,28 @@ const myMenu = [
   { name: 'My Requests', url: '/myRequests' },
 ];
 
+interface UserMenuItem {
+  label: string;
+  href: string;
+}
+
+const RIGHT_MENU: Map<string, Array<UserMenuItem>> = new Map([
+  [
+    'ADMIN',
+    [
+      { label: 'User Offers', href: '/userOffers' },
+      { label: 'User Requests', href: '/userRequests' },
+    ],
+  ],
+  [
+    'USER',
+    [
+      { label: 'My Offers', href: '/myOffers' },
+      { label: 'My Requests', href: '/myRequests' },
+    ],
+  ],
+]);
+
 export default function Main() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedMenu, setSelectedMenu] = useState('/');
@@ -158,22 +180,19 @@ export default function Main() {
                   </Box>
                 </MenuButton>
                 <MenuList>
-                  <MenuItem
-                    onClick={() => {
-                      setSelectedMenu('');
-                      navigate('/myOffers');
-                    }}
-                  >
-                    My Offers
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      setSelectedMenu('');
-                      navigate('/myRequests');
-                    }}
-                  >
-                    My Requests
-                  </MenuItem>
+                  {RIGHT_MENU.get(UserService.getRole())?.map((menuItem) => {
+                    return (
+                      <MenuItem
+                        key={menuItem.href}
+                        onClick={() => {
+                          setSelectedMenu('');
+                          navigate(menuItem.href);
+                        }}
+                      >
+                        {menuItem.label}
+                      </MenuItem>
+                    );
+                  })}
                   <MenuDivider />
                   <MenuItem
                     onClick={() =>
@@ -256,6 +275,10 @@ export default function Main() {
             <Route path="/register" element={<Register />} />
             <Route path="/authenticate" element={<Login />} />
             <Route path="/view/:scope/:id" element={<ViewOfferRequest />} />
+            <Route
+              path="/view/:scope/:status/:id"
+              element={<ViewOfferRequest />}
+            />
 
             <Route
               path="/myOffers"
@@ -276,6 +299,31 @@ export default function Main() {
                   type={JobConst.TYPE_REQUEST}
                   scope={JobConst.SCOPE_PRIVATE}
                   title="My Requests"
+                />
+              }
+            />
+
+            <Route
+              path="/userOffers"
+              element={
+                <JobOffersRequests
+                  key={'userOffers'}
+                  type={JobConst.TYPE_OFFER}
+                  scope={JobConst.SCOPE_PRIVATE}
+                  status={JobConst.STATUS_CREATED}
+                  title="User Offers"
+                />
+              }
+            />
+            <Route
+              path="/userRequests"
+              element={
+                <JobOffersRequests
+                  key={'userRequests'}
+                  type={JobConst.TYPE_REQUEST}
+                  scope={JobConst.SCOPE_PRIVATE}
+                  status={JobConst.STATUS_CREATED}
+                  title="User Requests"
                 />
               }
             />

@@ -36,17 +36,24 @@ export default function ViewOfferRequest({}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const [modalImage, setModalImage] = useState<string>();
-  let { id, scope } = useParams();
+  let { id, scope, status } = useParams();
   const scopeFromUrl = scope || 'public';
 
   useEffect(() => {
-    GenericService.get<Job>(`api/v1/job/${scopeFromUrl}/${id}`).then((job) => {
+    GenericService.get<Job>(
+      status !== undefined
+        ? `api/v1/job/${scopeFromUrl}/admin/${status}/${id}`
+        : `api/v1/job/${scopeFromUrl}/${id}`
+    ).then((job) => {
       setJob(job);
     });
   }, []);
 
   const showUserButtons = (job: Job) => {
-    return UserService.isSameUsername(job.author?.username || '');
+    return (
+      scope === JobConst.SCOPE_PRIVATE &&
+      UserService.isSameUsername(job.author?.username || '')
+    );
   };
 
   const goToEditOfferRequest = (job: Job | undefined) => {
