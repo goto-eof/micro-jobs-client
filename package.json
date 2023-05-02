@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "http://127.0.0.1:8080",
   "dependencies": {
+    "@angular/common": "^14.2.12",
     "@chakra-ui/icons": "^2.0.19",
     "@chakra-ui/react": "^2.6.0",
     "@emotion/react": "^11.10.6",

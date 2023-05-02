@@ -13,6 +13,7 @@ import {
   SimpleGrid,
   Center,
 } from '@chakra-ui/react';
+// import { DatePipe } from '@angular/common';
 import { useEffect, useState } from 'react';
 import GenericService from '../../service/GenericService';
 import Job from '../../dto/Job';
@@ -140,13 +141,23 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
     (UserService.isAdmin() || UserService.isPublisher(job)) &&
     scope !== JobConst.SCOPE_PUBLIC;
 
+  function parseDate(createdDate: Date | undefined): string | null {
+    if (createdDate) {
+      return new Date(createdDate).toLocaleDateString([], {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+    }
+    return '-';
+  }
+
   return (
     <>
       <Card
         direction={{ base: 'column', sm: 'row' }}
         overflow="hidden"
         variant="outline"
-        maxH={'200px'}
       >
         {job.pictureName && (
           <Skeleton
@@ -196,12 +207,13 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
                 {job.title}{' '}
               </Heading>
               <Box fontSize={'0.8em'}>
-                by {job.author?.firstname} {job.author?.lastname}
+                by {job.author?.firstname} {job.author?.lastname} on{' '}
+                {parseDate(job.createdDate) || ''}
                 {' | '} <Stars num={job.author?.stars} />
               </Box>
               <Text py="2">{job.description}</Text>
             </CardBody>
-            <CardFooter justify={'center'}></CardFooter>
+            <CardFooter justify={'left'}></CardFooter>
           </Stack>
           <Flex w={'full'}>
             <Box

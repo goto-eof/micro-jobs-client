@@ -131,6 +131,7 @@ export default function Main() {
                 size={'sm'}
                 mr={4}
                 leftIcon={<AddIcon />}
+                display={UserService.isAdmin() ? 'none' : ''}
                 onClick={() => navigate('/insertJob/' + JobConst.SCOPE_PRIVATE)}
               >
                 Add Job

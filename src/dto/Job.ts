@@ -11,4 +11,6 @@ export default interface Job {
   price: number;
   pictureName?: string;
   pictureNamesList?: Array<string>;
+  createdDate?: Date;
+  lastModifiedDate?: Date;
 }
