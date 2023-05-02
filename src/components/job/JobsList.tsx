@@ -141,7 +141,7 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
     (UserService.isAdmin() || UserService.isPublisher(job)) &&
     scope !== JobConst.SCOPE_PUBLIC;
 
-  function parseDate(createdDate: Date | undefined): string | null {
+  function transformDate(createdDate: Date | undefined): string | null {
     if (createdDate) {
       return new Date(createdDate).toLocaleDateString([], {
         year: 'numeric',
@@ -207,9 +207,9 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
                 {job.title}{' '}
               </Heading>
               <Box fontSize={'0.8em'}>
-                by {job.author?.firstname} {job.author?.lastname} on{' '}
-                {parseDate(job.createdDate) || ''}
-                {' | '} <Stars num={job.author?.stars} />
+                by {job.author?.firstname} {job.author?.lastname}
+                {'  '} <Stars num={job.author?.stars} /> {' | '}on{' '}
+                {transformDate(job.lastModifiedDate) || ''}
               </Box>
               <Text py="2">{job.description}</Text>
             </CardBody>
