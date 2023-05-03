@@ -4,9 +4,10 @@ import {
   Center,
   FormControl,
   FormLabel,
-  HStack,
+  Image,
   Input,
   Select,
+  SimpleGrid,
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -74,7 +75,7 @@ export default function InserJob() {
             content: file,
           } as JobPicture;
         })
-        .concat(job?.jobPictureList || [] ),
+        .concat(job?.jobPictureList || []),
       price: form.price,
       id: form.id,
     };
@@ -166,23 +167,29 @@ export default function InserJob() {
           </FormControl>
           <FileUpload callback={updateFileList} multiple={true} />
           <VStack>
-            <HStack w={'100%'}>
+            <SimpleGrid maxW={'100%'} columns={10} spacing={2}>
               {job?.jobPictureList &&
                 job.jobPictureList
                   .map((picture) => picture.pictureName)
                   .map((pictureName) => (
-                    <Box w={'64px'}>
-                      <img
-                        key={pictureName}
-                        style={{ width: '64px', height: '64px', float: 'left' }}
-                        src={JobService.getImageLink(pictureName)}
-                      />
-                      <Button onClick={() => deleteImage(pictureName)}>
+                    <Box key={pictureName}>
+                      <Box maxW={'64px'} maxH={'64px'}>
+                        <Image
+                          boxSize="64px"
+                          objectFit="cover"
+                          src={JobService.getImageLink(pictureName)}
+                        />
+                      </Box>
+                      <Button
+                        colorScheme="red"
+                        size="xs"
+                        onClick={() => deleteImage(pictureName)}
+                      >
                         Delete
                       </Button>
                     </Box>
                   ))}
-            </HStack>
+            </SimpleGrid>
             <Box w={'100%'}>
               <Button
                 mt={4}

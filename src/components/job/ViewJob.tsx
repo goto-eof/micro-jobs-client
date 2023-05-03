@@ -137,7 +137,7 @@ export default function ViewOfferRequest({}: Props) {
               <Text py="2">{job && job.description}</Text>
             </CardBody>
             <CardFooter justify={'left'}>
-              <Flex>
+              <SimpleGrid maxW={'100%'} columns={4} spacing={2}>
                 {job &&
                   job.jobPictureList &&
                   job.jobPictureList.map((image, idx) => (
@@ -145,14 +145,19 @@ export default function ViewOfferRequest({}: Props) {
                       onClick={() => openModalByImage(image.pictureName)}
                       key={idx}
                       mr={5}
-                      maxW={'200px'}
+                      maxW={'64px'}
+                      maxH={'64px'}
                       borderRadius={'10px'}
                       boxShadow={'md'}
                     >
-                      <img src={JobService.getImageLink(image.pictureName)} />
+                      <Image
+                        boxSize="64px"
+                        objectFit="cover"
+                        src={JobService.getImageLink(image.pictureName)}
+                      />
                     </Box>
                   ))}
-              </Flex>
+              </SimpleGrid>
             </CardFooter>
           </Stack>
           <Flex w={'full'}>
