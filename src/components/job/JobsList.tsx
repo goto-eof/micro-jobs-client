@@ -13,11 +13,9 @@ import {
   SimpleGrid,
   Center,
 } from '@chakra-ui/react';
-// import { DatePipe } from '@angular/common';
 import { useEffect, useState } from 'react';
 import GenericService from '../../service/GenericService';
 import Job from '../../dto/Job';
-import GenericResponse from '../../dto/GenericResponse';
 import Pagination from '../Pagination';
 import PaginationUtil from '../../util/PaginationUtil';
 import { useNavigate } from 'react-router-dom';
@@ -27,6 +25,7 @@ import JobService from '../../service/JobService';
 import Title from './Header';
 import JobConst from '../../consts/JobConst';
 import DateUtil from '../../service/DateUtil';
+import JobListPage from '../../dto/JobListPage';
 
 interface Props {
   type: number;
@@ -45,11 +44,6 @@ export default function JobOffersRequests({
     status !== undefined
       ? `api/v1/job/${scope}/admin/${type}/${status}`
       : `api/v1/job/${scope}/${type}`;
-  const BASE_URL_RETRIEVE_ITEMS_FIRST_PAGE: string = `${BASE_URL_RETRIEVE_ITEMS}/0`;
-  const BASE_URL_COUNT_ITEMS: string =
-    status !== undefined
-      ? `api/v1/job/${scope}/admin/count/${type}/${status}`
-      : `api/v1/job/${scope}/count/${type}`;
 
   const [offers, setOffers] = useState<Array<Job>>(new Array<Job>());
   const [itemsCount, setItemsCount] = useState(0);
@@ -61,24 +55,21 @@ export default function JobOffersRequests({
   };
 
   useEffect(() => {
-    GenericService.getAll<Array<Job>>(BASE_URL_RETRIEVE_ITEMS_FIRST_PAGE).then(
-      (data) => {
-        GenericService.get<GenericResponse<number>>(BASE_URL_COUNT_ITEMS).then(
-          (genericResponse) => {
-            setOffers(data);
-            setItemsCount(genericResponse.value);
-            setLoaded(true);
-          }
-        );
+    GenericService.getAll<JobListPage>(`${BASE_URL_RETRIEVE_ITEMS}/0`).then(
+      (jobListPageResponse) => {
+        setOffers(jobListPageResponse.jobList);
+        setItemsCount(jobListPageResponse.totalItems);
+        setLoaded(true);
       }
     );
   }, []);
 
   const goToPage = (page: number) => {
-    GenericService.getAll<Array<Job>>(
+    GenericService.getAll<JobListPage>(
       BASE_URL_RETRIEVE_ITEMS + '/' + page
-    ).then((data) => {
-      setOffers(data);
+    ).then((jobListPageResponse) => {
+      setOffers(jobListPageResponse.jobList);
+      setItemsCount(jobListPageResponse.totalItems);
       window.scrollTo(0, 0);
     });
   };
@@ -134,7 +125,6 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
   const approve = (job: Job): void => {
     GenericService.post<Job>('api/v1/job/private/' + job.id).then((job) => {
       removeElementFromList(job);
-      //navigate(job.type === JobConst.TYPE_OFFER ? '/offers' : '/requests');
     });
   };
 
