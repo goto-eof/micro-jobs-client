@@ -26,6 +26,7 @@ import Stars from './Stars';
 import JobService from '../../service/JobService';
 import Title from './Header';
 import JobConst from '../../consts/JobConst';
+import DateUtil from '../../service/DateUtil';
 
 interface Props {
   type: number;
@@ -141,17 +142,6 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
     (UserService.isAdmin() || UserService.isPublisher(job)) &&
     scope !== JobConst.SCOPE_PUBLIC;
 
-  function transformDate(createdDate: Date | undefined): string | null {
-    if (createdDate) {
-      return new Date(createdDate).toLocaleDateString([], {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      });
-    }
-    return '-';
-  }
-
   return (
     <>
       <Card
@@ -209,7 +199,7 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
               <Box fontSize={'0.8em'}>
                 by {job.author?.firstname} {job.author?.lastname}
                 {'  '} <Stars num={job.author?.stars} /> {' | '}on{' '}
-                {transformDate(job.lastModifiedDate) || ''}
+                {DateUtil.transformDate(job.lastModifiedDate) || ''}
               </Box>
               <Text py="2">{job.description}</Text>
             </CardBody>

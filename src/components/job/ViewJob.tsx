@@ -28,6 +28,7 @@ import Stars from './Stars';
 import JobService from '../../service/JobService';
 import Title from './Header';
 import JobConst from '../../consts/JobConst';
+import DateUtil from '../../service/DateUtil';
 
 interface Props {}
 export default function ViewOfferRequest({}: Props) {
@@ -140,9 +141,12 @@ export default function ViewOfferRequest({}: Props) {
                 {job && job.title}{' '}
               </Heading>
               <Box fontSize={'0.8em'}>
+                #{job?.id}
+                {' | '}
                 by {retrieveFirstname} {retrieveLastName} (@
-                {job && job.author?.username}){' | '}{' '}
-                <Stars num={job && job.author?.stars} />
+                {job && job.author?.username}) on{' '}
+                {(job && DateUtil.transformDate(job.lastModifiedDate)) || ''}
+                {' | '} <Stars num={job && job.author?.stars} />
               </Box>
               <Text py="2">{job && job.description}</Text>
             </CardBody>
