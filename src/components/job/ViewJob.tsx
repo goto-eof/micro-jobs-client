@@ -80,13 +80,6 @@ export default function ViewOfferRequest({}: Props) {
     }
   };
 
-  const openModal = (job: Job | undefined) => {
-    if (job && job.pictureName) {
-      setModalImage(job.pictureName);
-      onOpen();
-    }
-  };
-
   const openModalByImage = (imageName: string | undefined) => {
     if (imageName) {
       setModalImage(imageName);
@@ -102,13 +95,6 @@ export default function ViewOfferRequest({}: Props) {
       return 'Request';
     }
     return '';
-  };
-
-  const getImageLink = (pictureName: string | undefined): string => {
-    if (pictureName) {
-      return `/api/v1/jobPicture/files/${pictureName}`;
-    }
-    return '#';
   };
 
   const calculateDisplayUserButtons = () => {
@@ -128,7 +114,7 @@ export default function ViewOfferRequest({}: Props) {
         overflow="hidden"
         variant="outline"
       >
-        {JobPicture(job, imageLoaded, openModal, getImageLink, setImageLoaded)}
+        {JobPicture(job, imageLoaded, openModalByImage, setImageLoaded)}
         <SimpleGrid columns={{ base: 1, md: 2 }} w={'full'}>
           <Stack spacing={4} w={'full'}>
             <CardBody>
@@ -153,17 +139,17 @@ export default function ViewOfferRequest({}: Props) {
             <CardFooter justify={'left'}>
               <Flex>
                 {job &&
-                  job.pictureNamesList &&
-                  job.pictureNamesList.map((image, idx) => (
+                  job.jobPictureList &&
+                  job.jobPictureList.map((image, idx) => (
                     <Box
-                      onClick={() => openModalByImage(image)}
+                      onClick={() => openModalByImage(image.pictureName)}
                       key={idx}
                       mr={5}
                       maxW={'200px'}
                       borderRadius={'10px'}
                       boxShadow={'md'}
                     >
-                      <img src={getImageLink(image)} />
+                      <img src={JobService.getImageLink(image.pictureName)} />
                     </Box>
                   ))}
               </Flex>
@@ -222,39 +208,40 @@ export default function ViewOfferRequest({}: Props) {
           </Flex>
         </SimpleGrid>
       </Card>
-      {ModalShowPicture(isOpen, onClose, getImageLink, modalImage)}
+      {ModalShowPicture(isOpen, onClose, modalImage)}
     </>
   );
 }
 function JobPicture(
   job: Job | undefined,
   imageLoaded: boolean,
-  openModal: (job: Job | undefined) => void,
-  getImageLink: (pictureName: string | undefined) => string,
+  openModal: (string: string | undefined) => void,
   setImageLoaded: any
 ) {
   return (
     <>
-      {job && job.pictureName && (
+      {JobService.hasMainJobPicture(job) && (
         <Skeleton width={{ base: '100%', sm: '200px' }} isLoaded={imageLoaded}>
           <Image
-            onClick={() => openModal(job)}
+            onClick={() => openModal(JobService.retrieveMainJobPicture(job))}
             objectFit="cover"
             maxW={{ base: '100%', sm: '200px' }}
             h={{ base: '100%', sm: '100%' }}
-            src={getImageLink(job.pictureName)}
+            src={JobService.getImageLink(
+              JobService.retrieveMainJobPicture(job)
+            )}
             alt="Job Picture"
             onLoad={() => setImageLoaded(true)}
           />
         </Skeleton>
       )}
-      {job && !job.pictureName && (
+      {!JobService.hasMainJobPicture(job) && (
         <Skeleton width={{ base: '100%', sm: '200px' }} isLoaded={imageLoaded}>
           <Image
             objectFit="cover"
             maxW={{ base: '100%', sm: '200px' }}
             h={{ base: '100%', sm: '100%' }}
-            src={getImageLink('no_image.png')}
+            src={JobService.getImageLink('no_image.png')}
             alt="Job Picture"
             onLoad={() => setImageLoaded(true)}
           />
@@ -267,7 +254,6 @@ function JobPicture(
 function ModalShowPicture(
   isOpen: boolean,
   onClose: () => void,
-  getImageLink: (pictureName: string | undefined) => string,
   modalImage: string | undefined
 ) {
   return (
@@ -278,7 +264,7 @@ function ModalShowPicture(
         <ModalCloseButton />
         <ModalBody>
           <Box borderRadius={'10px'} boxShadow={'md'}>
-            <img src={getImageLink(modalImage)} />
+            <img src={JobService.getImageLink(modalImage)} />
           </Box>
         </ModalBody>
 

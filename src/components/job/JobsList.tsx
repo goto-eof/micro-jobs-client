@@ -139,7 +139,7 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
         overflow="hidden"
         variant="outline"
       >
-        {job.pictureName && (
+        {JobService.hasMainJobPicture(job) && (
           <Skeleton
             width={{ base: '100%', sm: '200px' }}
             isLoaded={imageLoaded}
@@ -150,13 +150,16 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
               objectFit="cover"
               maxW={{ base: '100%', sm: '200px' }}
               h={{ base: '100%', sm: '100%' }}
-              src={'/api/v1/jobPicture/files/' + job.pictureName}
+              src={
+                '/api/v1/jobPicture/files/' +
+                JobService.retrieveMainJobPicture(job)
+              }
               alt="Job Picture"
               onLoad={() => setImageLoaded(true)}
             />
           </Skeleton>
         )}
-        {!job.pictureName && (
+        {!JobService.hasMainJobPicture(job) && (
           <Skeleton
             width={{ base: '100%', sm: '200px' }}
             isLoaded={imageLoaded}

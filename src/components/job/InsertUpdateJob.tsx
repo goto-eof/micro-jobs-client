@@ -4,8 +4,10 @@ import {
   Center,
   FormControl,
   FormLabel,
+  HStack,
   Input,
   Select,
+  VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import GenericService from '../../service/GenericService';
@@ -14,6 +16,8 @@ import Job from '../../dto/Job';
 import FileUpload from '../FileUpload';
 import JobConst from '../../consts/JobConst';
 import Header from './Header';
+import JobPicture from '../../dto/JobPicture';
+import JobService from '../../service/JobService';
 
 export default function InserJob() {
   const [form, setForm] = useState<Job>({
@@ -64,7 +68,13 @@ export default function InserJob() {
       title: form.title,
       description: form.description,
       type: form.type,
-      imagesContent: files,
+      jobPictureList: files
+        .map((file) => {
+          return {
+            content: file,
+          } as JobPicture;
+        })
+        .concat(job?.jobPictureList || [] ),
       price: form.price,
       id: form.id,
     };
@@ -96,6 +106,18 @@ export default function InserJob() {
     setFiles(files);
     console.log(files);
   };
+
+  function deleteImage(pictureName: string) {
+    if (job && job.jobPictureList) {
+      const newJob = {
+        ...job,
+        jobPictureList: job.jobPictureList.filter(
+          (jobPicture) => jobPicture.pictureName !== pictureName
+        ),
+      };
+      setJob(newJob);
+    }
+  }
 
   return (
     <>
@@ -142,12 +164,36 @@ export default function InserJob() {
               <option value="1">Request</option>
             </Select>
           </FormControl>
-
           <FileUpload callback={updateFileList} multiple={true} />
-
-          <Button mt={4} colorScheme="teal" type="submit" onClick={onSubmit}>
-            Submit
-          </Button>
+          <VStack>
+            <HStack w={'100%'}>
+              {job?.jobPictureList &&
+                job.jobPictureList
+                  .map((picture) => picture.pictureName)
+                  .map((pictureName) => (
+                    <Box w={'64px'}>
+                      <img
+                        key={pictureName}
+                        style={{ width: '64px', height: '64px', float: 'left' }}
+                        src={JobService.getImageLink(pictureName)}
+                      />
+                      <Button onClick={() => deleteImage(pictureName)}>
+                        Delete
+                      </Button>
+                    </Box>
+                  ))}
+            </HStack>
+            <Box w={'100%'}>
+              <Button
+                mt={4}
+                colorScheme="teal"
+                type="submit"
+                onClick={onSubmit}
+              >
+                Submit
+              </Button>
+            </Box>{' '}
+          </VStack>
         </Box>
       </Center>
     </>

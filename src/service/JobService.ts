@@ -28,4 +28,32 @@ export default class JobService {
     return 'TEST';
     // throw new Error('Function not implemented.');
   };
+
+  public static retrieveMainJobPicture(job: Job | undefined) {
+    if (
+      job &&
+      job.jobPictureList &&
+      job.jobPictureList.length > 0 &&
+      job.jobPictureList[0]
+    ) {
+      return job.jobPictureList[0].pictureName;
+    }
+    return '';
+  }
+
+  public static hasMainJobPicture(job: Job | undefined) {
+    return (
+      job &&
+      job.jobPictureList &&
+      job.jobPictureList.length > 0 &&
+      job.jobPictureList[0]
+    );
+  }
+
+  public static getImageLink(pictureName: string | undefined): string {
+    if (pictureName) {
+      return `/api/v1/jobPicture/files/${pictureName}`;
+    }
+    return '#';
+  }
 }

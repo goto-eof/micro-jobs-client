@@ -1,4 +1,5 @@
 import Author from './Author';
+import JobPicture from './JobPicture';
 
 export default interface Job {
   id?: number;
@@ -6,11 +7,12 @@ export default interface Job {
   description: string;
   type: number;
   status?: number;
-  imagesContent?: Array<string>;
+  // imagesContent?: Array<string>;
   author?: Author;
   price: number;
-  pictureName?: string;
-  pictureNamesList?: Array<string>;
+  // pictureName?: string;
+  // pictureNamesList?: Array<string>;
   createdDate?: Date;
   lastModifiedDate?: Date;
+  jobPictureList?: Array<JobPicture>;
 }
