@@ -105,7 +105,6 @@ export default function InserJob() {
 
   const updateFileList = (files: Array<any>) => {
     setFiles(files);
-    console.log(files);
   };
 
   function deleteImage(pictureName: string) {

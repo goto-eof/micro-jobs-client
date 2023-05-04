@@ -40,7 +40,6 @@ export default function Login() {
     };
     GenericService.create<LoginRequest>('api/v1/auth/authenticate', data).then(
       (data: any) => {
-        console.log(data);
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('refresh_token', data.refresh_token);
         GenericService.get<UserProfile>('api/v1/auth/me').then(

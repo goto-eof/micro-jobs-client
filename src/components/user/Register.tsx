@@ -34,7 +34,6 @@ export default function Register() {
   };
 
   const updateFileList = (files: Array<any>) => {
-    console.log('picture', files.length, files[0], files);
     setUserPicture(files[0]);
   };
 
@@ -49,10 +48,8 @@ export default function Register() {
       password: form.password,
       picture: userPicture,
     };
-    console.log('userData', data);
     GenericService.create<RegisterRequest>('api/v1/auth/register', data).then(
       (data: any) => {
-        console.log(data);
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('refresh_token', data.access_token);
         GenericService.get<UserProfile>('api/v1/auth/me').then(
