@@ -111,6 +111,7 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const navigate = useNavigate();
   const goToViewOfferRequest = (id: number | undefined) => {
+    window.scrollTo(0, 0);
     navigate(
       status !== undefined
         ? `/view/${scope}/${status}/${id}`
