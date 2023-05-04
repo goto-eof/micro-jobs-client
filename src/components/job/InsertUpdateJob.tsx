@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Center,
@@ -19,6 +21,7 @@ import JobConst from '../../consts/JobConst';
 import Header from './Header';
 import JobPicture from '../../dto/JobPicture';
 import JobService from '../../service/JobService';
+import { error } from 'console';
 
 export default function InserJob() {
   const [form, setForm] = useState<Job>({
@@ -29,6 +32,7 @@ export default function InserJob() {
     id: undefined,
   });
 
+  const [alertMessage, setAlertMessage] = useState<string>();
   let { id, scope } = useParams();
   const scopeFromUri = scope || 'public';
   const [job, setJob] = useState<Job>();
@@ -88,6 +92,10 @@ export default function InserJob() {
           } else if (form.type == JobConst.TYPE_REQUEST) {
             navigate('/myRequests');
           }
+        },
+        (err: any) => {
+          setAlertMessage(err.response.data.message);
+          window.scroll(0, 0);
         }
       );
     } else {
@@ -98,6 +106,10 @@ export default function InserJob() {
           } else if (form.type == JobConst.TYPE_REQUEST) {
             navigate('/myRequests');
           }
+        },
+        (err: any) => {
+          setAlertMessage(err.response.data.message);
+          window.scroll(0, 0);
         }
       );
     }
@@ -122,6 +134,12 @@ export default function InserJob() {
   return (
     <>
       <Header title="Insert Job" />
+      {alertMessage && (
+        <Alert status="error">
+          <AlertIcon />
+          {alertMessage}
+        </Alert>
+      )}
       <Center>
         <Box width={'3xl'} boxShadow={'md'} p={4} mt={5}>
           <FormControl isRequired>
