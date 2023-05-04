@@ -210,7 +210,10 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
               {showJobStatus && (
                 <Box
                   color={
-                    JobService.isCreated(job.status) ? 'gray.400' : 'green.400'
+                    JobService.isCreated(job.status) ||
+                    JobService.isUpdated(job.status)
+                      ? 'gray.400'
+                      : 'green.400'
                   }
                   fontWeight={'bold'}
                 >

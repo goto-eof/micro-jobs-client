@@ -10,6 +10,9 @@ export default class JobService {
       case JobConst.STATUS_PUBLISHED: {
         return 'PUBLISHED';
       }
+      case JobConst.STATUS_UPDATED: {
+        return 'UPDATED';
+      }
       default: {
         return 'UKNOWN';
       }
@@ -17,6 +20,9 @@ export default class JobService {
   }
   static isCreated(status: number | undefined) {
     return status === JobConst.STATUS_CREATED;
+  }
+  static isUpdated(status: number | undefined) {
+    return status === JobConst.STATUS_UPDATED;
   }
   public static calulateAcceptButtonLabel = (job: Job) => {
     if (job.type === JobConst.TYPE_OFFER) {
