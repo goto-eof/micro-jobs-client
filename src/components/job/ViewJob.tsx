@@ -22,7 +22,7 @@ import {
   ModalBody,
   ModalFooter,
 } from '@chakra-ui/react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import UserService from '../../service/UserService';
 import Stars from './Stars';
 import JobService from '../../service/JobService';
@@ -106,6 +106,10 @@ export default function ViewOfferRequest({}: Props) {
   };
   const retrieveFirstname = job && job.author?.firstname;
   const retrieveLastName = job && job.author?.lastname;
+  function goToConversation(job: Job | undefined): void {
+    navigate(`/conversation/${job?.author?.id}`);
+  }
+
   return (
     <>
       {job && <Title title={calculateTitle(job?.type)} />}
@@ -129,9 +133,17 @@ export default function ViewOfferRequest({}: Props) {
               <Box fontSize={'0.8em'}>
                 #{job?.id}
                 {' | '}
-                by {retrieveFirstname} {retrieveLastName} (@
-                {job && job.author?.username}) on{' '}
-                {(job && DateUtil.transformDate(job.lastModifiedDate)) || ''}
+                by {retrieveFirstname} {retrieveLastName} (
+                <Box
+                  as="span"
+                  color={'blue.400'}
+                  cursor={'pointer'}
+                  userSelect={'none'}
+                  onClick={() => goToConversation(job)}
+                >
+                  @{job && job.author?.username})
+                </Box>{' '}
+                on {(job && DateUtil.transformDate(job.lastModifiedDate)) || ''}
                 {' | '} <Stars num={job && job.author?.stars} />
               </Box>
               <Text py="2">{job && job.description}</Text>
