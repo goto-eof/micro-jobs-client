@@ -107,7 +107,7 @@ export default function ViewOfferRequest({}: Props) {
   const retrieveFirstname = job && job.author?.firstname;
   const retrieveLastName = job && job.author?.lastname;
   function goToConversation(job: Job | undefined): void {
-    navigate(`/conversation/${job?.author?.id}`);
+    navigate(`/conversation/${job?.author?.id}/${job?.id}`);
   }
 
   return (

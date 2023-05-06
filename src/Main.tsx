@@ -34,7 +34,8 @@ import UserService from './service/UserService';
 import JobConst from './consts/JobConst';
 import UserConst from './consts/UserConst';
 import Footer from './components/Footer';
-import Conversation from './components/Conversation';
+import Conversations from './components/message/Conversations';
+import SendMessage from './components/message/SendMessage';
 
 const mainMenu = [
   { name: 'Home', url: '/' },
@@ -65,6 +66,7 @@ const RIGHT_MENU: Map<string, Array<UserMenuItem>> = new Map([
     [
       { label: 'My Offers', href: '/myOffers' },
       { label: 'My Requests', href: '/myRequests' },
+      { label: 'Conversations', href: '/conversations' },
     ],
   ],
 ]);
@@ -286,9 +288,10 @@ export default function Main() {
             <Route path="/insertJob/:scope" element={<InsertJob />} />
             <Route path="/editJob/:scope/:id" element={<InsertJob />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/conversations" element={<Conversations />} />
             <Route
-              path="/conversation/:userTargetId"
-              element={<Conversation />}
+              path="/conversation/:userTargetId/:jobTargetId"
+              element={<SendMessage />}
             />
             <Route path="/authenticate" element={<Login />} />
             <Route path="/view/:scope/:id" element={<ViewOfferRequest />} />

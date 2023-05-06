@@ -44,10 +44,7 @@ export default class GenericService {
       });
   }
 
-  public static async create<T>(
-    modelName: string,
-    data: T
-  ): Promise<Result<T>> {
+  public static async create<T>(modelName: string, data: T): Promise<T> {
     return await customAxios
       .post<T>(`${this.baseUrl}${modelName}`, data, { withCredentials: true })
       .then(async (result: any) => {
@@ -62,7 +59,7 @@ export default class GenericService {
   public static async createDifResponse<T, U>(
     modelName: string,
     data: T
-  ): Promise<Result<U>> {
+  ): Promise<U> {
     return await customAxios
       .post<T>(`${this.baseUrl}${modelName}`, data, { withCredentials: true })
       .then(async (result: any) => {
