@@ -64,8 +64,8 @@ export default function SendMessage() {
             messages.map((message) => (
               <Box key={message.id}>
                 <Box>{message.message}</Box>
-                <Box>{message.usernameFrom}</Box>
-                <Box>{message.date.toString()}</Box>
+                <Box fontSize={'0.6em'}>{message.usernameFrom}</Box>
+                <Box fontSize={'0.5em'}>{message.date.toString()}</Box>
                 <Divider />
               </Box>
             ))}
