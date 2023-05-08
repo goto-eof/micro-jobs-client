@@ -22,13 +22,14 @@ import {
   ModalBody,
   ModalFooter,
 } from '@chakra-ui/react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import UserService from '../../service/UserService';
 import Stars from './Stars';
 import JobService from '../../service/JobService';
 import Title from './Header';
 import JobConst from '../../consts/JobConst';
 import DateUtil from '../../service/DateUtil';
+import Room from '../../dto/Room';
 
 interface Props {}
 export default function ViewOfferRequest({}: Props) {
@@ -106,8 +107,12 @@ export default function ViewOfferRequest({}: Props) {
   };
   const retrieveFirstname = job && job.author?.firstname;
   const retrieveLastName = job && job.author?.lastname;
-  function goToConversation(job: Job | undefined): void {
-    navigate(`/conversation/${job?.author?.id}/${job?.id}`);
+  function goToConversation(job: Job): void {
+    GenericService.get<Room>(`api/v1/room/joobId/${job.id}`).then(
+      (room: Room) => {
+        navigate(`/room/${room?.id}`);
+      }
+    );
   }
 
   return (
@@ -139,7 +144,7 @@ export default function ViewOfferRequest({}: Props) {
                   color={'blue.400'}
                   cursor={'pointer'}
                   userSelect={'none'}
-                  onClick={() => goToConversation(job)}
+                  onClick={() => job && goToConversation(job)}
                 >
                   @{job && job.author?.username})
                 </Box>{' '}

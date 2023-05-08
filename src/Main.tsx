@@ -66,7 +66,7 @@ const RIGHT_MENU: Map<string, Array<UserMenuItem>> = new Map([
     [
       { label: 'My Offers', href: '/myOffers' },
       { label: 'My Requests', href: '/myRequests' },
-      { label: 'Conversations', href: '/conversations' },
+      { label: 'Conversations', href: '/rooms' },
     ],
   ],
 ]);
@@ -288,11 +288,8 @@ export default function Main() {
             <Route path="/insertJob/:scope" element={<InsertJob />} />
             <Route path="/editJob/:scope/:id" element={<InsertJob />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/conversations" element={<Conversations />} />
-            <Route
-              path="/conversation/:userTargetId/:jobTargetId"
-              element={<SendMessage />}
-            />
+            <Route path="/rooms" element={<Conversations />} />
+            <Route path="/room/:roomId" element={<SendMessage />} />
             <Route path="/authenticate" element={<Login />} />
             <Route path="/view/:scope/:id" element={<ViewOfferRequest />} />
             <Route

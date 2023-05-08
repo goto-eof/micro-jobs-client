@@ -9,23 +9,20 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import GenericService from '../../service/GenericService';
-import Message from '../../dto/Message';
 import { useParams } from 'react-router-dom';
 import MessageRequest from '../../dto/MessageRequest';
 import MessageResponse from '../../dto/MessageResponse';
 
 export default function SendMessage() {
   const [form, setForm] = useState({ message: '' });
-  const { userTargetId, jobTargetId } = useParams();
-  const userToId: number = Number(userTargetId);
-  const jobId: number = Number(jobTargetId);
+  const { roomId } = useParams();
   const [messages, setMessages] = useState<Array<MessageResponse>>(
     new Array<MessageResponse>()
   );
 
   useEffect(() => {
     GenericService.getAll<Array<MessageResponse>>(
-      `api/v1/message/${userToId}/${jobId}`
+      `api/v1/room/message/roomId/${roomId}`
     ).then((data: Array<MessageResponse>) => {
       setMessages(data);
     });
@@ -43,11 +40,10 @@ export default function SendMessage() {
 
   const sendMessage = () => {
     GenericService.createDifResponse<MessageRequest, MessageResponse>(
-      `api/v1/message`,
+      `api/v1/room/message`,
       {
         message: form.message,
-        userToId,
-        jobId,
+        roomId: Number(roomId),
       }
     ).then((data: MessageResponse) => {
       const newMessages: Array<MessageResponse> = [...messages, data];
@@ -65,7 +61,7 @@ export default function SendMessage() {
               <Box key={message.id}>
                 <Box>{message.message}</Box>
                 <Box fontSize={'0.6em'}>{message.usernameFrom}</Box>
-                <Box fontSize={'0.5em'}>{message.date.toString()}</Box>
+                {/* <Box fontSize={'0.5em'}>{message.date.toString()}</Box> */}
                 <Divider />
               </Box>
             ))}
