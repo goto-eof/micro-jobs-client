@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Center,
@@ -16,6 +18,7 @@ import MessageResponse from '../../dto/MessageResponse';
 export default function SendMessage() {
   const [form, setForm] = useState({ message: '' });
   const { roomId } = useParams();
+  const [alertMessage, setAlertMessage] = useState<string>();
   const [messages, setMessages] = useState<Array<MessageResponse>>(
     new Array<MessageResponse>()
   );
@@ -23,9 +26,15 @@ export default function SendMessage() {
   useEffect(() => {
     GenericService.getAll<Array<MessageResponse>>(
       `api/v1/room/message/roomId/${roomId}`
-    ).then((data: Array<MessageResponse>) => {
-      setMessages(data);
-    });
+    ).then(
+      (data: Array<MessageResponse>) => {
+        setMessages(data);
+      },
+      (err: any) => {
+        setAlertMessage(err.response.data.message);
+        window.scroll(0, 0);
+      }
+    );
   }, []);
 
   const updateFormData = (evt: any) => {
@@ -45,15 +54,27 @@ export default function SendMessage() {
         message: form.message,
         roomId: Number(roomId),
       }
-    ).then((data: MessageResponse) => {
-      const newMessages: Array<MessageResponse> = [...messages, data];
-      setMessages(newMessages);
-      setForm({ ...form, message: '' });
-    });
+    ).then(
+      (data: MessageResponse) => {
+        const newMessages: Array<MessageResponse> = [...messages, data];
+        setMessages(newMessages);
+        setForm({ ...form, message: '' });
+      },
+      (err: any) => {
+        setAlertMessage(err.response.data.message);
+        window.scroll(0, 0);
+      }
+    );
   };
 
   return (
     <>
+      {alertMessage && (
+        <Alert status="error">
+          <AlertIcon />
+          {alertMessage}
+        </Alert>
+      )}
       <Center>
         <Box width={'500px'}>
           {messages &&

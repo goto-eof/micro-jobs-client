@@ -108,7 +108,7 @@ export default function ViewOfferRequest({}: Props) {
   const retrieveFirstname = job && job.author?.firstname;
   const retrieveLastName = job && job.author?.lastname;
   function goToConversation(job: Job): void {
-    GenericService.get<Room>(`api/v1/room/joobId/${job.id}`).then(
+    GenericService.get<Room>(`api/v1/room/jobId/${job.id}`).then(
       (room: Room) => {
         navigate(`/room/${room?.id}`);
       }
