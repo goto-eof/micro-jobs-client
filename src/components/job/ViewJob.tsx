@@ -108,12 +108,22 @@ export default function ViewOfferRequest({}: Props) {
   const retrieveFirstname = job && job.author?.firstname;
   const retrieveLastName = job && job.author?.lastname;
   function goToConversation(job: Job): void {
+    if (job.author && UserService.isSameUsername(job.author?.username)) {
+      return;
+    }
     GenericService.get<Room>(`api/v1/room/jobId/${job.id}`).then(
       (room: Room) => {
         navigate(`/room/${room?.id}`);
       }
     );
   }
+
+  const calculateUserIdColor = (job: Job) => {
+    if (job.author && UserService.isSameUsername(job.author?.username)) {
+      return 'gray.600';
+    }
+    return 'blue.400';
+  };
 
   return (
     <>
@@ -141,7 +151,7 @@ export default function ViewOfferRequest({}: Props) {
                 by {retrieveFirstname} {retrieveLastName} (
                 <Box
                   as="span"
-                  color={'blue.400'}
+                  color={job && calculateUserIdColor(job)}
                   cursor={'pointer'}
                   userSelect={'none'}
                   onClick={() => job && goToConversation(job)}
