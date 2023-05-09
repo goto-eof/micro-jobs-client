@@ -289,7 +289,10 @@ export default function Main() {
             <Route path="/editJob/:scope/:id" element={<InsertJob />} />
             <Route path="/register" element={<Register />} />
             <Route path="/rooms" element={<Conversations />} />
-            <Route path="/room/:roomId" element={<SendMessage />} />
+            <Route
+              path="/room/:roomId/username/:username"
+              element={<SendMessage />}
+            />
             <Route path="/authenticate" element={<Login />} />
             <Route path="/view/:scope/:id" element={<ViewOfferRequest />} />
             <Route

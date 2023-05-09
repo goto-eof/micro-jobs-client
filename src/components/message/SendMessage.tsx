@@ -14,10 +14,11 @@ import GenericService from '../../service/GenericService';
 import { useParams } from 'react-router-dom';
 import MessageRequest from '../../dto/MessageRequest';
 import MessageResponse from '../../dto/MessageResponse';
+import Title from '../job/Header';
 
 export default function SendMessage() {
   const [form, setForm] = useState({ message: '' });
-  const { roomId } = useParams();
+  const { roomId, username } = useParams();
   const [alertMessage, setAlertMessage] = useState<string>();
   const [messages, setMessages] = useState<Array<MessageResponse>>(
     new Array<MessageResponse>()
@@ -67,8 +68,13 @@ export default function SendMessage() {
     );
   };
 
+  const calculateMessageTo = () => {
+    return '@' + username;
+  };
+
   return (
     <>
+      <Title title={'Message to: ' + calculateMessageTo()} />
       {alertMessage && (
         <Alert status="error">
           <AlertIcon />

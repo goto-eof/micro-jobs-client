@@ -17,7 +17,10 @@ export default function Conversations() {
   }, []);
 
   const goToConversation = (room: Room) => {
-    navigate(`/room/${room.id}`);
+    const participant = room.participants.filter(
+      (part) => !UserService.isSameUsername(part)
+    );
+    navigate(`/room/${room.id}/username/${participant}`);
   };
 
   return (
