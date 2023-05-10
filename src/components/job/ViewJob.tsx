@@ -44,8 +44,8 @@ export default function ViewOfferRequest({}: Props) {
   useEffect(() => {
     GenericService.get<Job>(
       status !== undefined
-        ? `api/v1/job/${scopeFromUrl}/admin/${status}/${id}`
-        : `api/v1/job/${scopeFromUrl}/${id}`
+        ? `api/v1/job/${scopeFromUrl}/admin/jobStatus/${status}/jobId/${id}`
+        : `api/v1/job/${scopeFromUrl}/jobId/${id}`
     ).then((job) => {
       setJob(job);
     });
@@ -65,19 +65,21 @@ export default function ViewOfferRequest({}: Props) {
 
   const goToEditOfferRequest = (job: Job | undefined) => {
     if (job) {
-      navigate(`/editJob/${scopeFromUrl}/${job.id}`);
+      navigate(`/editJob/${scopeFromUrl}/jobId/${job.id}`);
     }
   };
 
   const deleteItem = (job: Job | undefined) => {
     if (job && job.id) {
-      GenericService.delete(`api/v1/job/${scopeFromUrl}`, job.id).then((_) => {
-        if (job && job.type === JobConst.TYPE_OFFER) {
-          navigate('/myOffers');
-        } else if (job && job.type === JobConst.TYPE_REQUEST) {
-          navigate('/myRequests');
+      GenericService.delete(`api/v1/job/${scopeFromUrl}/jobId`, job.id).then(
+        (_) => {
+          if (job && job.type === JobConst.TYPE_OFFER) {
+            navigate('/myOffers');
+          } else if (job && job.type === JobConst.TYPE_REQUEST) {
+            navigate('/myRequests');
+          }
         }
-      });
+      );
     }
   };
 

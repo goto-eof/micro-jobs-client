@@ -42,8 +42,8 @@ export default function JobOffersRequests({
 }: Props) {
   const BASE_URL_RETRIEVE_ITEMS: string =
     status !== undefined
-      ? `api/v1/job/${scope}/admin/${type}/${status}`
-      : `api/v1/job/${scope}/${type}`;
+      ? `api/v1/job/${scope}/admin/jobType/${type}`
+      : `api/v1/job/${scope}/jobType/${type}`;
 
   const [offers, setOffers] = useState<Array<Job>>(new Array<Job>());
   const [itemsCount, setItemsCount] = useState(0);
@@ -55,13 +55,13 @@ export default function JobOffersRequests({
   };
 
   useEffect(() => {
-    GenericService.getAll<JobListPage>(`${BASE_URL_RETRIEVE_ITEMS}/0`).then(
-      (jobListPageResponse) => {
-        setOffers(jobListPageResponse.jobList);
-        setItemsCount(jobListPageResponse.totalItems);
-        setLoaded(true);
-      }
-    );
+    GenericService.getAll<JobListPage>(
+      `${BASE_URL_RETRIEVE_ITEMS}/page/0`
+    ).then((jobListPageResponse) => {
+      setOffers(jobListPageResponse.jobList);
+      setItemsCount(jobListPageResponse.totalItems);
+      setLoaded(true);
+    });
   }, []);
 
   const goToPage = (page: number) => {
@@ -114,8 +114,8 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
     window.scrollTo(0, 0);
     navigate(
       status !== undefined
-        ? `/view/${scope}/${status}/${id}`
-        : `/view/${scope}/${id}`
+        ? `/view/${scope}/${status}/jobId/${id}`
+        : `/view/${scope}/jobId/${id}`
     );
   };
 
@@ -237,16 +237,18 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
                 >
                   {JobService.calulateAcceptButtonLabel(job)}
                 </Button>
-                {UserService.isAdmin() && JobService.isCreated(job.status) && (
-                  <Button
-                    mr={3}
-                    variant="solid"
-                    colorScheme="blue"
-                    onClick={() => approve(job)}
-                  >
-                    Approve
-                  </Button>
-                )}
+                {UserService.isAdmin() &&
+                  (JobService.isCreated(job.status) ||
+                    JobService.isUpdated(job.status)) && (
+                    <Button
+                      mr={3}
+                      variant="solid"
+                      colorScheme="blue"
+                      onClick={() => approve(job)}
+                    >
+                      Approve
+                    </Button>
+                  )}
               </Box>
             </Box>
           </Flex>

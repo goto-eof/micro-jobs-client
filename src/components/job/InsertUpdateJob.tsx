@@ -23,7 +23,7 @@ import JobPicture from '../../dto/JobPicture';
 import JobService from '../../service/JobService';
 import { error } from 'console';
 
-export default function InserJob() {
+export default function InserUpdateJob() {
   const [form, setForm] = useState<Job>({
     title: '',
     description: '',
@@ -41,7 +41,7 @@ export default function InserJob() {
 
   useEffect(() => {
     if (id) {
-      GenericService.get<Job>(`api/v1/job/${scopeFromUri}/${id}`).then(
+      GenericService.get<Job>(`api/v1/job/${scopeFromUri}/jobId/${id}`).then(
         (job) => {
           setJob(job);
           setForm({
@@ -99,7 +99,11 @@ export default function InserJob() {
         }
       );
     } else {
-      GenericService.put<Job>(`api/v1/job/${scopeFromUri}`, form.id, data).then(
+      GenericService.put<Job>(
+        `api/v1/job/${scopeFromUri}/jobId`,
+        form.id,
+        data
+      ).then(
         () => {
           if (form.type == JobConst.TYPE_OFFER) {
             navigate('/myOffers');

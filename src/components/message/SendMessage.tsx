@@ -88,7 +88,6 @@ export default function SendMessage() {
               <Box key={message.id}>
                 <Box>{message.message}</Box>
                 <Box fontSize={'0.6em'}>{message.usernameFrom}</Box>
-                {/* <Box fontSize={'0.5em'}>{message.date.toString()}</Box> */}
                 <Divider />
               </Box>
             ))}

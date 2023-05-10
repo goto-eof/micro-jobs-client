@@ -24,7 +24,7 @@ import {
 } from '@chakra-ui/icons';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Home from './components/Home';
-import InsertJob from './components/job/InsertUpdateJob';
+import InsertUpdateJob from './components/job/InsertUpdateJob';
 import Register from './components/user/Register';
 import Login from './components/user/Login';
 import JobOffersRequests from './components/job/JobsList';
@@ -285,8 +285,11 @@ export default function Main() {
                 />
               }
             />
-            <Route path="/insertJob/:scope" element={<InsertJob />} />
-            <Route path="/editJob/:scope/:id" element={<InsertJob />} />
+            <Route path="/insertJob/:scope" element={<InsertUpdateJob />} />
+            <Route
+              path="/editJob/:scope/jobId/:id"
+              element={<InsertUpdateJob />}
+            />
             <Route path="/register" element={<Register />} />
             <Route path="/rooms" element={<Conversations />} />
             <Route
@@ -294,9 +297,12 @@ export default function Main() {
               element={<SendMessage />}
             />
             <Route path="/authenticate" element={<Login />} />
-            <Route path="/view/:scope/:id" element={<ViewOfferRequest />} />
             <Route
-              path="/view/:scope/:status/:id"
+              path="/view/:scope/jobId/:id"
+              element={<ViewOfferRequest />}
+            />
+            <Route
+              path="/view/:scope/status/:status/jobId/:id"
               element={<ViewOfferRequest />}
             />
 
