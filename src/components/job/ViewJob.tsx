@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import GenericService from '../../service/GenericService';
+import GenericApiService from '../../service/GenericService';
 import Job from '../../dto/Job';
 import { Card, CardBody } from '@chakra-ui/card';
 import {
@@ -30,6 +30,9 @@ import Title from './Header';
 import JobConst from '../../consts/JobConst';
 import DateUtil from '../../service/DateUtil';
 import Room from '../../dto/Room';
+import UserJobItemEditPanel from './panels/UserJobItemEditPanel';
+import UserJobItemPanel from './panels/UserJobItemPanel';
+import AdminJobItemPanel from './panels/AdminJobItemPanel';
 
 interface Props {}
 export default function ViewOfferRequest({}: Props) {
@@ -42,11 +45,11 @@ export default function ViewOfferRequest({}: Props) {
   const scopeFromUrl = scope || 'public';
 
   useEffect(() => {
-    GenericService.get<Job>(
+    GenericApiService.get<Job>(
       status !== undefined
         ? `api/v1/job/${scopeFromUrl}/admin/jobStatus/${status}/jobId/${id}`
         : `api/v1/job/${scopeFromUrl}/jobId/${id}`
-    ).then((job) => {
+    ).then((job: Job) => {
       setJob(job);
     });
   }, []);
@@ -55,33 +58,6 @@ export default function ViewOfferRequest({}: Props) {
     job &&
     (UserService.isAdmin() || UserService.isPublisher(job)) &&
     scope !== JobConst.SCOPE_PUBLIC;
-
-  const showUserButtons = (job: Job) => {
-    return (
-      scope === JobConst.SCOPE_PRIVATE &&
-      UserService.isSameUsername(job.author?.username || '')
-    );
-  };
-
-  const goToEditOfferRequest = (job: Job | undefined) => {
-    if (job) {
-      navigate(`/editJob/${scopeFromUrl}/jobId/${job.id}`);
-    }
-  };
-
-  const deleteItem = (job: Job | undefined) => {
-    if (job && job.id) {
-      GenericService.delete(`api/v1/job/${scopeFromUrl}/jobId`, job.id).then(
-        (_) => {
-          if (job && job.type === JobConst.TYPE_OFFER) {
-            navigate('/myOffers');
-          } else if (job && job.type === JobConst.TYPE_REQUEST) {
-            navigate('/myRequests');
-          }
-        }
-      );
-    }
-  };
 
   const openModalByImage = (imageName: string | undefined) => {
     if (imageName) {
@@ -100,20 +76,13 @@ export default function ViewOfferRequest({}: Props) {
     return '';
   };
 
-  const calculateDisplayUserButtons = () => {
-    return job && showUserButtons(job) ? '' : 'none';
-  };
-
-  const calculateDisplayDeleteButton = () => {
-    return job && showUserButtons(job) ? '' : 'none';
-  };
   const retrieveFirstname = job && job.author?.firstname;
   const retrieveLastName = job && job.author?.lastname;
   function goToConversation(job: Job): void {
     if (job.author && UserService.isSameUsername(job.author?.username)) {
       return;
     }
-    GenericService.get<Room>(`api/v1/room/jobId/${job.id}`).then(
+    GenericApiService.get<Room>(`api/v1/room/jobId/${job.id}`).then(
       (room: Room) => {
         navigate(`/room/${room?.id}/username/${job.author?.username}`);
       }
@@ -125,6 +94,14 @@ export default function ViewOfferRequest({}: Props) {
       return 'gray.600';
     }
     return 'blue.400';
+  };
+  const goToViewOfferRequest = (job: Job) => {
+    window.scrollTo(0, 0);
+    if (job.type == JobConst.TYPE_OFFER) {
+      navigate('/offers');
+    } else if (job.type == JobConst.TYPE_REQUEST) {
+      navigate('/requests');
+    }
   };
 
   return (
@@ -197,50 +174,22 @@ export default function ViewOfferRequest({}: Props) {
               textAlign={'right'}
               p={10}
             >
-              {showJobStatus && (
-                <Box
-                  color={
-                    JobService.isCreated(job.status) ||
-                    JobService.isUpdated(job.status)
-                      ? 'gray.400'
-                      : 'green.400'
-                  }
-                  fontWeight={'bold'}
-                >
-                  {JobService.retrieveStatus(job)}
-                </Box>
-              )}
+              {showJobStatus && <JobStatus job={job} />}
               <Box textAlign={'right'}>Price:</Box>
               <Box fontSize={'1.3em'} fontWeight={'bold'}>
                 {job && job.price}€
               </Box>
-              <Box mt={4}>
-                <Button
-                  display={calculateDisplayUserButtons()}
-                  mr={3}
-                  variant="solid"
-                  colorScheme="blue"
-                >
-                  {job && JobService.calulateAcceptButtonLabel(job)}
-                </Button>
-                <Button
-                  variant={'solid'}
-                  colorScheme="red"
-                  mr={3}
-                  display={calculateDisplayDeleteButton()}
-                  onClick={() => deleteItem(job)}
-                >
-                  Delete
-                </Button>
-                <Button
-                  variant={'solid'}
-                  colorScheme="green"
-                  display={calculateDisplayUserButtons()}
-                  onClick={() => goToEditOfferRequest(job)}
-                >
-                  Edit
-                </Button>
-              </Box>
+              {job && scope && (
+                <Box mt={4}>
+                  <UserJobItemEditPanel job={job} scope={scope} />
+                  <UserJobItemPanel job={job} />
+                  <AdminJobItemPanel
+                    job={job}
+                    scope={scope}
+                    approveCallback={goToViewOfferRequest}
+                  />
+                </Box>
+              )}
             </Box>
           </Flex>
         </SimpleGrid>
@@ -249,6 +198,26 @@ export default function ViewOfferRequest({}: Props) {
     </>
   );
 }
+
+interface JobStatusProps {
+  job: Job;
+}
+
+function JobStatus({ job }: JobStatusProps) {
+  return (
+    <Box
+      color={
+        JobService.isCreated(job.status) || JobService.isUpdated(job.status)
+          ? 'gray.400'
+          : 'green.400'
+      }
+      fontWeight={'bold'}
+    >
+      {JobService.retrieveStatus(job)}
+    </Box>
+  );
+}
+
 function JobPicture(
   job: Job | undefined,
   imageLoaded: boolean,

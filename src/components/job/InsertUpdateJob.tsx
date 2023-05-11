@@ -13,7 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import GenericService from '../../service/GenericService';
+import GenericApiService from '../../service/GenericService';
 import { useNavigate, useParams } from 'react-router-dom';
 import Job from '../../dto/Job';
 import FileUpload from '../FileUpload';
@@ -21,7 +21,6 @@ import JobConst from '../../consts/JobConst';
 import Header from './Header';
 import JobPicture from '../../dto/JobPicture';
 import JobService from '../../service/JobService';
-import { error } from 'console';
 
 export default function InserUpdateJob() {
   const [form, setForm] = useState<Job>({
@@ -41,7 +40,7 @@ export default function InserUpdateJob() {
 
   useEffect(() => {
     if (id) {
-      GenericService.get<Job>(`api/v1/job/${scopeFromUri}/jobId/${id}`).then(
+      GenericApiService.get<Job>(`api/v1/job/${scopeFromUri}/jobId/${id}`).then(
         (job) => {
           setJob(job);
           setForm({
@@ -85,7 +84,7 @@ export default function InserUpdateJob() {
     };
 
     if (!form.id) {
-      GenericService.create<Job>(`api/v1/job/${scopeFromUri}`, data).then(
+      GenericApiService.create<Job>(`api/v1/job/${scopeFromUri}`, data).then(
         () => {
           if (form.type == JobConst.TYPE_OFFER) {
             navigate('/myOffers');
@@ -99,7 +98,7 @@ export default function InserUpdateJob() {
         }
       );
     } else {
-      GenericService.put<Job>(
+      GenericApiService.put<Job>(
         `api/v1/job/${scopeFromUri}/jobId`,
         form.id,
         data

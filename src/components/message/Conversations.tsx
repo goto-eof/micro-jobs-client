@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import GenericService from '../../service/GenericService';
+import GenericApiService from '../../service/GenericService';
 import { Box, Divider } from '@chakra-ui/react';
 import Title from '../job/Header';
 import Conversation from '../../dto/Room';
@@ -11,9 +11,11 @@ export default function Conversations() {
   const [rooms, setRooms] = useState<Array<Room>>();
   const navigate = useNavigate();
   useEffect(() => {
-    GenericService.getAll<Array<Conversation>>(`api/v1/room`).then((data) => {
-      setRooms(data);
-    });
+    GenericApiService.getAll<Array<Conversation>>(`api/v1/room`).then(
+      (data) => {
+        setRooms(data);
+      }
+    );
   }, []);
 
   const goToConversation = (room: Room) => {

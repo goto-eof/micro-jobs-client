@@ -7,7 +7,7 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import GenericService from '../../service/GenericService';
+import GenericApiService from '../../service/GenericService';
 import { useNavigate } from 'react-router-dom';
 import RegisterRequest from '../../dto/RegisterRequest';
 import FileUpload from '../FileUpload';
@@ -48,18 +48,19 @@ export default function Register() {
       password: form.password,
       picture: userPicture,
     };
-    GenericService.create<RegisterRequest>('api/v1/auth/register', data).then(
-      (data: any) => {
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('refresh_token', data.access_token);
-        GenericService.get<UserProfile>('api/v1/auth/me').then(
-          (userProfile: UserProfile) => {
-            localStorage.setItem('user', JSON.stringify(userProfile));
-            navigate('/offers');
-          }
-        );
-      }
-    );
+    GenericApiService.create<RegisterRequest>(
+      'api/v1/auth/register',
+      data
+    ).then((data: any) => {
+      localStorage.setItem('access_token', data.access_token);
+      localStorage.setItem('refresh_token', data.access_token);
+      GenericApiService.get<UserProfile>('api/v1/auth/me').then(
+        (userProfile: UserProfile) => {
+          localStorage.setItem('user', JSON.stringify(userProfile));
+          navigate('/offers');
+        }
+      );
+    });
   };
 
   return (

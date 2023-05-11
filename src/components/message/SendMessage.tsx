@@ -10,7 +10,7 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import GenericService from '../../service/GenericService';
+import GenericApiService from '../../service/GenericService';
 import { useParams } from 'react-router-dom';
 import MessageRequest from '../../dto/MessageRequest';
 import MessageResponse from '../../dto/MessageResponse';
@@ -25,7 +25,7 @@ export default function SendMessage() {
   );
 
   useEffect(() => {
-    GenericService.getAll<Array<MessageResponse>>(
+    GenericApiService.getAll<Array<MessageResponse>>(
       `api/v1/room/message/roomId/${roomId}`
     ).then(
       (data: Array<MessageResponse>) => {
@@ -49,7 +49,7 @@ export default function SendMessage() {
   };
 
   const sendMessage = () => {
-    GenericService.createDifResponse<MessageRequest, MessageResponse>(
+    GenericApiService.createDifResponse<MessageRequest, MessageResponse>(
       `api/v1/room/message`,
       {
         message: form.message,
@@ -88,6 +88,7 @@ export default function SendMessage() {
               <Box key={message.id}>
                 <Box>{message.message}</Box>
                 <Box fontSize={'0.6em'}>{message.usernameFrom}</Box>
+                <Box>{message.createdDate.toString()}</Box>
                 <Divider />
               </Box>
             ))}

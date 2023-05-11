@@ -13,6 +13,9 @@ export default class JobService {
       case JobConst.STATUS_UPDATED: {
         return 'UPDATED';
       }
+      case JobConst.STATUS_UNPUBLISHED: {
+        return 'UNPUBLISHED';
+      }
       default: {
         return 'UKNOWN';
       }
@@ -24,6 +27,12 @@ export default class JobService {
   static isUpdated(status: number | undefined) {
     return status === JobConst.STATUS_UPDATED;
   }
+  static isPublished(status: number | undefined) {
+    return status === JobConst.STATUS_PUBLISHED;
+  }
+  static isUnpublished(status: number | undefined) {
+    return status === JobConst.STATUS_UNPUBLISHED;
+  }
   public static calulateAcceptButtonLabel = (job: Job) => {
     if (job.type === JobConst.TYPE_OFFER) {
       return 'Request service';
@@ -31,7 +40,7 @@ export default class JobService {
     if (job.type === JobConst.TYPE_REQUEST) {
       return 'Provide service';
     }
-    return 'TEST';
+    return 'ERROR';
     // throw new Error('Function not implemented.');
   };
 

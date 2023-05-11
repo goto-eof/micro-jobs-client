@@ -1,7 +1,7 @@
 import Result from '../dto/Result';
 import customAxios from '../interceptors/LoginInterceptor';
 
-export default class GenericService {
+export default class GenericApiService {
   private static baseUrl: string = '/';
   // process.env.REACT_APP_URI + ':' + process.env.REACT_APP_PORT + '/';
 
@@ -160,17 +160,4 @@ export default class GenericService {
         throw err;
       });
   }
-
-  // public static refreshToken(result: Result<any>) {
-  //   if (result.refresh_token) {
-  //     GenericService.createDifResponse<Jwt, Jwt>('user/refreshToken', {
-  //       jwt: localStorage.getItem('token') || '',
-  //     }).then((response) => {
-  //       if (response.success) {
-  //         localStorage.setItem('token', response.result.jwt);
-  //       }
-  //     });
-  //   } else {
-  //   }
-  // }
 }

@@ -14,7 +14,7 @@ import {
   Center,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import GenericService from '../../service/GenericService';
+import GenericApiService from '../../service/GenericService';
 import Job from '../../dto/Job';
 import Pagination from '../Pagination';
 import PaginationUtil from '../../util/PaginationUtil';
@@ -26,6 +26,8 @@ import Title from './Header';
 import JobConst from '../../consts/JobConst';
 import DateUtil from '../../service/DateUtil';
 import JobListPage from '../../dto/JobListPage';
+import AdminJobItemPanel from './panels/AdminJobItemPanel';
+import UserJobItemPanel from './panels/UserJobItemPanel';
 
 interface Props {
   type: number;
@@ -55,7 +57,7 @@ export default function JobOffersRequests({
   };
 
   useEffect(() => {
-    GenericService.getAll<JobListPage>(
+    GenericApiService.getAll<JobListPage>(
       `${BASE_URL_RETRIEVE_ITEMS}/page/0`
     ).then((jobListPageResponse) => {
       setOffers(jobListPageResponse.jobList);
@@ -65,7 +67,7 @@ export default function JobOffersRequests({
   }, []);
 
   const goToPage = (page: number) => {
-    GenericService.getAll<JobListPage>(
+    GenericApiService.getAll<JobListPage>(
       BASE_URL_RETRIEVE_ITEMS + '/' + page
     ).then((jobListPageResponse) => {
       setOffers(jobListPageResponse.jobList);
@@ -114,19 +116,9 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
     window.scrollTo(0, 0);
     navigate(
       status !== undefined
-        ? `/view/${scope}/${status}/jobId/${id}`
+        ? `/view/${scope}/status/${status}/jobId/${id}`
         : `/view/${scope}/jobId/${id}`
     );
-  };
-
-  function showUserButtons(job: Job) {
-    return UserService.isSameUsername(job.author?.username || '');
-  }
-
-  const approve = (job: Job): void => {
-    GenericService.post<Job>('api/v1/job/private/' + job.id).then((job) => {
-      removeElementFromList(job);
-    });
   };
 
   const showJobStatus =
@@ -207,53 +199,42 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
               textAlign={'right'}
               p={10}
             >
-              {showJobStatus && (
-                <Box
-                  color={
-                    JobService.isCreated(job.status) ||
-                    JobService.isUpdated(job.status)
-                      ? 'gray.400'
-                      : 'green.400'
-                  }
-                  fontWeight={'bold'}
-                >
-                  {JobService.retrieveStatus(job)}
-                </Box>
-              )}
+              {showJobStatus && <JobStatus job={job} />}
               <Box textAlign={'right'}>Price:</Box>
               <Box fontSize={'1.3em'} fontWeight={'bold'}>
                 {job.price}€
               </Box>
               <Box mt={4}>
-                <Button
-                  display={
-                    !showUserButtons(job) && !UserService.isAdmin()
-                      ? ''
-                      : 'none'
-                  }
-                  mr={3}
-                  variant="solid"
-                  colorScheme="blue"
-                >
-                  {JobService.calulateAcceptButtonLabel(job)}
-                </Button>
-                {UserService.isAdmin() &&
-                  (JobService.isCreated(job.status) ||
-                    JobService.isUpdated(job.status)) && (
-                    <Button
-                      mr={3}
-                      variant="solid"
-                      colorScheme="blue"
-                      onClick={() => approve(job)}
-                    >
-                      Approve
-                    </Button>
-                  )}
+                <UserJobItemPanel job={job} />
+                <AdminJobItemPanel
+                  scope={scope}
+                  job={job}
+                  approveCallback={removeElementFromList}
+                />
               </Box>
             </Box>
           </Flex>
         </SimpleGrid>
       </Card>
     </>
+  );
+}
+
+interface JobStatusProps {
+  job: Job;
+}
+function JobStatus({ job }: JobStatusProps) {
+  const [calculatedColor] = useState<string>(
+    JobService.isCreated(job.status) ||
+      JobService.isUpdated(job.status) ||
+      JobService.isUnpublished(job.status)
+      ? 'gray.400'
+      : 'green.400'
+  );
+  const [calculatedStatus] = useState<string>(JobService.retrieveStatus(job));
+  return (
+    <Box color={calculatedColor} fontWeight={'bold'}>
+      {calculatedStatus}
+    </Box>
   );
 }

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import GenericService from '../service/GenericService';
+import GenericApiService from '../service/GenericService';
 
 const customAxios = axios.create();
 export const customInterceptor = (navigate: any) => {
@@ -52,7 +52,7 @@ const refreshToken = (error: any, navigate: (path: string) => {}) => {
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
   if (tokensData) {
-    return GenericService.postHeaders('api/v1/auth/refreshToken', {
+    return GenericApiService.postHeaders('api/v1/auth/refreshToken', {
       headers: {
         Authorization: `Bearer ${tokensData}`,
       },
