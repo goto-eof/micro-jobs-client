@@ -5,4 +5,5 @@ export default interface Room {
   status: number;
   jobId: number;
   participants: Array<string>;
+  pictureName: string;
 }
