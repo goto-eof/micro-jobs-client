@@ -2,7 +2,7 @@ import { Button } from '@chakra-ui/react';
 import Job from '../../../dto/Job';
 import UserService from '../../../service/UserService';
 import { useState } from 'react';
-import GenericApiService from '../../../service/GenericService';
+import GenericApiService from '../../../service/GenericApiService';
 import JobConst from '../../../consts/JobConst';
 import { useNavigate } from 'react-router-dom';
 

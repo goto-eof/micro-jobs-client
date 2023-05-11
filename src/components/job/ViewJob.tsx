@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import GenericApiService from '../../service/GenericService';
+import GenericApiService from '../../service/GenericApiService';
 import Job from '../../dto/Job';
 import { Card, CardBody } from '@chakra-ui/card';
 import {

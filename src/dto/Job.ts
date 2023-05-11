@@ -15,4 +15,5 @@ export default interface Job {
   createdDate?: Date;
   lastModifiedDate?: Date;
   jobPictureList?: Array<JobPicture>;
+  picture?: string;
 }

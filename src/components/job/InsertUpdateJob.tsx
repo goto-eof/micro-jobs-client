@@ -13,7 +13,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import GenericApiService from '../../service/GenericService';
+import GenericApiService from '../../service/GenericApiService';
 import { useNavigate, useParams } from 'react-router-dom';
 import Job from '../../dto/Job';
 import FileUpload from '../FileUpload';

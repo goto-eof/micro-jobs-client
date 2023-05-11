@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import GenericApiService from './GenericService';
+import GenericApiService from './GenericApiService';
 
 export default class AuthenticationService {
   public static async logout(callback: () => void) {

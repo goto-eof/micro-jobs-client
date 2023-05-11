@@ -36,6 +36,7 @@ import UserConst from './consts/UserConst';
 import Footer from './components/Footer';
 import Conversations from './components/message/Conversations';
 import SendMessage from './components/message/SendMessage';
+import JobInfoSidebar from './components/message/JobInfoSidebar';
 
 const mainMenu = [
   { name: 'Home', url: '/' },
@@ -294,7 +295,7 @@ export default function Main() {
             <Route path="/rooms" element={<Conversations />} />
             <Route
               path="/room/:roomId/username/:username"
-              element={<SendMessage />}
+              element={<JobInfoSidebar />}
             />
             <Route path="/authenticate" element={<Login />} />
             <Route

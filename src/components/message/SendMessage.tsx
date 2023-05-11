@@ -10,13 +10,14 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import GenericApiService from '../../service/GenericService';
+import GenericApiService from '../../service/GenericApiService';
 import { useParams } from 'react-router-dom';
 import MessageRequest from '../../dto/MessageRequest';
 import MessageResponse from '../../dto/MessageResponse';
 import Title from '../job/Header';
+import Job from '../../dto/Job';
 
-export default function SendMessage() {
+export default function SendMessage({ job }: { job?: Job }) {
   const [form, setForm] = useState({ message: '' });
   const { roomId, username } = useParams();
   const [alertMessage, setAlertMessage] = useState<string>();
@@ -82,7 +83,10 @@ export default function SendMessage() {
         </Alert>
       )}
       <Center>
-        <Box width={'500px'}>
+        <Box
+          w={'full'}
+          // width={'500px'}
+        >
           {messages &&
             messages.map((message) => (
               <Box key={message.id}>

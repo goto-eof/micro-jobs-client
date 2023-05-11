@@ -1,5 +1,5 @@
 import axios from 'axios';
-import GenericApiService from '../service/GenericService';
+import GenericApiService from '../service/GenericApiService';
 
 const customAxios = axios.create();
 export const customInterceptor = (navigate: any) => {

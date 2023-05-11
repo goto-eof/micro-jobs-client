@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
-import GenericApiService from '../../service/GenericService';
+import GenericApiService from '../../service/GenericApiService';
 import {
-  Box,
-  Button,
   Card,
   CardBody,
   CardFooter,
-  Divider,
   Heading,
   Stack,
   Text,
@@ -55,7 +52,7 @@ function RoomItem({ room }: RoomItemProps) {
   const goToConversation = (room: Room) => {
     const participant = room.participants.filter(
       (part) => !UserService.isSameUsername(part)
-    );
+    )[0];
     navigate(`/room/${room.id}/username/${participant}`);
   };
   return (

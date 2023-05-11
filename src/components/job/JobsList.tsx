@@ -14,7 +14,7 @@ import {
   Center,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import GenericApiService from '../../service/GenericService';
+import GenericApiService from '../../service/GenericApiService';
 import Job from '../../dto/Job';
 import Pagination from '../Pagination';
 import PaginationUtil from '../../util/PaginationUtil';

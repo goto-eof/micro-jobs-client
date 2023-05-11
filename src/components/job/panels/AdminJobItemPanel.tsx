@@ -3,7 +3,7 @@ import Job from '../../../dto/Job';
 import UserService from '../../../service/UserService';
 import JobService from '../../../service/JobService';
 import { useState } from 'react';
-import GenericApiService from '../../../service/GenericService';
+import GenericApiService from '../../../service/GenericApiService';
 import JobConst from '../../../consts/JobConst';
 
 interface AdminPanelProps {
