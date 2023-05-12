@@ -91,7 +91,7 @@ export default function SendMessage({ job }: { job?: Job }) {
             messages.map((message) => (
               <Box key={message.id}>
                 <Box>{message.message}</Box>
-                <Box fontSize={'0.6em'}>{message.usernameFrom}</Box>
+                <Box fontSize={'0.6em'}>{message.username}</Box>
                 <Box>{message.createdDate.toString()}</Box>
                 <Divider />
               </Box>

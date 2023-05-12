@@ -1,7 +1,6 @@
 export default interface MessageResponse {
   id: number;
-  usernameFrom: string;
-  usernameTo: string;
+  username: string;
   message: string;
   createdDate: Date;
 }
