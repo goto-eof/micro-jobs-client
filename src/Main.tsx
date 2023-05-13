@@ -37,6 +37,7 @@ import Footer from './components/Footer';
 import Conversations from './components/message/Conversations';
 import SendMessage from './components/message/SendMessage';
 import JobInfoSidebar from './components/message/JobInfoSidebar';
+import JobService from './service/JobService';
 
 const mainMenu = [
   { name: 'Home', url: '/' },
@@ -163,7 +164,9 @@ export default function Main() {
 
                     {UserService.getRole() === UserConst.ROLE_USER && (
                       <img
-                        src={UserService.getUserPicture()}
+                        src={JobService.getImageLink(
+                          UserService.getUserPicture()
+                        )}
                         style={{
                           borderRadius: '50%',
                           margin: 'auto',

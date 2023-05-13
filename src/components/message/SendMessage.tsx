@@ -14,6 +14,12 @@ import {
   Stack,
   Heading,
   ResponsiveValue,
+  SimpleGrid,
+  Flex,
+  chakra,
+  Avatar,
+  VStack,
+  Textarea,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import GenericApiService from '../../service/GenericApiService';
@@ -23,6 +29,7 @@ import MessageResponse from '../../dto/MessageResponse';
 import Title from '../job/Header';
 import Job from '../../dto/Job';
 import UserService from '../../service/UserService';
+import JobService from '../../service/JobService';
 
 export default function SendMessage({ job }: { job?: Job }) {
   const [form, setForm] = useState({ message: '' });
@@ -77,13 +84,8 @@ export default function SendMessage({ job }: { job?: Job }) {
     );
   };
 
-  const calculateMessageTo = () => {
-    return '@' + username;
-  };
-
   return (
-    <>
-      <Title title={'Message to: ' + calculateMessageTo()} />
+    <Box>
       {alertMessage && (
         <Alert status="error">
           <AlertIcon />
@@ -104,18 +106,19 @@ export default function SendMessage({ job }: { job?: Job }) {
               />
             ))}
           <FormControl mt={3}>
-            <Input
-              type="text"
+            <FormHelperText>Please write down your message</FormHelperText>
+            <Textarea
               name="message"
               value={form.message}
               onChange={(e) => updateFormData(e)}
             />
-            <FormHelperText>Please write down your message</FormHelperText>
           </FormControl>
-          <Button onClick={() => sendMessage()}>Send</Button>
+          <Button onClick={() => sendMessage()} mt={2}>
+            Send
+          </Button>
         </Box>
       </Center>
-    </>
+    </Box>
   );
 }
 
@@ -127,24 +130,69 @@ function MessageItem({
   align: any;
 }) {
   return (
-    <Feature title={message.username} desc={message.message} align={align} />
+    <Flex
+      // boxShadow={'md'}
+      direction={{ base: 'column-reverse', md: 'row' }}
+      // width={'full'}
+      rounded={'xl'}
+      p={1}
+      my={1}
+      justifyContent={'space-between'}
+      position={'relative'}
+      bg={'white'}
+    >
+      <Box display={align === 'left' ? '' : 'none'}>
+        {AvatarComponent(message)}
+      </Box>
+      <Flex
+        direction={'column'}
+        textAlign={align}
+        justifyContent={'space-between'}
+        w={'100%'}
+        px={5}
+      >
+        <chakra.p
+          fontFamily={'Inter'}
+          fontWeight={'medium'}
+          fontSize={'15px'}
+          pb={4}
+        >
+          <Box
+            maxW={'400px'}
+            float={align}
+            boxShadow={'md'}
+            padding={4}
+            borderRadius={'md'}
+          >
+            <Text as={'span'} fontWeight={'bold'}>
+              {message.username}
+            </Text>
+            : {message.message}
+          </Box>
+        </chakra.p>
+      </Flex>
+      <Box display={align === 'right' ? '' : 'none'} verticalAlign={'bottom'}>
+        {AvatarComponent(message)}
+      </Box>
+    </Flex>
   );
 }
-
-function Feature({
-  title,
-  desc,
-  align,
-  ...rest
-}: {
-  title: string;
-  desc: string;
-  align: any;
-}) {
+function AvatarComponent(message: MessageResponse) {
   return (
-    <Box p={5} shadow="md" borderWidth="1px" {...rest} textAlign={align}>
-      <Heading fontSize="xl">{title}</Heading>
-      <Text mt={4}>{desc}</Text>
-    </Box>
+    <VStack
+      display={{ base: 'none', md: 'block' }}
+      alignContent={'center'}
+      boxShadow={'md'}
+      borderRadius={'10px'}
+      p={2}
+    >
+      <Avatar
+        src={JobService.getImageLink(message.pictureName)}
+        height={'32px'}
+        width={'32px'}
+        margin={'auto'}
+        alignSelf={'center'}
+      />
+    </VStack>
   );
 }

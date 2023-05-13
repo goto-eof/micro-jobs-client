@@ -26,6 +26,6 @@ export default class UserService {
   }
 
   public static getUserPicture(): string {
-    return this.getUser().picture?.picture;
+    return this.getUser().picture?.pictureName;
   }
 }

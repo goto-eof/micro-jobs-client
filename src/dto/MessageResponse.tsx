@@ -3,4 +3,6 @@ export default interface MessageResponse {
   username: string;
   message: string;
   createdDate: Date;
+  picture: string;
+  pictureName: string;
 }
