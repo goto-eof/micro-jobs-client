@@ -151,7 +151,7 @@ function MessageItem({
         w={'100%'}
         px={5}
       >
-        <chakra.p
+        <Box
           fontFamily={'Inter'}
           fontWeight={'medium'}
           fontSize={'15px'}
@@ -169,7 +169,7 @@ function MessageItem({
             </Text>
             : {message.message}
           </Box>
-        </chakra.p>
+        </Box>
       </Flex>
       <Box display={align === 'right' ? '' : 'none'} verticalAlign={'bottom'}>
         {AvatarComponent(message)}
