@@ -3,11 +3,17 @@ import {
   AlertIcon,
   Box,
   Button,
+  Card,
+  CardBody,
   Center,
-  Divider,
   FormControl,
   FormHelperText,
+  Image,
   Input,
+  Text,
+  Stack,
+  Heading,
+  ResponsiveValue,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import GenericApiService from '../../service/GenericApiService';
@@ -16,11 +22,13 @@ import MessageRequest from '../../dto/MessageRequest';
 import MessageResponse from '../../dto/MessageResponse';
 import Title from '../job/Header';
 import Job from '../../dto/Job';
+import UserService from '../../service/UserService';
 
 export default function SendMessage({ job }: { job?: Job }) {
   const [form, setForm] = useState({ message: '' });
   const { roomId, username } = useParams();
   const [alertMessage, setAlertMessage] = useState<string>();
+  const [loggedInUsername] = useState<String>(UserService.getUsername());
   const [messages, setMessages] = useState<Array<MessageResponse>>(
     new Array<MessageResponse>()
   );
@@ -89,14 +97,13 @@ export default function SendMessage({ job }: { job?: Job }) {
         >
           {messages &&
             messages.map((message) => (
-              <Box key={message.id}>
-                <Box>{message.message}</Box>
-                <Box fontSize={'0.6em'}>{message.username}</Box>
-                <Box>{message.createdDate.toString()}</Box>
-                <Divider />
-              </Box>
+              <MessageItem
+                align={loggedInUsername === message.username ? 'right' : 'left'}
+                key={message.id}
+                message={message}
+              />
             ))}
-          <FormControl>
+          <FormControl mt={3}>
             <Input
               type="text"
               name="message"
@@ -109,5 +116,35 @@ export default function SendMessage({ job }: { job?: Job }) {
         </Box>
       </Center>
     </>
+  );
+}
+
+function MessageItem({
+  message,
+  align,
+}: {
+  message: MessageResponse;
+  align: any;
+}) {
+  return (
+    <Feature title={message.username} desc={message.message} align={align} />
+  );
+}
+
+function Feature({
+  title,
+  desc,
+  align,
+  ...rest
+}: {
+  title: string;
+  desc: string;
+  align: any;
+}) {
+  return (
+    <Box p={5} shadow="md" borderWidth="1px" {...rest} textAlign={align}>
+      <Heading fontSize="xl">{title}</Heading>
+      <Text mt={4}>{desc}</Text>
+    </Box>
   );
 }
