@@ -15,6 +15,7 @@ import JobService from '../../service/JobService';
 import { useParams } from 'react-router-dom';
 import SendMessage from './SendMessage';
 import Title from '../job/Header';
+import UserJobItemPanel from '../job/panels/UserJobItemPanel';
 
 export default function JobInfoSidebar() {
   const { roomId } = useParams();
@@ -80,7 +81,7 @@ const SidebarContent = ({ job, jobPictureLink, ...rest }: SidebarProps) => {
             {job?.author?.username}]
           </Text>
           <Text>{job?.description}</Text>
-          <Button colorScheme={'blue'}>Request service</Button>
+          {job && <UserJobItemPanel job={job} />}
         </VStack>
       </Center>
     </Box>
