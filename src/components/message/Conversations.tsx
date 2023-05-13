@@ -26,20 +26,24 @@ export default function Conversations() {
       }
     );
   }, []);
-
+  const navigate = useNavigate();
   return (
     <>
       <Title title={'Conversations'} />
-      {rooms && rooms.map((room, idx) => <RoomItem key={idx} room={room} />)}
+      {rooms &&
+        rooms.map((room, idx) => (
+          <RoomItem navigate={navigate} key={idx} room={room} />
+        ))}
     </>
   );
 }
 
 interface RoomItemProps {
   room: Room;
+  navigate: (path: string) => void;
 }
 
-function RoomItem({ room }: RoomItemProps) {
+function RoomItem({ room, navigate }: RoomItemProps) {
   const [roomPicture] = useState<string>(
     JobService.getImageLink(room.pictureName)
   );
@@ -48,12 +52,9 @@ function RoomItem({ room }: RoomItemProps) {
       (participant) => !UserService.isSameUsername(participant)
     )[0]
   );
-  const navigate = useNavigate();
+
   const goToConversation = (room: Room) => {
-    const participant = room.participants.filter(
-      (part) => !UserService.isSameUsername(part)
-    )[0];
-    navigate(`/room/${room.id}/username/${participant}`);
+    navigate(`/rooms/${room.id}`);
   };
   return (
     <Card
@@ -66,7 +67,7 @@ function RoomItem({ room }: RoomItemProps) {
         objectFit="cover"
         maxW={{ base: '100%', sm: '50px' }}
         src={roomPicture}
-        alt="Caffe Latte"
+        alt="Room picture"
       />
 
       <Stack>

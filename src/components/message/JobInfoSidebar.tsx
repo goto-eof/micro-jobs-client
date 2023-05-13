@@ -19,6 +19,7 @@ import Title from '../job/Header';
 export default function JobInfoSidebar() {
   const { roomId } = useParams();
   const [job, setJob] = useState<Job>();
+
   useEffect(() => {
     GenericApiService.get<Job>(`api/v1/job/private/roomId/${roomId}`).then(
       (job: Job) => {

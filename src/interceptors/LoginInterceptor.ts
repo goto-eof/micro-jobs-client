@@ -29,7 +29,6 @@ export const customInterceptor = (navigate: any) => {
                 return Promise.reject(error);
               }
             );
-            // return Promise.resolve(data);
           } else {
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');

@@ -84,7 +84,7 @@ export default function ViewOfferRequest({}: Props) {
     }
     GenericApiService.get<Room>(`api/v1/room/jobId/${job.id}`).then(
       (room: Room) => {
-        navigate(`/room/${room?.id}/username/${job.author?.username}`);
+        navigate(`/rooms/${room?.id}`);
       }
     );
   }
