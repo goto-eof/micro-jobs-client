@@ -7,6 +7,7 @@ import {
   Image,
   Center,
   VStack,
+  Button,
 } from '@chakra-ui/react';
 import Job from '../../dto/Job';
 import GenericApiService from '../../service/GenericApiService';
@@ -76,6 +77,7 @@ const SidebarContent = ({ job, ...rest }: SidebarProps) => {
             {job?.author?.username}]
           </Text>
           <Text>{job?.description}</Text>
+          <Button colorScheme={'blue'}>Request service</Button>
         </VStack>
       </Center>
     </Box>
