@@ -19,18 +19,24 @@ import Title from '../job/Header';
 export default function JobInfoSidebar() {
   const { roomId } = useParams();
   const [job, setJob] = useState<Job>();
+  const [jobPictureLink, setJobPictureLink] = useState<string>();
 
   useEffect(() => {
     GenericApiService.get<Job>(`api/v1/job/private/roomId/${roomId}`).then(
       (job: Job) => {
         setJob(job);
+        setJobPictureLink(JobService.getImageLink(job?.picture));
       }
     );
   }, []);
 
   return (
     <Box minH="100vh" bg={useColorModeValue('white.100', 'white.900')}>
-      <SidebarContent display={{ base: 'none', md: 'block' }} job={job} />
+      <SidebarContent
+        display={{ base: 'none', md: 'block' }}
+        job={job}
+        jobPictureLink={jobPictureLink}
+      />
       <Box ml={{ base: 0, md: 60 }} p="4">
         <Title title={'Conversation: ' + job?.title} />
         <Box
@@ -42,12 +48,7 @@ export default function JobInfoSidebar() {
         >
           <Center>
             <VStack>
-              {
-                <Image
-                  w={'300px'}
-                  src={JobService.getImageLink(job?.picture)}
-                />
-              }
+              {<Image w={'300px'} src={jobPictureLink} />}
               <Text>
                 {job?.title} (by @{job?.author?.username})
               </Text>
@@ -63,14 +64,15 @@ export default function JobInfoSidebar() {
 
 interface SidebarProps extends BoxProps {
   job?: Job;
+  jobPictureLink?: string;
 }
 
-const SidebarContent = ({ job, ...rest }: SidebarProps) => {
+const SidebarContent = ({ job, jobPictureLink, ...rest }: SidebarProps) => {
   return (
     <Box w={{ base: 'full', md: 60 }} mt={4} p={3} pos={'absolute'} {...rest}>
       <Center>
         <VStack>
-          {<Image w={'600px'} src={JobService.getImageLink(job?.picture)} />}
+          {<Image w={'600px'} src={jobPictureLink} />}
           <Text fontSize="sm" fontFamily="monospace" fontWeight="bold"></Text>
           <Text>{job?.title}</Text>
           <Text fontSize={'0.6em'}>

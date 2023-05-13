@@ -3,11 +3,10 @@ import customAxios from '../interceptors/LoginInterceptor';
 
 export default class GenericApiService {
   private static baseUrl: string = '/';
-  // process.env.REACT_APP_URI + ':' + process.env.REACT_APP_PORT + '/';
 
-  public static async getAll<T>(modelName: string): Promise<T> {
+  public static async getAll<T>(url: string): Promise<T> {
     return await customAxios
-      .get<Array<T>>(this.baseUrl + modelName, { withCredentials: true })
+      .get<Array<T>>(this.baseUrl + url, { withCredentials: true })
       .then(async (result: any) => {
         return result.data;
       })
@@ -16,9 +15,9 @@ export default class GenericApiService {
       });
   }
 
-  public static async getById<T>(modelName: string, id: number): Promise<T> {
+  public static async getById<T>(url: string, id: number): Promise<T> {
     return await customAxios
-      .get<Array<T>>(`${this.baseUrl}${modelName}/${id}`, {
+      .get<Array<T>>(`${this.baseUrl}${url}/${id}`, {
         //  withCredentials: true,
       })
       .then(async (result: any) => {
@@ -30,9 +29,9 @@ export default class GenericApiService {
       });
   }
 
-  public static async get<T>(modelName: string): Promise<T> {
+  public static async get<T>(url: string): Promise<T> {
     return await customAxios
-      .get<Array<T>>(`${this.baseUrl}${modelName}`, {
+      .get<Array<T>>(`${this.baseUrl}${url}`, {
         //  withCredentials: true,
       })
       .then(async (result: any) => {
@@ -44,9 +43,9 @@ export default class GenericApiService {
       });
   }
 
-  public static async create<T>(modelName: string, data: T): Promise<T> {
+  public static async create<T>(url: string, data: T): Promise<T> {
     return await customAxios
-      .post<T>(`${this.baseUrl}${modelName}`, data, { withCredentials: true })
+      .post<T>(`${this.baseUrl}${url}`, data, { withCredentials: true })
       .then(async (result: any) => {
         let data = result.data;
         return data;
@@ -57,11 +56,11 @@ export default class GenericApiService {
   }
 
   public static async createDifResponse<T, U>(
-    modelName: string,
+    url: string,
     data: T
   ): Promise<U> {
     return await customAxios
-      .post<T>(`${this.baseUrl}${modelName}`, data, { withCredentials: true })
+      .post<T>(`${this.baseUrl}${url}`, data, { withCredentials: true })
       .then(async (result: any) => {
         let data = result.data;
         return data;
@@ -71,9 +70,9 @@ export default class GenericApiService {
       });
   }
 
-  public static async post<T>(modelName: string): Promise<T> {
+  public static async post<T>(url: string): Promise<T> {
     return await customAxios
-      .post<T>(`${this.baseUrl}${modelName}`, '', { withCredentials: true })
+      .post<T>(`${this.baseUrl}${url}`, '', { withCredentials: true })
       .then(async (result: any) => {
         let data = result.data;
         return data;
@@ -84,11 +83,11 @@ export default class GenericApiService {
   }
 
   public static async postHeaders<T>(
-    modelName: string,
+    url: string,
     headers: any
   ): Promise<Result<T>> {
     return await customAxios
-      .post<T>(`${this.baseUrl}${modelName}`, '', {
+      .post<T>(`${this.baseUrl}${url}`, '', {
         ...headers,
         withCredentials: true,
       })
@@ -102,12 +101,12 @@ export default class GenericApiService {
   }
 
   public static async update<T, S>(
-    modelName: string,
+    url: string,
     id: number,
     data: T
   ): Promise<Result<S>> {
     return await customAxios
-      .put<T>(`${this.baseUrl}${modelName}/${id}`, data, {
+      .put<T>(`${this.baseUrl}${url}/${id}`, data, {
         //  withCredentials: true,
       })
       .then(async (result: any) => {
@@ -119,13 +118,9 @@ export default class GenericApiService {
       });
   }
 
-  public static async put<T>(
-    modelName: string,
-    id: number,
-    data: T
-  ): Promise<T> {
+  public static async put<T>(url: string, id: number, data: T): Promise<T> {
     return await customAxios
-      .put<T>(`${this.baseUrl}${modelName}/${id}`, data, {
+      .put<T>(`${this.baseUrl}${url}/${id}`, data, {
         //  withCredentials: true,
       })
       .then(async (result: any) => {
@@ -137,9 +132,9 @@ export default class GenericApiService {
       });
   }
 
-  public static async delete<T>(modelName: string, id: number): Promise<T> {
+  public static async delete<T>(url: string, id: number): Promise<T> {
     return await customAxios
-      .delete(`${this.baseUrl}${modelName}/${id}`, { withCredentials: true })
+      .delete(`${this.baseUrl}${url}/${id}`, { withCredentials: true })
       .then(async (result: any) => {
         let data = result.data;
         return data;
@@ -149,9 +144,9 @@ export default class GenericApiService {
       });
   }
 
-  public static async patch<T>(modelName: string, id: number): Promise<T> {
+  public static async patch<T>(url: string, id: number): Promise<T> {
     return await customAxios
-      .patch(`${this.baseUrl}${modelName}/${id}`, { withCredentials: true })
+      .patch(`${this.baseUrl}${url}/${id}`, { withCredentials: true })
       .then(async (result: any) => {
         let data = result.data;
         return data;

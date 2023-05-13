@@ -3,20 +3,11 @@ import {
   AlertIcon,
   Box,
   Button,
-  Card,
-  CardBody,
   Center,
   FormControl,
   FormHelperText,
-  Image,
-  Input,
   Text,
-  Stack,
-  Heading,
-  ResponsiveValue,
-  SimpleGrid,
   Flex,
-  chakra,
   Avatar,
   VStack,
   Textarea,
@@ -26,14 +17,13 @@ import GenericApiService from '../../service/GenericApiService';
 import { useParams } from 'react-router-dom';
 import MessageRequest from '../../dto/MessageRequest';
 import MessageResponse from '../../dto/MessageResponse';
-import Title from '../job/Header';
 import Job from '../../dto/Job';
 import UserService from '../../service/UserService';
 import JobService from '../../service/JobService';
 
 export default function SendMessage({ job }: { job?: Job }) {
   const [form, setForm] = useState({ message: '' });
-  const { roomId, username } = useParams();
+  const { roomId } = useParams();
   const [alertMessage, setAlertMessage] = useState<string>();
   const [loggedInUsername] = useState<String>(UserService.getUsername());
   const [messages, setMessages] = useState<Array<MessageResponse>>(
@@ -93,10 +83,7 @@ export default function SendMessage({ job }: { job?: Job }) {
         </Alert>
       )}
       <Center>
-        <Box
-          w={'full'}
-          // width={'500px'}
-        >
+        <Box w={'full'}>
           {messages &&
             messages.map((message) => (
               <MessageItem
@@ -131,9 +118,7 @@ function MessageItem({
 }) {
   return (
     <Flex
-      // boxShadow={'md'}
       direction={{ base: 'column-reverse', md: 'row' }}
-      // width={'full'}
       rounded={'xl'}
       p={1}
       my={1}
