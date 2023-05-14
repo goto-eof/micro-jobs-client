@@ -26,7 +26,7 @@ import MessagePost from '../../dto/MessagePost';
 export default function SendMessage({ job }: { job?: Job }) {
   const [form, setForm] = useState({ message: '' });
   const { roomId } = useParams();
-  const [offset, setOffset] = useState<number>(3);
+  const [offset, setOffset] = useState<number>(10);
   const [alertMessage, setAlertMessage] = useState<string>();
   const [loggedInUsername] = useState<String>(UserService.getUsername());
   const [messages, setMessages] = useState<Array<Message>>(
@@ -43,7 +43,7 @@ export default function SendMessage({ job }: { job?: Job }) {
     ).then(
       (data: MessageResponse) => {
         setMessages(data.messages);
-        setOffset(data.offset);
+        setOffset(data.nextOffset);
       },
       (err: any) => {
         setAlertMessage(err.response.data.message);
@@ -92,7 +92,7 @@ export default function SendMessage({ job }: { job?: Job }) {
     ).then(
       (data: MessageResponse) => {
         setMessages([...data.messages, ...messages]);
-        setOffset(data.offset);
+        setOffset(data.nextOffset);
       },
       (err: any) => {
         setAlertMessage(err.response.data.message);
