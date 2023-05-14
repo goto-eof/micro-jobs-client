@@ -27,6 +27,7 @@ export default function SendMessage({ job }: { job?: Job }) {
   const [form, setForm] = useState({ message: '' });
   const { roomId } = useParams();
   const [offset, setOffset] = useState<number>(10);
+  const [lastOffset, setLastOffset] = useState<number>(0);
   const [alertMessage, setAlertMessage] = useState<string>();
   const [loggedInUsername] = useState<String>(UserService.getUsername());
   const [messages, setMessages] = useState<Array<Message>>(
@@ -37,12 +38,14 @@ export default function SendMessage({ job }: { job?: Job }) {
     GenericApiService.createDifResponse<MessageRequest, MessageResponse>(
       `api/v1/room/message/roomId/${roomId}`,
       {
-        offset,
+        offsetRequest: offset,
+        lastOffset: lastOffset,
         roomId: Number(roomId) || -1,
       }
     ).then(
       (data: MessageResponse) => {
         setMessages(data.messages);
+        setLastOffset(offset);
         setOffset(data.nextOffset);
       },
       (err: any) => {
@@ -86,12 +89,15 @@ export default function SendMessage({ job }: { job?: Job }) {
     GenericApiService.createDifResponse<MessageRequest, MessageResponse>(
       `api/v1/room/message/roomId/${roomId}`,
       {
-        offset,
+        offsetRequest: offset,
+        lastOffset: lastOffset,
         roomId: Number(roomId) || -1,
       }
     ).then(
       (data: MessageResponse) => {
-        setMessages([...data.messages, ...messages]);
+        const msgs = [...data.messages, ...messages];
+        setMessages(msgs);
+        setLastOffset(offset);
         setOffset(data.nextOffset);
       },
       (err: any) => {
