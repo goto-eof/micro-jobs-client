@@ -68,7 +68,7 @@ export default function JobOffersRequests({
 
   const goToPage = (page: number) => {
     GenericApiService.getAll<JobListPage>(
-      BASE_URL_RETRIEVE_ITEMS + '/' + page
+      BASE_URL_RETRIEVE_ITEMS + '/page/' + page
     ).then((jobListPageResponse) => {
       setOffers(jobListPageResponse.jobList);
       setItemsCount(jobListPageResponse.totalItems);
