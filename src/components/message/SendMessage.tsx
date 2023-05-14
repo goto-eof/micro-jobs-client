@@ -110,7 +110,7 @@ export default function SendMessage({ job }: { job?: Job }) {
         </Alert>
       )}
       <Center>
-        <VStack>
+        <VStack w={'full'}>
           <Button
             display={offset == -1 ? 'none' : ''}
             onClick={() => loadOldestMessages()}
