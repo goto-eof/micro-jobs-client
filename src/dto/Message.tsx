@@ -1,9 +1,10 @@
 import Author from './Author';
 
 export default interface Message {
-  id?: number;
-  userFrom?: Author;
-  userTo: Author;
+  id: number;
+  username: string;
   message: string;
-  status?: number;
+  createdDate: Date;
+  picture: string;
+  pictureName: string;
 }

@@ -20,22 +20,30 @@ import MessageResponse from '../../dto/MessageResponse';
 import Job from '../../dto/Job';
 import UserService from '../../service/UserService';
 import JobService from '../../service/JobService';
+import Message from '../../dto/Message';
+import MessagePost from '../../dto/MessagePost';
 
 export default function SendMessage({ job }: { job?: Job }) {
   const [form, setForm] = useState({ message: '' });
   const { roomId } = useParams();
+  const [offset, setOffset] = useState<number>(3);
   const [alertMessage, setAlertMessage] = useState<string>();
   const [loggedInUsername] = useState<String>(UserService.getUsername());
-  const [messages, setMessages] = useState<Array<MessageResponse>>(
-    new Array<MessageResponse>()
+  const [messages, setMessages] = useState<Array<Message>>(
+    new Array<Message>()
   );
 
   useEffect(() => {
-    GenericApiService.getAll<Array<MessageResponse>>(
-      `api/v1/room/message/roomId/${roomId}`
+    GenericApiService.createDifResponse<MessageRequest, MessageResponse>(
+      `api/v1/room/message/roomId/${roomId}`,
+      {
+        offset,
+        roomId: Number(roomId) || -1,
+      }
     ).then(
-      (data: Array<MessageResponse>) => {
-        setMessages(data);
+      (data: MessageResponse) => {
+        setMessages(data.messages);
+        setOffset(data.offset);
       },
       (err: any) => {
         setAlertMessage(err.response.data.message);
@@ -55,17 +63,36 @@ export default function SendMessage({ job }: { job?: Job }) {
   };
 
   const sendMessage = () => {
-    GenericApiService.createDifResponse<MessageRequest, MessageResponse>(
+    GenericApiService.createDifResponse<MessagePost, Message>(
       `api/v1/room/message`,
       {
         message: form.message,
         roomId: Number(roomId),
       }
     ).then(
-      (data: MessageResponse) => {
-        const newMessages: Array<MessageResponse> = [...messages, data];
+      (data: Message) => {
+        const newMessages: Array<Message> = [...messages, data];
         setMessages(newMessages);
         setForm({ ...form, message: '' });
+      },
+      (err: any) => {
+        setAlertMessage(err.response.data.message);
+        window.scroll(0, 0);
+      }
+    );
+  };
+
+  const loadOldestMessages = () => {
+    GenericApiService.createDifResponse<MessageRequest, MessageResponse>(
+      `api/v1/room/message/roomId/${roomId}`,
+      {
+        offset,
+        roomId: Number(roomId) || -1,
+      }
+    ).then(
+      (data: MessageResponse) => {
+        setMessages([...data.messages, ...messages]);
+        setOffset(data.offset);
       },
       (err: any) => {
         setAlertMessage(err.response.data.message);
@@ -83,39 +110,43 @@ export default function SendMessage({ job }: { job?: Job }) {
         </Alert>
       )}
       <Center>
-        <Box w={'full'}>
-          {messages &&
-            messages.map((message) => (
-              <MessageItem
-                align={loggedInUsername === message.username ? 'right' : 'left'}
-                key={message.id}
-                message={message}
-              />
-            ))}
-          <FormControl mt={3}>
-            <FormHelperText>Please write down your message</FormHelperText>
-            <Textarea
-              name="message"
-              value={form.message}
-              onChange={(e) => updateFormData(e)}
-            />
-          </FormControl>
-          <Button onClick={() => sendMessage()} mt={2}>
-            Send
+        <VStack>
+          <Button
+            display={offset == -1 ? 'none' : ''}
+            onClick={() => loadOldestMessages()}
+          >
+            Load oldest
           </Button>
-        </Box>
+          <Box w={'full'}>
+            {messages &&
+              messages.map((message) => (
+                <MessageItem
+                  align={
+                    loggedInUsername === message.username ? 'right' : 'left'
+                  }
+                  key={message.id}
+                  message={message}
+                />
+              ))}
+            <FormControl mt={3}>
+              <FormHelperText>Please write down your message</FormHelperText>
+              <Textarea
+                name="message"
+                value={form.message}
+                onChange={(e) => updateFormData(e)}
+              />
+            </FormControl>
+            <Button onClick={() => sendMessage()} mt={2}>
+              Send
+            </Button>
+          </Box>
+        </VStack>
       </Center>
     </Box>
   );
 }
 
-function MessageItem({
-  message,
-  align,
-}: {
-  message: MessageResponse;
-  align: any;
-}) {
+function MessageItem({ message, align }: { message: Message; align: any }) {
   return (
     <Flex
       direction={{ base: 'column-reverse', md: 'row' }}
@@ -162,7 +193,7 @@ function MessageItem({
     </Flex>
   );
 }
-function AvatarComponent(message: MessageResponse) {
+function AvatarComponent(message: Message) {
   return (
     <VStack
       display={{ base: 'none', md: 'block' }}

@@ -1,4 +1,4 @@
 export default interface MessageRequest {
-  message: string;
+  offset: number;
   roomId: number;
 }
