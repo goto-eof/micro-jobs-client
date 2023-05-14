@@ -14,9 +14,15 @@ password: Micr@J@bs
 
 # Screenshot
 
+## Offers page
+
 ![screenshot](screenshot.png)
 
+## Conversation page
+
 ![screenshot](screenshot1.png)
+
+## Admin panel page
 
 ![screenshot](screenshot2.png)
 
