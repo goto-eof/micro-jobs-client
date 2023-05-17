@@ -70,7 +70,7 @@ export default class GenericApiService {
       });
   }
 
-  public static async post<T>(url: string): Promise<T> {
+  public static async postWithouthBody<T>(url: string): Promise<T> {
     return await customAxios
       .post<T>(`${this.baseUrl}${url}`, '', { withCredentials: true })
       .then(async (result: any) => {

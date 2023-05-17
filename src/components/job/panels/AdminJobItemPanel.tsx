@@ -18,14 +18,14 @@ export default function AdminJobItemPanel({
   scope,
 }: AdminPanelProps) {
   const approve = (): void => {
-    GenericApiService.post<Job>(
+    GenericApiService.postWithouthBody<Job>(
       'api/v1/job/private/approve/jobId/' + job.id
     ).then((job) => {
       approveCallback && approveCallback(job);
     });
   };
   const unpublish = (): void => {
-    GenericApiService.post<Job>(
+    GenericApiService.postWithouthBody<Job>(
       'api/v1/job/private/unpublish/jobId/' + job.id
     ).then((job) => {
       approveCallback && approveCallback(job);
