@@ -142,9 +142,16 @@ export default function SendMessage({ job }: { job?: Job }) {
                 onChange={(e) => updateFormData(e)}
               />
             </FormControl>
-            <Button onClick={() => sendMessage()} mt={2}>
-              Send
-            </Button>
+            <Center>
+              <Button
+                colorScheme="blue"
+                onClick={() => sendMessage()}
+                mt={2}
+                px={'50px'}
+              >
+                Send
+              </Button>
+            </Center>
           </Box>
         </VStack>
       </Center>
