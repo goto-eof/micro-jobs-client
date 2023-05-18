@@ -1,10 +1,11 @@
-import { Button } from '@chakra-ui/react';
+import { Button, Text } from '@chakra-ui/react';
 import Job from '../../../dto/Job';
 import UserService from '../../../service/UserService';
 import JobService from '../../../service/JobService';
 import { useEffect, useState } from 'react';
 import GenericApiService from '../../../service/GenericApiService';
 import JobInstance from '../../../dto/JobInstance';
+import JobInstanceService from '../../../service/JobInstanceService';
 
 interface UserJobItemPanelProps {
   job: Job;
@@ -19,6 +20,7 @@ export default function UserJobItemPanel({ job }: UserJobItemPanelProps) {
   const [acceptJobButtonLabel] = useState<string>(
     JobService.calulateAcceptButtonLabel(job)
   );
+  const [jobInstanceStatus, setJobInstanceStatus] = useState<string>('');
 
   useEffect(() => {
     const jobId = job.id;
@@ -31,6 +33,9 @@ export default function UserJobItemPanel({ job }: UserJobItemPanelProps) {
         return;
       }
       setShowAcceptJobButton(false);
+      setJobInstanceStatus(
+        JobInstanceService.retrieveHumanableStatus(jobInstance.status)
+      );
     });
   }, []);
 
@@ -41,20 +46,33 @@ export default function UserJobItemPanel({ job }: UserJobItemPanelProps) {
       `api/v1/jobInstance/private/jobId/${jobId}/customerId/${customerId}`
     ).then((jobInstance: JobInstance) => {
       setShowAcceptJobButton(false);
+      setJobInstanceStatus(
+        JobInstanceService.retrieveHumanableStatus(jobInstance.status)
+      );
     });
   };
 
   return (
     <>
-      <Button
-        display={showAcceptJobButton ? '' : 'none'}
-        mr={3}
-        variant="solid"
-        colorScheme="blue"
-        onClick={() => requestForWork()}
-      >
-        {acceptJobButtonLabel}
-      </Button>
+      {showAcceptJobButton && (
+        <Button
+          mr={3}
+          variant="solid"
+          colorScheme="blue"
+          onClick={() => requestForWork()}
+        >
+          {acceptJobButtonLabel}
+        </Button>
+      )}
+      {!showAcceptJobButton && (
+        <Text fontWeight={'bold'}>
+          status:{' '}
+          <Text as={'span'} color={'green.400'}>
+            {' '}
+            {jobInstanceStatus}
+          </Text>
+        </Text>
+      )}
     </>
   );
 }
