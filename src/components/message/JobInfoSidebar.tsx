@@ -7,7 +7,6 @@ import {
   Image,
   Center,
   VStack,
-  Button,
 } from '@chakra-ui/react';
 import Job from '../../dto/Job';
 import GenericApiService from '../../service/GenericApiService';
@@ -21,12 +20,17 @@ export default function JobInfoSidebar() {
   const { roomId } = useParams();
   const [job, setJob] = useState<Job>();
   const [jobPictureLink, setJobPictureLink] = useState<string>();
-
+  const [workerId, setWorkerId] = useState<number>(-1);
   useEffect(() => {
     GenericApiService.get<Job>(`api/v1/job/private/roomId/${roomId}`).then(
       (job: Job) => {
-        setJob(job);
-        setJobPictureLink(JobService.getImageLink(job?.picture));
+        GenericApiService.get<number>(
+          `api/v1/room/getWorkerId/roomId/${roomId}`
+        ).then((workerId: number) => {
+          setJob(job);
+          setJobPictureLink(JobService.getImageLink(job?.picture));
+          setWorkerId(workerId);
+        });
       }
     );
   }, []);
@@ -37,6 +41,7 @@ export default function JobInfoSidebar() {
         display={{ base: 'none', md: 'block' }}
         job={job}
         jobPictureLink={jobPictureLink}
+        workerId={workerId}
       />
       <Box ml={{ base: 0, md: 60 }} p="4">
         <Title title={'Conversation: ' + job?.title} />
@@ -66,9 +71,15 @@ export default function JobInfoSidebar() {
 interface SidebarProps extends BoxProps {
   job?: Job;
   jobPictureLink?: string;
+  workerId: number;
 }
 
-const SidebarContent = ({ job, jobPictureLink, ...rest }: SidebarProps) => {
+const SidebarContent = ({
+  job,
+  workerId,
+  jobPictureLink,
+  ...rest
+}: SidebarProps) => {
   return (
     <Box w={{ base: 'full', md: 60 }} mt={4} p={3} pos={'absolute'} {...rest}>
       <Center>
@@ -81,7 +92,7 @@ const SidebarContent = ({ job, jobPictureLink, ...rest }: SidebarProps) => {
             {job?.author?.username}]
           </Text>
           <Text>{job?.description}</Text>
-          {job && <UserJobItemPanel job={job} />}
+          {job && <UserJobItemPanel workerId={workerId} job={job} />}
         </VStack>
       </Center>
     </Box>

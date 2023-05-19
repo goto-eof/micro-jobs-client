@@ -6,10 +6,10 @@ export default class JobInstanceService {
       case JobInstanceConst.STATUS_CREATED: {
         return 'CREATED';
       }
-      case JobInstanceConst.STATUS_CUSTOMER_WORK_REQUEST: {
+      case JobInstanceConst.STATUS_WORKER_WORK_REQUEST: {
         return 'WORK REQUEST SENT';
       }
-      case JobInstanceConst.STATUS_PROVIDER_WORK_ACCEPT: {
+      case JobInstanceConst.STATUS_WORK_PROVIDER_WORK_REQUEST_ACCEPT: {
         return 'WORK REQUEST ACCEPTED';
       }
       case JobInstanceConst.STATUS_WORKER_WORK_START: {
@@ -18,14 +18,17 @@ export default class JobInstanceService {
       case JobInstanceConst.STATUS_WORKER_WORK_END: {
         return 'WORK ENDED';
       }
-      case JobInstanceConst.STATUS_CUSTOMER_RECEIVES_WORK: {
+      case JobInstanceConst.STATUS_WORK_PROVIDER_WORK_RECEIVED: {
         return 'WORK RECEIVED BY CUSTOMER';
       }
-      case JobInstanceConst.STATUS_CUSTOMER_ACCEPTS_WORK: {
+      case JobInstanceConst.STATUS_WORK_PROVIDER_WORK_APPROVE: {
         return 'CUSTOMER APPROVED WORK';
       }
-      case JobInstanceConst.STATUS_CUSTOMER_PAYS_WORKER: {
+      case JobInstanceConst.STATUS_WORK_PROVIDER_PAYMENT: {
         return 'CUSTOMER PAYED WORKER';
+      }
+      case JobInstanceConst.STATUS_WORKER_RECEIVED_PAYMENT: {
+        return 'Worker received payment';
       }
       case JobInstanceConst.STATUS_PROCESS_COMPLETE: {
         return 'PROCESS COMPLETE';

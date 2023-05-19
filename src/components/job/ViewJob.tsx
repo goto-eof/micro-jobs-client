@@ -182,7 +182,6 @@ export default function ViewOfferRequest({}: Props) {
               {job && scope && (
                 <Box mt={4}>
                   <UserJobItemEditPanel job={job} scope={scope} />
-                  <UserJobItemPanel job={job} />
                   <AdminJobItemPanel
                     job={job}
                     scope={scope}

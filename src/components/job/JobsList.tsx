@@ -205,7 +205,6 @@ function JobComponent({ job, scope, status, removeElementFromList }: JobProps) {
                 {job.price}€
               </Box>
               <Box mt={4}>
-                <UserJobItemPanel job={job} />
                 <AdminJobItemPanel
                   scope={scope}
                   job={job}
