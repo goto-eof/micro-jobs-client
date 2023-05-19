@@ -47,6 +47,7 @@ export default function UserJobItemPanel({
     GenericApiService.postWithouthBody<JobInstance>(
       `api/v1/jobInstance/private/jobId/${jobId}/jobInstanceStatus/${jobInstanceStatus}`
     ).then((jobInstance: JobInstance) => {
+      setJobInstance(jobInstance);
       setJobInstanceStatus(
         JobInstanceService.retrieveHumanableStatus(jobInstance.status)
       );
@@ -94,6 +95,7 @@ export default function UserJobItemPanel({
     GenericApiService.postWithouthBody<JobInstance>(
       `api/v1/jobInstance/private/jobId/${jobId}/workerId/${workerId}/jobInstanceStatus/${jobInstanceStatus}`
     ).then((jobInstance: JobInstance) => {
+      setJobInstance(jobInstance);
       setJobInstanceStatus(
         JobInstanceService.retrieveHumanableStatus(jobInstance.status)
       );
@@ -205,6 +207,7 @@ export default function UserJobItemPanel({
 
       {showWorkProviderAcceptWorkRequest && (
         <Button
+          colorScheme="blue"
           onClick={() => {
             acceptWorkRequest();
           }}
@@ -215,6 +218,7 @@ export default function UserJobItemPanel({
 
       {showWorkStartButton && (
         <Button
+          colorScheme="blue"
           onClick={() => {
             startWork();
           }}
@@ -225,6 +229,7 @@ export default function UserJobItemPanel({
 
       {showWorkEndButton && (
         <Button
+          colorScheme="blue"
           onClick={() => {
             endWork();
           }}
@@ -235,6 +240,7 @@ export default function UserJobItemPanel({
 
       {showWorkProviderWorkReceived && (
         <Button
+          colorScheme="blue"
           onClick={() => {
             workProviderWorkReceived();
           }}
@@ -245,6 +251,7 @@ export default function UserJobItemPanel({
 
       {showWorkProviderWorkApprove && (
         <Button
+          colorScheme="blue"
           onClick={() => {
             workProviderWorkApprove();
           }}
@@ -255,6 +262,7 @@ export default function UserJobItemPanel({
 
       {showWorkProviderPayWorker && (
         <Button
+          colorScheme="blue"
           onClick={() => {
             workProviderPayWorker();
           }}
@@ -265,6 +273,7 @@ export default function UserJobItemPanel({
 
       {showWorkerReceivedPaymentConfirmation && (
         <Button
+          colorScheme="blue"
           onClick={() => {
             workerReceivedPaymentConfirmation();
           }}
