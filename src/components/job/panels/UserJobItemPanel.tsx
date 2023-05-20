@@ -21,6 +21,7 @@ export default function UserJobItemPanel({
   );
   const [jobInstance, setJobInstance] = useState<JobInstance>();
   const [jobInstanceStatus, setJobInstanceStatus] = useState<string>('');
+  const [showJobInstanceStatus, setShowJobInstanceStatus] = useState<boolean>();
 
   useEffect(() => {
     const jobId = job.id;
@@ -37,6 +38,12 @@ export default function UserJobItemPanel({
       );
     });
   }, []);
+
+  useEffect(() => {
+    setShowJobInstanceStatus(
+      jobInstance?.status !== JobInstanceConst.STATUS_CREATED
+    );
+  }, [jobInstance]);
 
   /*************** [Worker] ****************/
 
@@ -187,13 +194,14 @@ export default function UserJobItemPanel({
 
   return (
     <>
-      <Text fontWeight={'bold'}>
-        status:{' '}
-        <Text as={'span'} color={'green.400'}>
-          {jobInstanceStatus}
+      {showJobInstanceStatus && (
+        <Text fontWeight={'bold'}>
+          status:{' '}
+          <Text as={'span'} color={'green.400'}>
+            {jobInstanceStatus}
+          </Text>
         </Text>
-      </Text>
-
+      )}
       {showAcceptWorkButton && (
         <Button
           mr={3}
