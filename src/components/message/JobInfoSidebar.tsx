@@ -15,6 +15,8 @@ import { useParams } from 'react-router-dom';
 import SendMessage from './SendMessage';
 import Title from '../job/Header';
 import UserJobItemPanel from '../job/panels/UserJobItemPanel';
+import RateUser from '../rateUser';
+import UserService from '../../service/UserService';
 
 export default function JobInfoSidebar() {
   const { roomId } = useParams();
@@ -37,12 +39,14 @@ export default function JobInfoSidebar() {
 
   return (
     <Box minH="100vh" bg={useColorModeValue('white.100', 'white.900')}>
-      <SidebarContent
-        display={{ base: 'none', md: 'block' }}
-        job={job}
-        jobPictureLink={jobPictureLink}
-        workerId={workerId}
-      />
+      {job && workerId && (
+        <SidebarContent
+          display={{ base: 'none', md: 'block' }}
+          job={job}
+          jobPictureLink={jobPictureLink}
+          workerId={workerId}
+        />
+      )}
       <Box ml={{ base: 0, md: 60 }} p="4">
         <Title title={'Conversation: ' + job?.title} />
         <Box
@@ -80,6 +84,11 @@ const SidebarContent = ({
   jobPictureLink,
   ...rest
 }: SidebarProps) => {
+  const [raterId] = useState<number>(UserService.getUser().id);
+  const [targetUserId] = useState<number | undefined>(
+    UserService.getUser().id === job?.author?.id ? workerId : job?.author?.id
+  );
+
   return (
     <Box w={{ base: 'full', md: 60 }} mt={4} p={3} pos={'absolute'} {...rest}>
       <Center>
@@ -93,6 +102,15 @@ const SidebarContent = ({
           </Text>
           <Text>{job?.description}</Text>
           {job && <UserJobItemPanel workerId={workerId} job={job} />}
+          <Text>Rate user:</Text>
+          {job && job.id && job.author && job.author.id && targetUserId && (
+            <RateUser
+              workerId={workerId}
+              jobId={job?.id}
+              raterUserId={raterId}
+              targetUserId={targetUserId}
+            />
+          )}
         </VStack>
       </Center>
     </Box>
