@@ -23,6 +23,7 @@ export default function JobInfoSidebar() {
   const [job, setJob] = useState<Job>();
   const [jobPictureLink, setJobPictureLink] = useState<string>();
   const [workerId, setWorkerId] = useState<number>(-1);
+
   useEffect(() => {
     GenericApiService.get<Job>(`api/v1/job/private/roomId/${roomId}`).then(
       (job: Job) => {
