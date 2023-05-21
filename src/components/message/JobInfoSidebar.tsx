@@ -96,7 +96,7 @@ const SidebarContent = ({
           {<Image w={'600px'} src={jobPictureLink} />}
           <Text fontSize="sm" fontFamily="monospace" fontWeight="bold"></Text>
           <Text>{job?.title}</Text>
-          <Text fontSize={'0.6em'}>
+          <Text fontSize={'0.5em'}>
             by {job?.author?.firstname} {job?.author?.lastname} [@
             {job?.author?.username}]
           </Text>
