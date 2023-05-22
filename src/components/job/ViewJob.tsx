@@ -31,7 +31,6 @@ import JobConst from '../../consts/JobConst';
 import DateUtil from '../../service/DateUtil';
 import Room from '../../dto/Room';
 import UserJobItemEditPanel from './panels/UserJobItemEditPanel';
-import UserJobItemPanel from './panels/UserJobItemPanel';
 import AdminJobItemPanel from './panels/AdminJobItemPanel';
 
 interface Props {}
