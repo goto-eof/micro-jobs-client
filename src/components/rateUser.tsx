@@ -36,8 +36,8 @@ export default function RateUser({
       ).then((rating: Rating | null) => {
         setRating(rating);
         if (rating) {
-          setRatingValue(rating?.rating);
-          updateColors(rating?.rating);
+          setRatingValue(rating?.rating - 1);
+          updateColors(rating?.rating - 1);
         }
       });
     });
@@ -48,7 +48,7 @@ export default function RateUser({
       id: rating?.id,
       comment: '',
       jobInstanceId: jobInstance?.id,
-      rating: idx,
+      rating: idx + 1,
       userTargetId: targetUserId,
       userVoterId: raterUserId,
     };
@@ -56,8 +56,8 @@ export default function RateUser({
       (rating: Rating) => {
         setRating(rating);
         if (rating) {
-          setRatingValue(rating?.rating);
-          updateColors(rating?.rating);
+          setRatingValue(rating?.rating - 1);
+          updateColors(rating?.rating - 1);
         }
       }
     );
