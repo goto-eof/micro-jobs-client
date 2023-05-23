@@ -6,15 +6,13 @@ import Rating from '../dto/Rating';
 import JobInstance from '../dto/JobInstance';
 
 export default function RateUser({
-  jobId,
   targetUserId,
   raterUserId,
-  workerId,
+  jobInstanceProp,
 }: {
-  workerId: number;
-  jobId: number;
   raterUserId: number;
   targetUserId: number;
+  jobInstanceProp: JobInstance;
 }) {
   const [enabled, setEnabled] = useState<Array<boolean>>(
     Array.from(Array(5).keys()).map(() => false)
@@ -27,19 +25,15 @@ export default function RateUser({
   const [jobInstance, setJobInstance] = useState<JobInstance>();
 
   useEffect(() => {
-    GenericApiService.get<JobInstance>(
-      `api/v1/jobInstance/private/jobId/${jobId}/workerId/${workerId}`
-    ).then((jobInstance: JobInstance) => {
-      setJobInstance(jobInstance);
-      GenericApiService.get<Rating>(
-        `api/v1/rating/jobInstanceId/${jobInstance.id}/targetUserId/${targetUserId}`
-      ).then((rating: Rating | null) => {
-        setRating(rating);
-        if (rating) {
-          setRatingValue(rating?.rating - 1);
-          updateColors(rating?.rating - 1);
-        }
-      });
+    setJobInstance(jobInstanceProp);
+    GenericApiService.get<Rating>(
+      `api/v1/rating/jobInstanceId/${jobInstanceProp.id}/targetUserId/${targetUserId}`
+    ).then((rating: Rating | null) => {
+      setRating(rating);
+      if (rating) {
+        setRatingValue(rating?.rating - 1);
+        updateColors(rating?.rating - 1);
+      }
     });
   }, []);
 

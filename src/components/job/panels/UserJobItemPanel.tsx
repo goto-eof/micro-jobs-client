@@ -11,10 +11,12 @@ import JobInstanceConst from '../../../consts/JobInstanceConst';
 interface UserJobItemPanelProps {
   job: Job;
   workerId: number;
+  jobInstanceProp: JobInstance;
 }
 export default function UserJobItemPanel({
   job,
   workerId,
+  jobInstanceProp,
 }: UserJobItemPanelProps) {
   const [acceptJobButtonLabel] = useState<string>(
     JobService.calulateAcceptButtonLabel(job)
@@ -24,19 +26,10 @@ export default function UserJobItemPanel({
   const [showJobInstanceStatus, setShowJobInstanceStatus] = useState<boolean>();
 
   useEffect(() => {
-    const jobId = job.id;
-    GenericApiService.get<JobInstance>(
-      `api/v1/jobInstance/private/jobId/${jobId}/workerId/${workerId}`
-    ).then((jobInstance: JobInstance) => {
-      if (jobInstance === null) {
-        // it's ok
-        return;
-      }
-      setJobInstance(jobInstance);
-      setJobInstanceStatus(
-        JobInstanceService.retrieveHumanableStatus(jobInstance.status)
-      );
-    });
+    setJobInstance(jobInstanceProp);
+    setJobInstanceStatus(
+      JobInstanceService.retrieveHumanableStatus(jobInstanceProp.status)
+    );
   }, []);
 
   useEffect(() => {

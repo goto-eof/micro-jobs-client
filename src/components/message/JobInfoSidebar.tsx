@@ -17,6 +17,7 @@ import Title from '../job/Header';
 import UserJobItemPanel from '../job/panels/UserJobItemPanel';
 import RateUser from '../rateUser';
 import UserService from '../../service/UserService';
+import JobInstance from '../../dto/JobInstance';
 
 export default function JobInfoSidebar() {
   const { roomId } = useParams();
@@ -89,6 +90,15 @@ const SidebarContent = ({
   const [targetUserId] = useState<number | undefined>(
     UserService.getUser().id === job?.author?.id ? workerId : job?.author?.id
   );
+  const [jobInstance, setJobInstance] = useState<JobInstance>();
+
+  useEffect(() => {
+    GenericApiService.get<JobInstance>(
+      `api/v1/jobInstance/private/jobId/${job?.id}/workerId/${workerId}`
+    ).then((jobInstance: JobInstance) => {
+      setJobInstance(jobInstance);
+    });
+  }, []);
 
   return (
     <Box w={{ base: 'full', md: 60 }} mt={4} p={3} pos={'absolute'} {...rest}>
@@ -102,12 +112,17 @@ const SidebarContent = ({
             {job?.author?.username}]
           </Text>
           <Text>{job?.description}</Text>
-          {job && <UserJobItemPanel workerId={workerId} job={job} />}
-          <Text>Rate user:</Text>
-          {job && job.id && job.author && job.author.id && targetUserId && (
-            <RateUser
+          {jobInstance && job && (
+            <UserJobItemPanel
+              jobInstanceProp={jobInstance}
               workerId={workerId}
-              jobId={job?.id}
+              job={job}
+            />
+          )}
+          <Text>Rate user:</Text>
+          {jobInstance && targetUserId && (
+            <RateUser
+              jobInstanceProp={jobInstance}
               raterUserId={raterId}
               targetUserId={targetUserId}
             />
