@@ -39,7 +39,8 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  const onSubmit = () => {
+  const onSubmit = (event: any) => {
+    event.preventDefault();
     const data: RegisterRequest = {
       firstname: form.firstname,
       lastname: form.lastname,
@@ -67,58 +68,65 @@ export default function Register() {
     <>
       <Header title="Sign up" />
       <Center>
-        <Box width={'3xl'} boxShadow={'md'} p={4} mt={5}>
-          <FormControl isRequired>
-            <FormLabel>First name</FormLabel>
-            <Input
-              placeholder="First name"
-              value={form.firstname}
-              name="firstname"
-              onChange={(e) => updateFormData(e)}
+        <form onSubmit={onSubmit}>
+          <Box width={'3xl'} boxShadow={'md'} p={4} mt={5}>
+            <FormControl isRequired>
+              <FormLabel>First name</FormLabel>
+              <Input
+                placeholder="First name"
+                value={form.firstname}
+                name="firstname"
+                onChange={(e) => updateFormData(e)}
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Last name</FormLabel>
+              <Input
+                name="lastname"
+                value={form.lastname}
+                placeholder="Last name"
+                onChange={(e) => updateFormData(e)}
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Username</FormLabel>
+              <Input
+                name="username"
+                value={form.username}
+                placeholder="Username"
+                onChange={(e) => updateFormData(e)}
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>E-Mail</FormLabel>
+              <Input
+                name="email"
+                value={form.email}
+                type={'email'}
+                placeholder="E-Mail"
+                onChange={(e) => updateFormData(e)}
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Password</FormLabel>
+              <Input
+                name="password"
+                value={form.password}
+                type="password"
+                placeholder="Password"
+                onChange={(e) => updateFormData(e)}
+              />
+            </FormControl>
+            <FileUpload
+              callback={updateFileList}
+              multiple={false}
+              required={true}
             />
-          </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Last name</FormLabel>
-            <Input
-              name="lastname"
-              value={form.lastname}
-              placeholder="Last name"
-              onChange={(e) => updateFormData(e)}
-            />
-          </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Username</FormLabel>
-            <Input
-              name="username"
-              value={form.username}
-              placeholder="Username"
-              onChange={(e) => updateFormData(e)}
-            />
-          </FormControl>
-          <FormControl isRequired>
-            <FormLabel>E-Mail</FormLabel>
-            <Input
-              name="email"
-              value={form.email}
-              placeholder="E-Mail"
-              onChange={(e) => updateFormData(e)}
-            />
-          </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Password</FormLabel>
-            <Input
-              name="password"
-              value={form.password}
-              type="password"
-              placeholder="Password"
-              onChange={(e) => updateFormData(e)}
-            />
-          </FormControl>
-          <FileUpload callback={updateFileList} multiple={false} />
-          <Button mt={4} colorScheme="teal" type="submit" onClick={onSubmit}>
-            Submit
-          </Button>
-        </Box>
+            <Button mt={4} colorScheme="teal" type="submit">
+              Submit
+            </Button>
+          </Box>
+        </form>
       </Center>
     </>
   );

@@ -35,9 +35,9 @@ import JobConst from './consts/JobConst';
 import UserConst from './consts/UserConst';
 import Footer from './components/Footer';
 import Conversations from './components/message/Conversations';
-import SendMessage from './components/message/SendMessage';
 import JobInfoSidebar from './components/message/JobInfoSidebar';
 import JobService from './service/JobService';
+import { FaPenNib, FaSignInAlt } from 'react-icons/fa';
 
 const mainMenu = [
   { name: 'Home', url: '/' },
@@ -215,19 +215,23 @@ export default function Main() {
             )}
             {!isAuthenticated() && (
               <>
-                <span
+                <Button
+                  colorScheme="green"
+                  px={'10px'}
                   onClick={() => navigate('/authenticate')}
-                  style={{ padding: 4, cursor: 'pointer' }}
+                  style={{ cursor: 'pointer' }}
                 >
-                  Sign in
-                </span>
-                {' | '}
-                <span
-                  style={{ padding: 4, cursor: 'pointer' }}
+                  <Icon as={FaSignInAlt} pr={1} /> Sign in
+                </Button>
+                <Button
+                  ml={2}
+                  colorScheme="red"
+                  px={'10px'}
+                  style={{ cursor: 'pointer' }}
                   onClick={() => navigate('/register')}
                 >
-                  Sign up
-                </span>
+                  <Icon as={FaPenNib} pr={1} /> Sign up
+                </Button>
               </>
             )}
           </Flex>

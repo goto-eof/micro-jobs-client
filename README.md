@@ -3,7 +3,7 @@ Look [here](https://github.com/goto-eof/micro-jobs-server) for the back-end proj
 # Run
 
 ```
-yarn start
+yarn install && yarn start
 ```
 
 # Default username and password

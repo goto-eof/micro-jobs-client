@@ -33,7 +33,8 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const onSubmit = () => {
+  const onSubmit = (event: any) => {
+    event.preventDefault();
     const data: LoginRequest = {
       username: form.username,
       password: form.password,
@@ -57,30 +58,34 @@ export default function Login() {
     <>
       <Header title="Sign in" />
       <Center>
-        <Box width={'3xl'} boxShadow={'md'} p={4} mt={5}>
-          <FormControl isRequired>
-            <FormLabel>Username</FormLabel>
-            <Input
-              name="username"
-              value={form.username}
-              placeholder="Username"
-              onChange={(e) => updateFormData(e)}
-            />
-          </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Password</FormLabel>
-            <Input
-              name="password"
-              value={form.password}
-              type="password"
-              placeholder="Password"
-              onChange={(e) => updateFormData(e)}
-            />
-          </FormControl>
-          <Button mt={4} colorScheme="teal" type="submit" onClick={onSubmit}>
-            Submit
-          </Button>
-        </Box>
+        <form onSubmit={onSubmit}>
+          <Box width={'3xl'} boxShadow={'md'} p={4} mt={5}>
+            <FormControl isRequired>
+              <FormLabel>Username</FormLabel>
+              <Input
+                required={true}
+                name="username"
+                value={form.username}
+                placeholder="Username"
+                onChange={(e) => updateFormData(e)}
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Password</FormLabel>
+              <Input
+                required={true}
+                name="password"
+                value={form.password}
+                type="password"
+                placeholder="Password"
+                onChange={(e) => updateFormData(e)}
+              />
+            </FormControl>
+            <Button mt={4} colorScheme="green" type="submit">
+              Submit
+            </Button>
+          </Box>
+        </form>
       </Center>
     </>
   );

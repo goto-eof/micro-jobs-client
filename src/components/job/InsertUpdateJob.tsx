@@ -67,7 +67,8 @@ export default function InserUpdateJob() {
 
   const navigate = useNavigate();
 
-  const onSubmit = () => {
+  const onSubmit = (event: any) => {
+    event.preventDefault();
     const data: Job = {
       title: form.title,
       description: form.description,
@@ -144,84 +145,89 @@ export default function InserUpdateJob() {
         </Alert>
       )}
       <Center>
-        <Box width={'3xl'} boxShadow={'md'} p={4} mt={5}>
-          <FormControl isRequired>
-            <FormLabel>Title</FormLabel>
-            <Input
-              placeholder="Title"
-              value={form.title}
-              name="title"
-              onChange={(e) => updateFormData(e)}
-            />
-          </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Description</FormLabel>
-            <Input
-              name="description"
-              value={form.description}
-              placeholder="Description"
-              onChange={(e) => updateFormData(e)}
-            />
-          </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Price</FormLabel>
-            <Input
-              type="number"
-              name="price"
-              value={form.price}
-              placeholder="Price"
-              onChange={(e) => updateFormData(e)}
-            />
-          </FormControl>
-          <FormControl isRequired>
-            <FormLabel>Type</FormLabel>
-            <Select
-              placeholder="Select type"
-              name="type"
-              value={form.type}
-              onChange={(e) => updateFormData(e)}
-            >
-              <option value="0">Offer</option>
-              <option value="1">Request</option>
-            </Select>
-          </FormControl>
-          <FileUpload callback={updateFileList} multiple={true} />
-          <VStack>
-            <SimpleGrid maxW={'100%'} columns={10} spacing={2}>
-              {job?.jobPictureList &&
-                job.jobPictureList
-                  .map((picture) => picture.pictureName)
-                  .map((pictureName) => (
-                    <Box key={pictureName}>
-                      <Box maxW={'64px'} maxH={'64px'}>
-                        <Image
-                          boxSize="64px"
-                          objectFit="cover"
-                          src={JobService.getImageLink(pictureName)}
-                        />
-                      </Box>
-                      <Button
-                        colorScheme="red"
-                        size="xs"
-                        onClick={() => deleteImage(pictureName)}
-                      >
-                        Delete
-                      </Button>
-                    </Box>
-                  ))}
-            </SimpleGrid>
-            <Box w={'100%'}>
-              <Button
-                mt={4}
-                colorScheme="teal"
-                type="submit"
-                onClick={onSubmit}
+        <form onSubmit={onSubmit}>
+          <Box width={'3xl'} boxShadow={'md'} p={4} mt={5}>
+            <FormControl isRequired>
+              <FormLabel>Title</FormLabel>
+              <Input
+                required={true}
+                placeholder="Title"
+                value={form.title}
+                name="title"
+                onChange={(e) => updateFormData(e)}
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Description</FormLabel>
+              <Input
+                required={true}
+                name="description"
+                value={form.description}
+                placeholder="Description"
+                onChange={(e) => updateFormData(e)}
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Price</FormLabel>
+              <Input
+                required={true}
+                type="number"
+                name="price"
+                value={form.price}
+                placeholder="Price"
+                onChange={(e) => updateFormData(e)}
+              />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel>Type</FormLabel>
+              <Select
+                required={true}
+                placeholder="Select type"
+                name="type"
+                value={form.type}
+                onChange={(e) => updateFormData(e)}
               >
-                Submit
-              </Button>
-            </Box>{' '}
-          </VStack>
-        </Box>
+                <option value="0">Offer</option>
+                <option value="1">Request</option>
+              </Select>
+            </FormControl>
+            <FileUpload
+              required={false}
+              callback={updateFileList}
+              multiple={true}
+            />
+            <VStack>
+              <SimpleGrid maxW={'100%'} columns={10} spacing={2}>
+                {job?.jobPictureList &&
+                  job.jobPictureList
+                    .map((picture) => picture.pictureName)
+                    .map((pictureName) => (
+                      <Box key={pictureName}>
+                        <Box maxW={'64px'} maxH={'64px'}>
+                          <Image
+                            boxSize="64px"
+                            objectFit="cover"
+                            src={JobService.getImageLink(pictureName)}
+                          />
+                        </Box>
+                        <Button
+                          colorScheme="red"
+                          size="xs"
+                          onClick={() => deleteImage(pictureName)}
+                        >
+                          Delete
+                        </Button>
+                      </Box>
+                    ))}
+              </SimpleGrid>
+              <Box w={'100%'}>
+                <Button mt={4} colorScheme="teal" type="submit">
+                  Submit
+                </Button>
+              </Box>{' '}
+            </VStack>
+          </Box>
+        </form>
       </Center>
     </>
   );

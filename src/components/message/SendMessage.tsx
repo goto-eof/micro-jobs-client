@@ -66,6 +66,9 @@ export default function SendMessage({ job }: { job?: Job }) {
   };
 
   const sendMessage = () => {
+    if (!!!form.message) {
+      return;
+    }
     GenericApiService.createDifResponse<MessagePost, Message>(
       `api/v1/room/message`,
       {

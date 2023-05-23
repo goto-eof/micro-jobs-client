@@ -4,9 +4,10 @@ import { ChangeEvent, useState } from 'react';
 interface Props {
   callback: (files: Array<any>) => void;
   multiple: boolean;
+  required: boolean;
 }
 
-function FileUpload({ callback, multiple }: Props) {
+function FileUpload({ callback, multiple, required }: Props) {
   const [file, setFile] = useState<File>();
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +44,7 @@ function FileUpload({ callback, multiple }: Props) {
         onChange={(e) => handleFileChange(e)}
         accept="image/png, image/gif, image/jpeg"
         multiple={multiple}
+        required={required}
       />
       <div>{file && `${file.name} - ${file.type}`}</div>
     </FormControl>
