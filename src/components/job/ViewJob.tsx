@@ -46,7 +46,7 @@ export default function ViewOfferRequest({}: Props) {
   useEffect(() => {
     GenericApiService.get<Job>(
       status !== undefined
-        ? `api/v1/job/${scopeFromUrl}/admin/jobStatus/${status}/jobId/${id}`
+        ? `api/v1/job/${scopeFromUrl}/admin/jobId/${id}`
         : `api/v1/job/${scopeFromUrl}/jobId/${id}`
     ).then((job: Job) => {
       setJob(job);
