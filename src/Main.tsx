@@ -85,6 +85,15 @@ export default function Main() {
     navigate(link.url);
   };
 
+  const switchColor = (): void => {
+    const color = localStorage.getItem('chakra-ui-color-mode');
+    localStorage.setItem(
+      'chakra-ui-color-mode',
+      color === 'light' ? 'dark' : 'light'
+    );
+    window.location.reload();
+  };
+
   return (
     <>
       <Box px={4} boxShadow={'base'}>
@@ -201,7 +210,11 @@ export default function Main() {
                         {menuItem.label}
                       </MenuItem>
                     );
-                  })}
+                  })}{' '}
+                  <MenuDivider />
+                  <MenuItem onClick={() => switchColor()}>
+                    Switch color
+                  </MenuItem>
                   <MenuDivider />
                   <MenuItem
                     onClick={() =>
