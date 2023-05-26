@@ -87,7 +87,7 @@ export default function Main() {
 
   return (
     <>
-      <Box bg={useColorModeValue('white', 'white')} px={4} boxShadow={'base'}>
+      <Box px={4} boxShadow={'base'}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <IconButton
             size={'md'}
