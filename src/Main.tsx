@@ -213,7 +213,7 @@ export default function Main() {
                   })}{' '}
                   <MenuDivider />
                   <MenuItem onClick={() => switchColor()}>
-                    Switch color
+                    Switch theme
                   </MenuItem>
                   <MenuDivider />
                   <MenuItem
