@@ -171,7 +171,6 @@ function MessageItem({ message, align }: { message: Message; align: any }) {
       my={1}
       justifyContent={'space-between'}
       position={'relative'}
-      //  bg={'white'}
     >
       <Box display={align === 'left' ? '' : 'none'}>
         {AvatarComponent(message)}
